@@ -44,7 +44,7 @@
 \fi
 
 
-\RequirePackage{cmap} % pdf copy\paste + search package
+%\RequirePackage{cmap} % pdf copy\paste + search package
 
 %        Options       ====
 
@@ -88,18 +88,18 @@
   }
 }
 
-\def\cmpj@sf@droid{
-\RequirePackage{txfonts}
-\RequirePackage{fourier}
-\IfFileExists{omltxmi.fd}{\re@DeclareMathSymbol{\varkappa}{\mathord}{AMSb}{123}}{}
-\RequirePackage[default,scale=0.86]{droidserif}
-\RequirePackage[defaultsans,scale=0.86]{droidsans}
-\RequirePackage[defaultmono,scale=0.86]{droidsansmono}
-\def\lat@sf{droidsans}
-\def\cyr@sf{droidsans}
-}
+% \def\cmpj@sf@droid{
+% \RequirePackage{txfonts}
+% \RequirePackage{fourier}
+% \IfFileExists{omltxmi.fd}{\re@DeclareMathSymbol{\varkappa}{\mathord}{AMSb}{123}}{}
+% \RequirePackage[default,scale=0.86]{droidserif}
+% \RequirePackage[defaultsans,scale=0.86]{droidsans}
+% \RequirePackage[defaultmono,scale=0.86]{droidsansmono}
+% \def\lat@sf{droidsans}
+% \def\cyr@sf{droidsans}
+% }
 
-\DeclareOption{droid}{\let\cmpj@sf\cmpj@sf@droid}
+% \DeclareOption{droid}{\let\cmpj@sf\cmpj@sf@droid}
 
 \DeclareOption{helvet}{\let\cmpj@sf\cmpj@sf@helvet}
 
