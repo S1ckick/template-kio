@@ -150,7 +150,7 @@ FUNCTION {output.nonnull}
     { ", " * write$ }
     { output.state after.block =
         { add.period$ write$
-          " \BibDash " write$
+          " " write$
           newline$
           "\newblock " write$
         }
@@ -1308,7 +1308,7 @@ FUNCTION {format.date}
     }
     { month empty$
         'year.or.date.to.year
-        { year.or.date.to.year ". \BibDash " format.month * * }
+        { year.or.date.to.year ". " format.month * * }
       if$
     }
   if$
