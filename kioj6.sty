@@ -128,7 +128,7 @@
 \def\@@copyright{\copyright}
 \def\copyright@size{\small}
 \def\copyright@author{\@author\cp@issue@year}
-\def\copyright@journal{\@unreverselang{\copyright\space\MakeTextUppercase{\journal@type}. \textnumero\issue@number, \issue@year}\@lang{ \space г.}{}}
+\def\copyright@journal{\@unreverselang{\copyright\space\MakeUppercase{\journal@type}. \textnumero\issue@number, \issue@year}\@lang{ \space г.}{}}
 \def\authorcopyright{\@ifnextchar[
         \iauthorcopyright{\iauthorcopyright[\small]}}
 \def\iauthorcopyright[#1]#2{\gdef\copyright@size{#1}
@@ -419,75 +419,6 @@
   \global\let\@thanks\@empty
   \firstpage
   
-
-
-% Сброс нумерации для библиографии
-
-\renewenvironment{thebibliography}[1]
-{\if@englishversion
-	\renewcommand\refname{References}
-	\setcounter{enumiv}{0}% ← СБРОС НУМЕРАЦИИ
-	
-	% Настройки для английского списка
-	\def\@bibitemsep{0pt}%   ← интервал между записями
-	\def\@bibparsep{0pt}%    ← интервал внутри записи
-	\def\@bibtopsep{-100pt}% ← отступ сверху/снизу всего списка
-	\else
-	\renewcommand\refname{Список литературы}
-	
-	% Настройки для русского списка
-	\def\@bibitemsep{0pt}%   ← интервал между записями
-	\def\@bibparsep{0pt}%    ← интервал внутри записи  
-	\def\@bibtopsep{0pt}%   ← отступ сверху/снизу всего списка
-	\fi
-	\section*{\refname}%
-	\list{\@biblabel{\@arabic\c@enumiv}}%
-	{\settowidth\labelwidth{\@biblabel{#1}}%
-		\leftmargin\labelwidth
-		\advance\leftmargin\labelsep
-		\itemsep=\@bibitemsep
-		\parsep=\@bibparsep
-		\topsep=\@bibtopsep
-		\partopsep=0pt
-		\@openbib@code
-		\usecounter{enumiv}%
-		\let\p@enumiv\@empty
-		\renewcommand\theenumiv{\@arabic\c@enumiv}}%
-	\sloppy
-	\clubpenalty4000
-	\@clubpenalty \clubpenalty
-	\widowpenalty4000%
-	\sfcode`\.\@m}
-{\def\@noitemerr
-	{\@latex@warning{Empty `thebibliography' environment}}%
-	\endlist}
-
-\newcounter{engbibnum}
-
-\def\reset@english@bib{
-	\setcounter{engbibnum}{0}
-	\makeatletter
-	% Временно переопределяем \bibitem для английской версии
-	\def\eng@bibitem{\@ifnextchar[{\eng@lbibitem}{\eng@lbibitem[]}}
-	\def\eng@lbibitem[##1]##2{%
-		\stepcounter{engbibnum}%
-		\item[\@biblabel{\theengbibnum}]%
-		\if@filesw
-		\immediate\write\@auxout{\string\bibcite{##2}{\theengbibnum}}%
-		\fi
-		\ignorespaces
-	}
-	\let\@lbibitem\eng@lbibitem
-	\let\bibitem\eng@bibitem
-	\makeatother
-}
-
-% Модифицируем englishversion для сброса библиографии
-\renewcommand{\englishversion}{
-	\@englishversiontrue
-	\reset@english@bib
-}
-
 \def\@title{}
 \def\@author{}
 \def\@address{}
@@ -1603,8 +1534,8 @@
 	\fancyfoot[RO]{%
 		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЖУРНАЛ РЫЖИЙ
 			\begin{tabular}{@{}l@{}}
-				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ №\ \issue@number.\ С.\ \pages@span \\
-				©\ \MakeTextUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
+				©\ \MakeUppercase{\journal@type@ru}\ \issue@year.\ №\ \issue@number.\ С.\ \pages@span \\
+				©\ \MakeUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
 			\end{tabular}%
 		}%
 		\hfill
@@ -1645,8 +1576,8 @@
 			\exhyphenpenalty=10000
 			\emergencystretch=0em
 			\textcolor{rulercolor}{%
-				\noindent\MakeTextUppercase{\journal@type@ru}\\
-				\noindent\MakeTextUppercase{\journal@type@en}%
+				\noindent\MakeUppercase{\journal@type@ru}\\
+				\noindent\MakeUppercase{\journal@type@en}%
 			}
 		\end{minipage}%
 		\hfill%
@@ -1684,8 +1615,8 @@
 			\exhyphenpenalty=10000
 			\emergencystretch=2em
 			\textcolor{rulercolor}{%
-				\noindent\MakeTextUppercase{\journal@type@ru}\\
-				\noindent\MakeTextUppercase{\journal@type@en}%
+				\noindent\MakeUppercase{\journal@type@ru}\\
+				\noindent\MakeUppercase{\journal@type@en}%
 			}
 		\end{minipage}%
 		\hspace*{0pt}% Компенсируем правый отступ
