@@ -161,9 +161,9 @@ FUNCTION {output.nonnull}
                 { output.state after.slash =
                     { "~/ " * write$ }
                     { output.state after.colon =
-                        { "~: " * write$ }
+                        { ": " * write$ }
                         { output.state after.semicolon =
-                            { "~; " * write$ }
+                            { "; " * write$ }
                         { add.period$ " " * write$ }
                        if$
                         }
@@ -695,15 +695,15 @@ if$}
 
 FUNCTION {bbl.url}
 { curlanguage "english" =
-   {"Access mode"}
+   {"URL"}
    { curlanguage "ukrainian" =
-      { "{^^d0^^a0^^d0^^b5^^d0^^b6^^d0^^b8^^d0^^bc ^^d0^^b4^^d0^^be^^d1^^81^^d1^^82^^d1^^83^^d0^^bf^^d1^^83}" }
+      { "URL" }
       { curlanguage "russian" =
-         { "{^^d0^^a0^^d0^^b5^^d0^^b6^^d0^^b8^^d0^^bc ^^d0^^b4^^d0^^be^^d1^^81^^d1^^82^^d1^^83^^d0^^bf^^d0^^b0}" }
+         { "URL" }
          { curlanguage "german" =
-            { "{online; abgerufen}" }
+            { "URL" }
             { curlanguage "french" =
-                { "Mode d'acc\`{e}s" }
+                { "URL" }
                 { "language is not defined: " curlanguage " in bbl.url" * * warning$ "online; accessed" }
             if$}
          if$}
@@ -1705,10 +1705,13 @@ FUNCTION {format.url}
 }
 
 FUNCTION {output.url}
-{
-  url empty$
+{ doi empty$
+  { url empty$
     'skip$
     { format.url output }
+    if$
+  }
+  'skip$
   if$
 }
 
@@ -1731,14 +1734,10 @@ FUNCTION {format.isbn}
   if$
 }
 
-FUNCTION {add.doi}
-{ duplicate$ empty$
-    'skip$
-    { doi empty$
-        'skip$
-        { "\href{https://doi.org/" doi * "}{" * swap$ * "}" * }
-      if$
-    }
+FUNCTION {format.doi}
+{ doi empty$
+  { "" }
+  { "doi:~\nolinkurl{" doi * "}" * }
   if$
 }
 
@@ -1775,10 +1774,13 @@ FUNCTION {format.eprint}
 }
 
 FUNCTION {output.eprint.url}
-{
-  eprint empty$
+{ doi empty$
+  {eprint empty$
     { format.url output }
     { format.eprint output }
+  if$
+  }
+  'skip$
   if$
 }
 
@@ -1834,7 +1836,7 @@ FUNCTION {article}
   new.slash
   output.author.rest
   new.dblslash
-  journal emphasize add.doi "journal" output.check % new in v1.2
+  journal emphasize "journal" output.check % new in v1.2
   new.block
   format.date "year/date" output.check
   new.block
@@ -1844,6 +1846,8 @@ FUNCTION {article}
   format.pages.page output
   new.block
   note output
+  new.sentence
+  format.doi output
   new.sentence
   output.eprint.url
   format.annote output
@@ -1855,7 +1859,7 @@ FUNCTION {book}
   output.bibitem
   output.author.head
   new.sentence
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.slash
@@ -1877,6 +1881,8 @@ FUNCTION {book}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -1887,7 +1893,7 @@ FUNCTION {booklet}
   output.bibitem
   output.author.head
   new.sentence
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.slash
@@ -1900,6 +1906,8 @@ FUNCTION {booklet}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -1910,7 +1918,7 @@ FUNCTION {inbook}
   output.bibitem
   output.author.head
   new.sentence
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.slash
@@ -1936,6 +1944,8 @@ FUNCTION {inbook}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -1947,7 +1957,7 @@ FUNCTION {incollection}
   output.author.head
   new.sentence
   new.sentence
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.slash
@@ -1967,6 +1977,8 @@ FUNCTION {incollection}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -1975,7 +1987,7 @@ FUNCTION {incollection}
 FUNCTION {proceedings}
 {
   output.bibitem
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon                   % added in v.1.2k
   titleaddon output           % added in v.1.2k
   new.slash
@@ -1993,6 +2005,8 @@ FUNCTION {proceedings}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -2003,7 +2017,7 @@ FUNCTION {inproceedings}
   output.author.head
   new.sentence
   new.sentence
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon                % added in v.1.2k
   titleaddon output        % added in v.1.2k
   new.slash
@@ -2024,6 +2038,8 @@ FUNCTION {inproceedings}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -2042,7 +2058,7 @@ FUNCTION {manual}
     { format.author output.nonnull }
   if$
   new.block
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   author empty$
@@ -2065,6 +2081,8 @@ FUNCTION {manual}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -2084,8 +2102,8 @@ FUNCTION {patent}
   ipc output
   new.slash
   format.author "author" output.check
-  add.blank
-  authorcountry paranthesify output.nonnull
+  %add.blank
+  authorcountry paranthesify output
   new.semicolon
   holder output.nonnull
   new.semicolon
@@ -2154,7 +2172,7 @@ FUNCTION {online}
 { output.bibitem
   format.author output
   title howpublished new.sentence.checkb
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   howpublished new.dblslash.checka
@@ -2164,6 +2182,8 @@ FUNCTION {online}
   new.block
   output.address.publisher
   format.date output
+  new.sentence
+  format.doi output
   new.block
   output.eprint.url
   new.sentence
@@ -2180,7 +2200,7 @@ FUNCTION {thesis}
 { output.bibitem
   format.author "author" output.check
   new.sentence
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon
   bbl.phdthesis format.thesis.type output.nonnull
   new.colon
@@ -2201,6 +2221,8 @@ FUNCTION {thesis}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -2210,7 +2232,7 @@ FUNCTION {thesis}
 FUNCTION {report}
 {
   output.bibitem
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.colon
@@ -2231,6 +2253,8 @@ FUNCTION {report}
   format.date "year/date" output.check
   new.block                % v.2
   format.pages.page output % v.2
+  new.sentence
+  format.doi output
   new.sentence % ^^d0^^b8^^d0^^bb^^d0^^b8 new.block ?
   output.eprint.url
   new.block
@@ -2243,7 +2267,7 @@ FUNCTION {phdthesis}
 { output.bibitem
   format.author "author" output.check
   new.sentence
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon
   bbl.phdthesis format.thesis.type output.nonnull
   new.colon
@@ -2265,6 +2289,8 @@ FUNCTION {phdthesis}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -2273,7 +2299,7 @@ FUNCTION {mastersthesis}
 { output.bibitem
   format.author "author" output.check
   new.sentence
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon
   bbl.mathesis format.thesis.type output.nonnull
   new.colon
@@ -2295,6 +2321,8 @@ FUNCTION {mastersthesis}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -2303,7 +2331,7 @@ FUNCTION {docthesis}
 { output.bibitem
   format.author "author" output.check
   new.sentence
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon
   bbl.docthesis format.thesis.type output.nonnull
   new.colon
@@ -2325,6 +2353,8 @@ FUNCTION {docthesis}
   new.block
   note output
   new.sentence
+  format.doi output
+  new.sentence
   output.eprint.url
   format.annote output
   fin.entry
@@ -2336,7 +2366,7 @@ FUNCTION {conference} { inproceedings }
 FUNCTION {techreport}
 {
   output.bibitem
-  title add.doi add.media "title" output.check
+  title add.media "title" output.check
   new.colon
   format.techreport.type output
   new.colon
@@ -2355,6 +2385,8 @@ FUNCTION {techreport}
   format.date "year/date" output.check
   new.block                % v.2
   format.pages.page output % v.2
+  new.sentence
+  format.doi output
   new.sentence % ^^d0^^b8^^d0^^bb^^d0^^b8 new.block ?
   output.eprint.url
   new.block
