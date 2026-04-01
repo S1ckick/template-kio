@@ -202,12 +202,6 @@
 %\affiliationen{4}{Institute of Applied Physics, Russian Academy of Sciences, Full Name, Address, Nizhny Novgorod, Postal Code, Russia}
 %\affiliationen{5}{Novosibirsk State University, Full Name, Address, Novosibirsk, Postal Code, Russia}
 
-
-\makeatletter
-\AtBeginDocument{%
-  \gdef\f@encoding{T2A}%
-}
-\makeatother
 \begin{document}
 
 \printenc
@@ -345,7 +339,6 @@
     %IEEE, ugost2008
     \bibliographystyle{ugost2008} 
     \bibliography{references}
-    \fontencoding{T2A}\selectfont 
 
     \printenc
     

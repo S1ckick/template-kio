@@ -1,0 +1,82 @@
+@Inbook{layexpl7,
+author="М.В. Лукашова  and Л.И. Румянцева and М.Л. Свешников ",
+title={{Глава 7. Теория астрономических редукций}},
+bookTitle={{Труды ИПА РАН, вып. 10 «Эфемеридная астрономия»}},
+year="2004",
+publisher="ИПА РАН",
+address="Санкт-Петербург",
+pages="135--185",
+language = {russian},
+DOI={10.1017/S0074180900147990},
+}
+
+@article{matveenko,
+author = {Л. И. Матвеенко and А. В. Ипатов and В. А. Демичев and А. Е. Мельников},
+title = {{Структура объекта W3 OH в мазерных линиях гидроксила}},
+journal = {Письма в Астрономический журнал},
+volume = {40},
+number = {2-3},
+pages = {115-130},
+language = {russian},
+DOI={10.1017/S0074180900147990},
+}
+
+@article{akim,
+title={A relativistic theory of motion of the inner planets},
+volume={114},
+DOI={10.1017/S0074180900147990},
+journal={Symposium - International Astronomical Union},
+publisher={Cambridge University Press},
+author={Akim, E.L. and Brumberg, V.A. and Kislik, M.D. and
+Koljuka, Ju.F. and Krasinsky, G.A. and Pitjeva, E.V. and
+Shishov, V.A. and Stepanianz, V.A. and Sveshnikov, M.L. and
+Tikhonov, V.F.},
+year={1986},
+pages={63–68}, 
+URL="http://dx.doi.org/10.1007/978-3-319-23126-6_67"
+}
+
+@Inproceedings{Chernov2015,
+author="Chernov, Vitaliy K.
+and Ipatov, Alexander V.
+and Mardyshkin, Vyacheslav V.
+and Ivanov, Sergey I.
+and Roev, Artem A.",
+editor="Balandin, Sergey and Andreev, Sergey and Koucheryavy, Yevgeni",
+title={{Ultra-Wideband Feed for Radio Telescope of a New-Generation Radio Interferometric Network}},
+bookTitle={{Internet of Things, Smart Spaces, and Next Generation Networks and Systems:
+15th International Conference, NEW2AN 2015, and 8th Conference, ruSMART 2015,
+August 26-28, 2015, Proceedings}},
+address={{St. Petersburg, Russia}},
+year="2015",
+publisher="Springer International Publishing",
+pages="729--738",
+isbn="978-3-319-23126-6",
+doi="10.1007/978-3-319-23126-6_67",
+url="http://dx.doi.org/10.1007/978-3-319-23126-6_67"
+}
+
+@techreport{de430,
+author = {Folkner, W. M. and Williams, J. G. and Boggs D. H. and Park, R. S. and
+Kuchynka P.},
+title = {{The Planetary and Lunar Ephemeris DE 430 and DE 431}},
+year = 2014,
+type = {{JPL IPN Progress Report}},
+number = {42-196}
+}
+
+
+@article{pavlov,
+author="P, D A.
+and W, J G.
+and S, V V.",
+title={{Determ}},
+journal={{C}},
+year="2016",
+volume="126",
+number="1",
+pages="61--88",
+issn="1572-9478",
+doi="10.1007/s10569-016-9712-1",
+url="https://doi.org/10.1007/s10569-016-9712-1"
+}

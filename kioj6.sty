@@ -20,6 +20,10 @@
 %%%                             iposov@gmail.com                         %%%
 %%%                                                                      %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
 \NeedsTeXFormat{LaTeX2e}
 
 % А. Б. Иванов1,  должность, orcid (если есть)
@@ -66,27 +70,27 @@
 
 % font options
 
-\def\kio@sf{cmss}
+%\def\kio@sf{cmss}
 
-\def\lat@sf{\kio@sf}
-\def\cyr@sf{\kio@sf}
+% \def\lat@sf{\kio@sf}
+% \def\cyr@sf{\kio@sf}
 \def\Hv@scale{0.889}
 \def\Pr@scale{0.889}
-\def\cmpj@sf{}
+% \def\cmpj@sf{}
 
-\def\cmpj@sf@helvet{
-  %P%\IfFileExists{t1phv.fd}{
-  \IfFileExists{t2aphv.fd}{
-    \def\lat@sf{phv}
-  }{
-    \def\lat@sf{\kio@sf}
-  }
-  \IfFileExists{t2appr.fd}{
-    \def\cyr@sf{ppr}
-  }{
-    \def\cyr@sf{\kio@sf}
-  }
-}
+% \def\cmpj@sf@helvet{
+%   %P%\IfFileExists{t1phv.fd}{
+%   \IfFileExists{t2aphv.fd}{
+%     \def\lat@sf{phv}
+%   }{
+%     \def\lat@sf{\kio@sf}
+%   }
+%   \IfFileExists{t2appr.fd}{
+%     \def\cyr@sf{ppr}
+%   }{
+%     \def\cyr@sf{\kio@sf}
+%   }
+% }
 
 % \def\cmpj@sf@droid{
 % \RequirePackage{txfonts}
@@ -101,9 +105,9 @@
 
 % \DeclareOption{droid}{\let\cmpj@sf\cmpj@sf@droid}
 
-\DeclareOption{helvet}{\let\cmpj@sf\cmpj@sf@helvet}
+% \DeclareOption{helvet}{\let\cmpj@sf\cmpj@sf@helvet}
 
-\DeclareOption{cm}{\def\cmpj@sf{}}
+% \DeclareOption{cm}{\def\cmpj@sf{}}
 
 %Two languages
 
@@ -136,16 +140,18 @@
 
 \DeclareOption{nocopyright}{\def\@@copyright{}\authorcopyright{}}
 
-\ExecuteOptions{droid}
+% \ExecuteOptions{droid}
 
 \ProcessOptions\relax
 
-\RequirePackage[T2A]{fontenc}
-\@lang{
-  \RequirePackage[english,russian]{babel}
-}{
-  \RequirePackage[russian,english]{babel}
-}
+% \RequirePackage[T2A]{fontenc}
+% \@lang{
+%   \RequirePackage[english,russian]{babel}
+% }{
+%   \RequirePackage[russian,english]{babel}
+% }
+
+
 \RequirePackage{fancyhdr}
 \RequirePackage{graphicx}
 \@ifundefined{@noimages}{}{\renewcommand{\includegraphics}[2][]{\fbox{\detokenize{#2}}}}  
@@ -161,7 +167,7 @@
 \RequirePackage[tableposition=top,labelfont={bf,sf,small},font=small,skip=4mm,labelsep=period]{caption}
 \RequirePackage{subcaption}
 \RequirePackage[misc]{ifsym}  
-\RequirePackage{microtype}
+%\RequirePackage{microtype}
 
 \@lang{
   \renewcommand\thesubfigure{\asbuk{subfigure}}
@@ -176,7 +182,7 @@
 
 \urlstyle{same}
 
-\cmpj@sf
+%\cmpj@sf
 
 \def\hv@sf{\sffamily\upshape}
 
@@ -1445,7 +1451,7 @@
 %\addtolength{\@captionwidth}{-2\parindent}
 %P%\renewcommand{\encodingdefault}{T1}
 %\renewcommand{\sfdefault}{phv}
-\renewcommand{\sfdefault}{\lat@sf}
+%\renewcommand{\sfdefault}{\lat@sf}
 \frenchspacing
 \let\@afterindentfalse\@afterindenttrue
 
@@ -1458,7 +1464,7 @@
 
 %\def\sf@phv{\fontencoding{T1}\fontfamily{phv}\selectfont\upshape}
 %P1%\def\sf@phv{\fontencoding{T1}\fontfamily{\lat@sf}\selectfont\upshape}
-\def\sf@phv{\fontfamily{\lat@sf}\selectfont\upshape}
+%\def\sf@phv{\fontfamily{\lat@sf}\selectfont\upshape}
 \newcounter{isspage}
 \def\issue@page@odd{}
 \def\issue@page@even{}
@@ -1513,7 +1519,7 @@
 	
 	% Верхние колонтитулы (на двух языках)
 	\fancyhead[RO]{%
-		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
+		\normalsize\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
 			\begin{tabular}{r@{}}
 				\@russianarticleheader \\
 				\@englisharticleheader
@@ -1522,7 +1528,7 @@
 	}
 	
 	\fancyhead[LE]{%
-		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
+		\normalsize\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
 			\begin{tabular}{@{}l@{}}
 				\@russianauthorsheader \\
 				\@englishauthorsheader
@@ -1532,20 +1538,20 @@
 	
 	% НИЖНИЕ КОЛОНТИТУЛЫ С НОМЕРАМИ СТРАНИЦ ВНУТРИ
 	\fancyfoot[RO]{%
-		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЖУРНАЛ РЫЖИЙ
+		\normalsize\textcolor{rulercolor}{% ← ЖУРНАЛ РЫЖИЙ
 			\begin{tabular}{@{}l@{}}
 				©\ \MakeUppercase{\journal@type@ru}\ \issue@year.\ №\ \issue@number.\ С.\ \pages@span \\
 				©\ \MakeUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
 			\end{tabular}%
 		}%
 		\hfill
-		\normalsize\sf@phv\textcolor{black}{\kio@page} % Номер страницы справа (рыжий)
+		\normalsize\textcolor{black}{\kio@page} % Номер страницы справа (рыжий)
 	}
 	
 	\fancyfoot[LE]{%
-		\normalsize\sf@phv\textcolor{black}{\kio@page} % Номер страницы слева (рыжий)
+		\normalsize\textcolor{black}{\kio@page} % Номер страницы слева (рыжий)
 		\hfill
-		\normalsize\sf@phv\textcolor{rulercolor}{% 
+		\normalsize\textcolor{rulercolor}{% 
 			\begin{tabular}{@{}l@{}}
 				\@russiansectionheader \\
 				\@englishsectionheader
@@ -1567,7 +1573,7 @@
 	
 	%     ПРАВАЯ СТРАНИЦА (нечетная)    
 	\fancyfoot[RO]{%
-		\footnotesize\sf@phv%
+		\footnotesize%
 		\hspace*{0pt}% Компенсируем левый отступ
 		% Журнал к левому краю
 		\begin{minipage}[t]{0.6\textwidth}
@@ -1596,7 +1602,7 @@
 	
 	%     ЛЕВАЯ СТРАНИЦА (четная)    
 	\fancyfoot[LE]{%
-		\footnotesize\sf@phv%
+		\footnotesize%
 		\hspace*{0pt}% Компенсируем левый отступ
 		% Номер страницы к левому краю
 		\normalsize\textcolor{black}{\kio@page}%
@@ -1637,7 +1643,7 @@
 		\noindent
 		\begin{minipage}[b]{\textwidth}%
 			\bfseries
-			\sf@phv
+			
 			
 			\def\authorlonginfo##1{
 				\setstretch{0.9}
@@ -1691,6 +1697,6 @@
 	\lastpage%
 }
 
-\RequirePackage[T2A]{fontenc} % package 'fourier' sets T1 encoding
+
 %\pagestyle{mainstyle}
 \endinput

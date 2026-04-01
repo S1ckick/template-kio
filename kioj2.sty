@@ -1,0 +1,938 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%                                                                      %%%
+%%%    INSTITUTE FOR CONDENSED MATTER PHYSICS                            %%%
+%%%                                                                      %%%
+%%%    Style file for preparing an article for publication               %%%
+%%%    in the Condensed Matter Physics journal <cmp@icmp.lviv.ua>,       %%%
+%%%    http://www.icmp.lviv.ua/journal/                                  %%%
+%%%    using LaTeX2e                                                     %%%
+%%%                                                                      %%%
+%%%    Last time modified: March 23, 2014                                %%%
+%%%                                                                      %%%
+%%%    Copyright (C) 2013 by the Institute for Condensed Matter Physics  %%%
+%%%                      of the National Academy of Sciences of Ukraine  %%%
+%%%                      all rights reserved.                            %%%
+%%%                                                                      %%%
+%%%    This file can be redistributed and/or modified under the terms    %%%
+%%%    of the LaTeX Project Public License (lppl).                       %%%
+%%%                                                                      %%%
+%%%    Please report errors to: Andrij Shvaika                           %%%
+%%%                             ashv (a) icmp lviv ua                    %%%
+%%%                                                                      %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kioj2}[2016/07/28 v0.2 The KIO journal package]
+\def\filename{kioj2.sty}
+\def\fileversion{2.00}
+\def\filedate{2014/03/23}
+\immediate\write32{This is '\filename' v\fileversion \space <\filedate> ^^J%
+     the KIO journal package}
+
+\if\@ptsize1
+   \else
+   \PackageWarning{kioj2.sty}{Bad \noexpand\documentclass option, use 11pt}
+\fi
+
+%do not forget to install droid fonts before usage
+
+% ========== Options ==============
+
+%eqsecnum: new numbering of formulae in each section
+\def\eqsecnum{%
+        \@addtoreset{equation}{section} %
+        \def\theequation{\ifnum \c@section>\z@ \thesection.\fi \@arabic\c@equation}%
+}
+
+\DeclareOption{eqsecnum}{\eqsecnum}
+
+% font options
+
+\def\kio@sf{cmss}
+
+\def\lat@sf{\kio@sf}
+\def\cyr@sf{\kio@sf}
+\def\Hv@scale{0.889}
+\def\Pr@scale{0.889}
+\def\cmpj@sf{}
+
+\def\cmpj@sf@helvet{
+  %P%\IfFileExists{t1phv.fd}{
+  \IfFileExists{t2aphv.fd}{
+%      \RequirePackage[scaled=0.95]{helvet}
+    \def\lat@sf{phv}
+  }{
+    \def\lat@sf{\kio@sf}
+  }
+  \IfFileExists{t2appr.fd}{
+    \def\cyr@sf{ppr}
+  }{
+    \def\cyr@sf{\kio@sf}
+  }
+}
+
+\def\cmpj@sf@droid{
+  \IfFileExists{t2afds.fd}{
+    \IfFileExists{omltxmi.fd}{\RequirePackage{txfonts}}{}
+    \IfFileExists{fmlfutm.fd}{\RequirePackage{fourier}}{}
+    \IfFileExists{omltxmi.fd}{\re@DeclareMathSymbol{\varkappa}{\mathord}{AMSb}{123}}{}  
+    \RequirePackage[default,scale=0.86]{droidserif}
+    \RequirePackage[defaultsans,scale=0.86]{droidsans}
+    \RequirePackage[defaultmono,scale=0.86]{droidmono}
+    \def\lat@sf{fds}
+    \def\cyr@sf{fds}
+  }{\PackageWarning{kioj2.sty}{Failed to use droid fonts}\cmpj@sf@helvet}
+}
+
+\DeclareOption{droid}{\let\cmpj@sf\cmpj@sf@droid}
+
+\DeclareOption{helvet}{\let\cmpj@sf\cmpj@sf@helvet}
+
+\DeclareOption{cm}{\def\cmpj@sf{}}
+
+%Two languages
+
+\newcommand\@lang[2]{\@ifundefined{@english}{#1}{#2}}
+\newcommand\@langrev[2]{\@ifundefined{@reverse@lang}{\@lang{#1}{#2}}{\@lang{#2}{#1}}}
+
+\DeclareOption{english}{
+	\def\@english{}
+}
+
+% nocopyright option
+
+\def\@@copyright{\copyright}
+\def\copyright@size{\small}
+\def\copyright@author{\@author\cp@issue@year}
+\def\copyright@journal{\copyright\space\MakeTextUppercase{\journal@type}. \textnumero\issue@number, \issue@year \space г.}
+\def\authorcopyright{\@ifnextchar[
+        \iauthorcopyright{\iauthorcopyright[\small]}}
+\def\iauthorcopyright[#1]#2{\gdef\copyright@size{#1}
+        \gdef\copyright@author{#2}}
+
+\DeclareOption{nocopyright}{\def\@@copyright{}\authorcopyright{}}
+
+\ExecuteOptions{droid}
+
+\ProcessOptions\relax
+
+\RequirePackage[T2A]{fontenc}
+\@lang{
+  \RequirePackage[english,russian]{babel}
+}{
+  \RequirePackage[russian,english]{babel}
+}
+\RequirePackage{fancyhdr}
+\RequirePackage{graphicx}
+\RequirePackage[square,comma,numbers,sort&compress]{natbib}
+\RequirePackage{ifthen}
+\RequirePackage{textcase}
+\RequirePackage{setspace}
+\RequirePackage[pdfstartview=FitH,colorlinks=true,urlcolor=Blue,citecolor=Green,linkcolor=BrickRed]{hyperref}
+\RequirePackage{url}
+%\RequirePackage{doi}
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{float}
+\RequirePackage[tableposition=top,labelfont={bf,sf,small},font=small,skip=4mm,labelsep=period]{caption}
+\RequirePackage{subcaption}
+
+\@lang{
+  \renewcommand\thesubfigure{\asbuk{subfigure}}
+}{
+  \renewcommand\thesubfigure{\alph{subfigure}}
+}
+
+\newcommand\kioabstractname{\@langrev{Аннотация}{Abstract}}
+\newcommand\keywordsname{\@langrev{Ключевые слова}{Keywords}}
+\newcommand\citationname{\@langrev{Цитирование}{Citation}}
+\newcommand\acknowledgementsname{\@langrev{Благодарности}{Acknowledgements}}
+
+\urlstyle{same}
+
+\cmpj@sf
+
+\def\hv@sf{\sffamily\upshape}
+
+% remove lists spacing
+
+\def\remove@lists@spacings{
+  \let\oldenumerate\enumerate
+  \renewcommand{\enumerate}{
+    \oldenumerate    
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}
+    \setlength{\topsep}{0pt}
+    \setlength{\partopsep}{0pt}
+  }
+  
+  \let\olditemize\itemize
+  \renewcommand{\itemize}{
+    \olditemize
+    \setlength{\topsep}{0pt}
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}
+    \setlength{\partopsep}{0pt}
+  }
+}
+\remove@lists@spacings
+
+%%  Sectioning  %%
+
+%%TODO make command to uppercase all sections
+
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                   {2.3ex \@plus.2ex}%
+                                   {\normalfont\large\hv@sf\bfseries\mathversion{bold}\centering}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\large\hv@sf\bfseries\mathversion{bold}}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\hv@sf\bfseries\mathversion{bold}}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                    {3.25ex \@plus1ex \@minus.2ex}%
+                                    {-1em}%
+                                    {\normalfont\normalsize\hv@sf\bfseries\mathversion{bold}}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+                                       {3.25ex \@plus1ex \@minus .2ex}%
+                                       {-1em}%
+                                      {\normalfont\normalsize\hv@sf\bfseries\mathversion{bold}}}
+                                      
+\def\@seccntformat#1{\csname the#1\endcsname.\hspace{0.5em}}
+
+%% penalties
+
+\widowpenalty=300
+\clubpenalty=300
+\emergencystretch=3em
+
+%% Authors splitted by ,
+
+\def\authorI@full@cont{\@ifundefined{authorII@full}{}{, \mbox\authorII@full\authorII@full@cont}}
+\def\authorI@short@cont{\@ifundefined{authorII@short}{}{, \authorII@short\authorII@short@cont}}
+
+\def\authorII@full@cont{\@ifundefined{authorIII@full}{}{, \mbox\authorIII@full\authorIII@full@cont}}
+\def\authorII@short@cont{\@ifundefined{authorIII@short}{}{, \authorIII@short\authorIII@short@cont}}
+
+\def\authorIII@full@cont{\@ifundefined{authorIV@full}{}{, \mbox\authorIV@full\authorIV@full@cont}}
+\def\authorIII@short@cont{\@ifundefined{authorIV@short}{}{, \authorIV@short\authorIV@short@cont}}
+
+%\def\authorIII@full@cont{\@ifundefined{authorIV@full}{}{, \mbox\authorIV@full}}
+%\def\authorIII@short@cont{\@ifundefined{authorIV@short}{}{, \authorIV@short}}
+
+\def\authorIV@full@cont{\@ifundefined{authorV@full}{}{, \mbox\authorV@full}}
+\def\authorIV@short@cont{\@ifundefined{authorV@short}{}{, \authorV@short}}
+
+%%  Title  %%
+
+%\def\affil#1{\@for\@fnt:=#1\do{\textsuperscript{\@fnt}}}%TODO separate by comma
+\def\relax@with@arg#1{\relax}
+\def\@affil#1{\textsuperscript{#1}}%TODO separate by comma
+\let\affil\@affil
+\def\affiliation@footnotes{}
+\def\affiliation#1#2{\g@addto@macro\affiliation@footnotes{
+  \textsuperscript{#1}#2\par
+}}
+
+\renewcommand\maketitle{\par
+  \author{\mbox\authorI@short\authorI@short@cont}%[\authorI@short\authorI@short@cont]%
+         %{\mbox\authorI@full\authorI@full@cont}
+  \begingroup
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    \long\def\@makefntext##1{\parindent 1em\noindent
+            \hb@xt@1.8em{%
+                \hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
+    %\if@twocolumn
+    %  \ifnum \col@number=\@ne
+    %    \@maketitle
+    %  \else
+    %    \twocolumn[\@maketitle]%
+    %  \fi
+    %\else
+      \newpage
+      \global\@topnum\z@   % Prevents figures from going at top of page.
+      \@maketitle
+    %\fi
+    \thispagestyle{plain}
+    \@thanks
+  \endgroup
+  \setcounter{footnote}{0}%
+  \global\let\affil\relax@with@arg
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+%  \global\let\@maketitle\relax
+  \global\let\@thanks\@empty
+%  \global\let\@author\@empty
+%  \global\let\@date\@empty
+%  \global\let\@title\@empty
+%  \global\let\title\relax
+%  \global\let\author\relax
+%  \global\let\date\relax
+%  \global\let\and\relax
+  \firstpage
+  %\renewcommand{\refname}{\upshape Список литературы} %TODO does not work
+}
+
+\def\@title{}
+\def\@author{}
+\def\@address{}
+\def\fancy@author{}
+\def\journal@type{}
+\def\issue@year{????}%
+\def\issue@number{?}%
+\def\journal@section@img{kio-logo-col.png}
+\def\journal@section@name{????}
+\def\cp@issue@year{}
+%\def\doi@number{10.XXXX/CMPJ.XX.XXXXX}
+\def\authorI@short{???}
+\def\authorI@full{????}
+\def\authorI@addr{??????}
+\def\authorI@email{???@???}
+
+\def\issue#1#2#3{
+    \def\issue@year{#1}%
+    \def\cp@issue@year{,\space#1}%
+    \def\issue@number{#2}%
+    \ifthenelse{\equal{edu}{#3}}{%
+      \def\journal@type{\@langrev{Компьютерные инструменты в образовании}{Computer tools in education}}%
+    }{%
+      \def\journal@type{\@langrev{Компьютерные инструменты в школе}{Computer tools at schools}}%
+    }%
+}
+\def\article@type{}
+\def\articletype#1{\def\article@type{#1}}
+\def\kio@page{\bf \arabic{page}}
+\def\doinumber#1{\def\doi@number{#1}}
+\def\udknumber#1{\def\udk@number{#1}}
+%\def\bibdoi#1{\href{http://dx.doi.org/#1}{doi:#1}}
+\def\bibdoi{\doi}
+\def\arxiv#1{\href{http://arxiv.org/abs/#1}{arXiv:#1}}
+
+\def\journalsection#1{%
+    \def\journal@section@id{#1}
+    \ifthenelse{\equal{informatics}{#1}}{%
+        \def\journal@section@name{\@lang{ИНФОРМАТИКА}{INFORMATICS}}%
+    }{%
+    \ifthenelse{\equal{information-systems}{#1}}{%
+        \def\journal@section@name{\@lang{ИНФОРМАЦИОННЫЕ СИСТЕМЫ}{INFORMATION SYSTEMS}}%
+    }{%
+    \ifthenelse{\equal{software-engineering}{#1}}{%
+    	\def\journal@section@name{\@lang{ИНЖЕНЕРИЯ ПРОГРАММНОГО ОБЕСПЕЧЕНИЯ}{SOFTWARE ENGINEERING}}%
+    }{%
+    \ifthenelse{\equal{computer-in-education}{#1}}{%
+    	\def\journal@section@name{\@lang{КОМПЬЮТЕР В УЧЕБНОМ ПРОЦЕССЕ}{COMPUTER IN EDUCATION}}%
+    }{%
+    \ifthenelse{\equal{popular-science-articles}{#1}}{%
+    	\def\journal@section@name{\@lang{НАУЧНО-ПОЛУЛЯРНЫЕ СТАТЬИ}{POPULAR-SCIENCE ARTICLES}}%
+    }{%
+    \ifthenelse{\equal{programming-practice}{#1}}{%
+    	\def\journal@section@name{\@lang{ПРАКТИКА ПРОГРАММИРОВАНИЯ}{PROGRAMMING PRACTICE}}%
+    }{%
+    \ifthenelse{\equal{editorial-column}{#1}}{%
+    	\def\journal@section@name{\@lang{КОЛОНКА РЕДАКТОРА}{EDITORIAL COLUMN}}%
+    }{%
+    \ifthenelse{\equal{specialists-training-new-teaching-methods}{#1}}{%
+    	\def\journal@section@name{\@lang{ПОДГОТОВКА СПЕЦИАЛИСТОВ: новые методы обучения}{SPECIALISTS TRAINING: new teaching methods}}%
+    }{%
+    \ifthenelse{\equal{specialists-training-training-programs}{#1}}{%
+    	\def\journal@section@name{\@lang{ПОДГОТОВКА СПЕЦИАЛИСТОВ: программы обучения}{SPECIALISTS TRAINING: training programs}}%
+    }{%
+    \ifthenelse{\equal{specialists-training-professional-standards}{#1}}{%
+    	\def\journal@section@name{\@lang{ПОДГОТОВКА СПЕЦИАЛИСТОВ: профессиональные стандарты}{SPECIALISTS TRAINING: professional standards}}%
+    }{%
+    \ifthenelse{\equal{algorithmic-mathematics}{#1}}{%
+    	\def\journal@section@name{\@lang{АЛГОРИТМИЧЕСКАЯ МАТЕМАТИКА}{ALGORITHMIC MATHEMATICS}}%
+    }{%
+    \ifthenelse{\equal{open-problems-for-young-scientists}{#1}}{%
+    	\def\journal@section@name{\@lang{НЕРЕШЕННЫЕ ЗАДАЧИ ДЛЯ МОЛОДЫХ УЧЕНЫХ}{OPEN PROBLEMS FOR YOUNG SCIENTISTS}}%
+    }{%
+    \ifthenelse{\equal{empty}{#1}}{%
+        \def\journal@section@name{}%
+        \def\journal@section@img{}%
+        
+        \chead[]{}\cfoot[]{}\lhead[]{}\rhead[]{}      
+        \lfoot[\issue@page@even\normalsize\sf@phv\kio@page]{}
+        \rfoot[]{\normalsize\sf@phv\kio@page\issue@page@odd}
+        \renewcommand{\headrule}{}
+        \renewcommand{\footrule}{}
+    }{%
+        \def\journal@section@name{?? #1}%
+    }%
+    }%
+    }%
+    }%
+    }%
+    }%
+    }%
+    }%
+    }%
+    }%
+    }%
+    }%        
+    }%            
+}%
+\def\journalsectionnoimage#1{%
+  \journalsection{#1}%
+  \def\no@section@image{}%
+}%
+
+\def\print@title{{\LARGE \hv@sf\bfseries\mathversion{bold} \@title \par}}
+\def\print@author{%
+    \vskip 1.5em%
+    {\hv@sf
+      \lineskip .5em%
+        \large\upshape\@author\par}
+  }
+\def\print@address{\vskip 0.5em
+        \small\hv@sf\upshape\@address\par
+        }
+        
+% title
+
+\def\pages@span{%
+\ifthenelse{\equal{\pageref*{first@page}}%
+        {\pageref*{last@page}}}%
+        {\pageref*{last@page}}{\pageref*{first@page}--\pageref*{last@page}}
+}
+
+\newcommand\print@doi{\href{http://dx.doi.org/\doi@number}{doi:\doi@number}}
+\newcommand\print@doi@full{\url{http://dx.doi.org/\doi@number}}
+        
+\def\title@full@article@info{%
+    \begin{minipage}{0.5\linewidth}% TODO make this linewidth - 7cm
+      \small\hv@sf \journal@type, \issue@year\\ [0.6ex]%
+      №~\issue@number:\space
+      \pages@span%
+      \@langrev{%no UDC in english
+        \@ifundefined{udk@number}{}{\\[0.6ex]\@langrev{УДК}{UDC}:\space\udk@number}%
+      }{} 
+      \\[0.6ex]\href{http://ipo.spb.ru/journal}{http://ipo.spb.ru/journal}%
+      \@ifundefined{doi@number}{}{\\[0.6ex]\print@doi}%
+    \end{minipage}%
+  }
+\def\title@section@image{%
+  \begin{minipage}{7cm}
+     \@ifundefined{no@section@image}{% 
+       \includegraphics[width=7cm]{\journal@section@id\@lang{}{-en}.png}%
+     }{%
+       \hskip 7cm%
+     }
+  \end{minipage}%
+}%
+
+\def\@maketitle{%
+%---------------------------- 
+  \newpage%
+  \ifthenelse{\isodd{\pageref{first@page}}}{%
+      \noindent\title@full@article@info\hfill\title@section@image%      
+  }{%
+      \noindent\title@section@image\hfill\title@full@article@info%
+  }%
+  %
+%----------------------------  
+  %ruler below title
+  %\par\vskip3pt\noindent\textcolor{rulercolor}{\hrulefill}
+  \par\vskip 1ex\noindent\textsf{\bfseries\slshape\article@type}\par\vskip 2em
+  \noindent\null%\hspace{\@titleindent}\parbox{\@titlewidth}
+  {%\raggedright%
+  \centering
+  \let \footnote \thanks
+  \@ifundefined{@title}{}{\print@title}%
+  \@ifundefined{@author}{}{\print@author}%
+  \@ifundefined{@address}{}{\print@address}% 
+  \affiliation@footnotes
+  }%
+  \par
+  \vskip 1.5em}
+  
+\renewenvironment{abstract}{%
+%%%    \setcounter{page}{\start@page}\label{first@page}
+%    \setcounter{page}{1}\label{first@page}
+    \if@twocolumn
+      %\section*{Аннотация}%
+    \else
+      \everypar{\parskip 3pt plus1pt minus2pt
+      \parindent=0pt%\hangindent=\@titleindent
+      \hangafter=0%
+      \leftskip=\@titleindent%
+      \rightskip=\@titleindent}
+      \noindent\small\hv@sf\upshape\ignorespaces
+    \fi
+    {\centering\textbf{\kioabstractname}\par}}
+    {\if@twocolumn\else\vskip 1.5em plus 0.2em \fi\upshape}
+
+\newcommand\abstract@section[2]{\par\vskip 1ex
+        \noindent%
+        \raggedright%
+        \leftskip=\@titleindent%
+        \rightskip=\@titleindent%
+        \upshape{\hv@sf\bfseries #1:}#2\space}
+        
+\newcommand\keywords{\abstract@section{\keywordsname}{\slshape}}
+\newcommand\citationexample{\abstract@section{\citationname}{}}
+\newcommand\acknowledgements{\abstract@section{\acknowledgementsname}{\slshape}}
+
+\newcommand\autocitationexample{\citationexample\@langrev{
+  \authorI@short\authorI@short@cont\space\fancy@title\space//
+  \journal@type, \issue@year. № \issue@number. С. \pages@span.
+}{
+  \authorI@short\authorI@short@cont. \fancy@title. \journal@type, \issue@year.
+  № \issue@number. P. \pages@span \@ifundefined{doi@number}{}{: DOI: \print@doi@full}.
+}}
+
+\newcommand\pacs{\par\vskip 1ex
+        \noindent\raggedright\upshape{\hv@sf\bfseries PACS:}\slshape\space}
+
+\def\author{\@dblarg{\make@author}}
+\long\def\make@author[#1]#2{\gdef\fancy@author{#1}\gdef\@author{#2}\gdef\@copyright{\@@copyright}}
+
+\def\title{\@dblarg{\make@title}}
+\long\def\make@title[#1]#2{\gdef\fancy@title{#1}\gdef\@title{#2}}
+
+\def\authorI{\@dblarg{\def@authorI}}
+\def\authorII{\@dblarg{\def@authorII}}
+\def\authorIII{\@dblarg{\def@authorIII}}
+\def\authorIV{\@dblarg{\def@authorIV}}
+\def\authorV{\@dblarg{\def@authorV}}
+\def\def@authorI[#1]#2{\def\authorI@short{#1}\def\authorI@full{#2}}
+\def\def@authorII[#1]#2{\def\authorII@short{#1}\def\authorII@full{#2}}
+\def\def@authorIII[#1]#2{\def\authorIII@short{#1}\def\authorIII@full{#2}}
+\def\def@authorIV[#1]#2{\def\authorIV@short{#1}\def\authorIV@full{#2}}
+\def\def@authorV[#1]#2{\def\authorV@short{#1}\def\authorV@full{#2}}
+
+\def\authorIaddr#1{\def\authorI@addr{#1}}
+\def\authorIIaddr#1{\def\authorII@addr{#1}}
+\def\authorIIIaddr#1{\def\authorIII@addr{#1}}
+\def\authorIVaddr#1{\def\authorIV@addr{#1}}
+\def\authorVaddr#1{\def\authorV@addr{#1}}
+
+\def\authorIemail#1{\def\authorI@email{#1}}
+\def\authorIIemail#1{\def\authorII@email{#1}}
+\def\authorIIIemail#1{\def\authorIII@email{#1}}
+\def\authorIVemail#1{\def\authorIV@email{#1}}
+\def\authorVemail#1{\def\authorV@email{#1}}
+
+\def\address#1{\gdef\@address{#1}}
+\def\addresses#1{\gdef\@address{%
+    \renewcommand{\labelenumi}{$^{\textsf{\footnotesize\arabic{enumi}}}$}
+    \setlength{\leftmargini}{0mm}
+    \setlength{\topsep}{0mm}
+    \setlength{\partopsep}{0mm}
+    \setlength{\parskip}{0mm}
+    \begin{enumerate}
+    \setlength{\itemsep}{0mm}
+    \setlength{\itemindent}{0em}
+    \setlength{\labelsep}{2pt}
+    #1
+    \end{enumerate}}}
+\newcommand{\addr}[1]{\item\label{#1}}
+
+\newcommand{\refaddr}[1]{$^{\textsf{\footnotesize\@refad{#1}}}$}
+
+\DeclareRobustCommand\@refad{\@@refadx}
+\def\@@refadx#1{%
+  \let\@@refada\@empty
+  \@@refad{\@for\@@refadb:=#1\do
+    {\@@refada\def\@@refada{,\penalty\@m}%
+     \edef\@@refadb{\expandafter\@firstofone\@@refadb\@empty}%
+     \@ifundefined{r@\@@refadb}{\mbox{\reset@font\bfseries ?}%
+       \G@refundefinedtrue
+       \@latex@warning
+         {Address reference `\@@refadb' undefined}}%
+       {\hbox{\ref{\@@refadb}}}}}}
+\def\@@refad#1{{#1}}
+
+%%  Floats  %%
+
+%TODO what does this do???
+%\long\def\@makecaption#1#2{%
+%  \vskip\abovecaptionskip
+%  \sbox\@tempboxa{{\small{\hv@sf\bfseries #1.} #2}}%
+%  \setlength{\@captionwidth}{0.9\hsize}
+%  \ifdim \wd\@tempboxa >\@captionwidth
+%    \centerline{\parbox{\@captionwidth}{\small{\hv@sf\bfseries #1.} #2}}
+%  \else
+%    \global \@minipagefalse
+%    \hb@xt@\@captionwidth{\hfil\box\@tempboxa\hfil}%
+%  \fi
+%  \vskip\belowcaptionskip}
+
+%%  Bibliography  %%
+
+% \renewenvironment{thebibliography}[1]
+%      {\section*{\refname
+%         \@mkboth{\MakeUppercase\refname}{\MakeUppercase\refname}}%
+%       \normalsize%
+%       \list{\@biblabel{\@arabic\c@enumiv}}%
+%            {\settowidth\labelwidth{\@biblabel{#1}}%
+%             \leftmargin\labelwidth
+%             \advance\leftmargin\labelsep
+%             \parsep\z@\itemsep\z@
+%             \@openbib@code
+%             \usecounter{enumiv}%
+%             \let\p@enumiv\@empty
+%             \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+%       \sloppy
+%       \clubpenalty4000
+%       \@clubpenalty \clubpenalty
+%       \widowpenalty4000%
+%       \sfcode`\.\@m}
+%      {\def\@noitemerr
+%        {\@latex@warning{Empty `thebibliography' environment}}%
+%       \endlist\normalsize}
+% %\def\@biblabel#1{#1.}
+
+\bibsep=0pt
+\renewcommand{\bibnumfmt}[1]{#1.}
+\@ifundefined{bibfont}{\newcommand{\bibfont}{\small}}{\renewcommand{\bibfont}{\small}}
+
+%%  Ukrainian Part  %%
+
+\newcommand\maketranslatedtitle{
+  \begingroup
+    %\if@twocolumn
+    %  \ifnum \col@number=\@ne
+    %    \@makeukrtitle
+    %  \else
+    %    \twocolumn[\@makeukrtitle]%
+    %  \fi
+    %\else
+      \global\@botnum\z@   % Prevents figures from going at bottom of page.
+      \@makeukrtitle
+    %\fi
+    \@thanks
+  \endgroup
+  \global\let\affil\relax@with@arg%
+  \global\let\thanks\relax
+  \global\let\makeukrtitle\relax
+  \global\let\@makeukrtitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+}
+\def\print@ukrtitle{{\Large \hv@sf\bfseries\mathversion{bold} \@title \par}}
+
+\def\@makeukrtitle{%
+\par
+\vskip 10pt
+\noindent\null
+\ifthenelse{\isodd{\value{page}}}{%
+    \noindent\title@full@article@info\hfill%      
+}{%
+    \noindent\hfill\title@full@article@info%
+}
+\vskip 1.5em
+\noindent\null
+%\hspace{\@titleindent}\parbox{\@titlewidth}{
+\raggedright%
+  \centering
+  \let \footnote \thanks
+  \@ifundefined{@title}{}{\print@ukrtitle}%
+  \@ifundefined{@author}{}{\print@author}%
+  \@ifundefined{@address}{}{\print@address}%
+  \affiliation@footnotes
+%  {\Large \hv@sf \bfseries\upshape \@title \par}%
+%    \vskip 1em%
+%    {\normalsize\hv@sf\upshape \@date}%
+  %}%end of \parbox
+  \par
+  \vskip 1.5em}
+
+\newenvironment{translatedpart}{%
+  \ifx\l@ukrainian\@undefined
+  \@nopatterns{Ukrainian}
+  \adddialect\l@ukrainian0
+  \fi
+  \language\l@ukrainian
+  \lefthyphenmin=2 \righthyphenmin=2 % disallow x- or -x breaks; -xx OK
+  \lccode`\'=`\'
+  %\tolerance=3000
+  %\renewcommand{\encodingdefault}{T2A}
+%  \renewcommand{\sfdefault}{ppr}
+  %\renewcommand{\sfdefault}{\cyr@sf}
+  %\fontencoding{T2A}\selectfont
+  \renewcommand{\addr}[1]{\item\label{##1}}
+  \long\def\make@author[##1]##2{\gdef\@author{##2}}
+  \long\def\make@title[##1]##2{\gdef\fancy@title{##1}\gdef\@title{##2}}
+  \def\today{\number\day\space
+     \ifcase\month\or
+    \cyrs\cyrii\cyrch\cyrn\cyrya\or
+    \cyrl\cyryu\cyrt\cyro\cyrg\cyro\or
+    \cyrb\cyre\cyrr\cyre\cyrz\cyrn\cyrya\or
+    \cyrk\cyrv\cyrii\cyrt\cyrn\cyrya\or
+    \cyrt\cyrr\cyra\cyrv\cyrn\cyrya\or
+    \cyrch\cyre\cyrr\cyrv\cyrn\cyrya\or
+    \cyrl\cyri\cyrp\cyrn\cyrya\or
+    \cyrs\cyre\cyrr\cyrp\cyrn\cyrya\or
+    \cyrv\cyre\cyrr\cyre\cyrs\cyrn\cyrya\or
+    \cyrzh\cyro\cyrv\cyrt\cyrn\cyrya\or
+    \cyrl\cyri\cyrs\cyrt\cyro\cyrp\cyra\cyrd\cyra\or
+    \cyrg\cyrr\cyru\cyrd\cyrn\cyrya\fi
+     \space\number\year}
+  
+  \let\affil\@affil
+  \def\@reverse@lang{}
+  \def\affiliation@footnotes{}
+  %\renewcommand\kioabstractname{\@lang{Abstract}{Аннотация}}
+  %\renewcommand\keywordsname{\@lang{Keywords}{Ключевые слова}}
+  %\renewcommand\citationname{\@lang{Citation}{Цитирование}}
+  %\renewcommand\acknowledgementsname{\@lang{Acknowledgements}{Благодарности}}
+%%
+%%
+
+%http://tex.stackexchange.com/questions/173304/can-newpage-take-an-argument-like-pagebreak
+\vspace{0pt plus \textheight}\pagebreak[3]\vspace{0pt plus -\textheight}
+\vskip 1cm
+\hrule width\headwidth height\headrulewidth
+\vskip 1pt
+\hrule width\headwidth height\headrulewidth
+}{
+
+\let\kio@author@record@temp\kio@author@record
+\def\kio@author@record##1##2##3{
+  \message{HHHHHERE}
+  ##1,
+  ##2
+  \href{mailto:##3}{##3}\\
+}
+
+{
+\par\vskip 1ex
+\noindent%
+\raggedright%
+\leftskip=\@titleindent%
+\rightskip=\@titleindent%
+\bfseries
+\sf@phv
+
+\kio@author@record{\authorI@full}{\authorI@addr}{\authorI@email}\authorI@record@cont
+}
+
+\let\kio@author@record\kio@author@record@temp
+\vskip 1.5em plus 0.2em
+\hrule width\headwidth height\headrulewidth
+\vskip 1pt
+\hrule width\headwidth height\headrulewidth
+}
+
+%P%\newcommand{\ukrclosing}[1]{\strut\vskip 2em\par\vskip 1.em
+%P%\strut\hfill\includegraphics{#1}\lastpage\if@twocolumn\else\vskip 2em\fi\upshape
+%P%     \clearpage\if@twoside \ifodd\c@page\else
+%P%     \hbox{}\def\fancy@author{}\def\article@page{}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
+%% Kio part %%
+\def\kio@author@record#1#2#3{\setstretch{0.9}\message{HHHHHERA}
+  #1, \\
+  #2 \\[0.5mm]
+  \href{mailto:#3}{#3}\\[2mm]
+}
+\def\all@kio@authors{
+\begin{minipage}[b]{7.4cm}%
+\raggedright
+\bfseries
+\sf@phv
+\kio@author@record{\authorI@full}{\authorI@addr}{\authorI@email}\authorI@record@cont
+\end{minipage}
+}
+%\def\authorI@full@cont{\@ifundefined{authorII@full}{}{, \authorII@full\authorII@full@cont}}
+\def\authorI@record@cont{
+\@ifundefined{authorII@full}{}{\kio@author@record{\authorII@full}{\authorII@addr}{\authorII@email}\authorII@record@cont}
+}
+\def\authorII@record@cont{
+\@ifundefined{authorIII@full}{}{\kio@author@record{\authorIII@full}{\authorIII@addr}{\authorIII@email}\authorIII@record@cont}
+}
+\def\authorIII@record@cont{
+\@ifundefined{authorIV@full}{}{\kio@author@record{\authorIV@full}{\authorIV@addr}{\authorIV@email}\authorIV@record@cont}
+}
+\def\authorIV@record@cont{
+\@ifundefined{authorV@full}{}{\kio@author@record{\authorV@full}{\authorV@addr}{\authorV@email}}
+}
+
+\definecolor{info@boxes@color}{HTML}{913828}
+\def\authors@image{%
+	%\includegraphics[width=7cm]{our_authors_\issue@year.png}
+	{\setlength{\fboxsep}{0pt}%http://tex.stackexchange.com/questions/23681/colorboxcolortext-without-increasing-the-height-and-width-of-the-cell-in-a
+    \colorbox{info@boxes@color}{
+		\hspace{0.2cm}%
+		\begin{minipage}[b]{6.5cm}
+			\vskip 0.5cm
+			\color{white}%
+			\sffamily\LARGE
+			\begin{flushright}
+				{\huge \ttfamily ©}\hfill \@lang{Наши авторы}{Our authors}, \issue@year.\\
+				\@lang{Our authors}{Наши авторы}, \issue@year.
+			\end{flushright}
+			\vspace{0.4cm}%
+		\end{minipage}%
+		\hspace{0.3cm}%
+	}%
+    }%
+}
+
+\newcommand{\makekioauthors}{
+   \vspace*{0.5cm plus 1fill}
+   %\ifodd\c@page hello \else olleh \fi
+  \noindent%
+  \ifthenelse{\isodd{\pageref{last@page}}}{%
+%  	\colorbox{green}{
+    \all@kio@authors\hfill\authors@image%
+  }{%
+    \authors@image\hfill\all@kio@authors
+  }
+  \lastpage
+}
+
+\newcommand\additionalinfo[1]{
+\begin{center}
+{\noindent\small\hv@sf\upshape\ignorespaces #1}
+\end{center}
+}
+
+%%  General  %%
+
+%\voffset -1in
+%\hoffset -1in
+\textwidth 150mm
+%\textheight 227mm
+\textheight 646pt    % = 227.0430331mm
+\topmargin 30mm
+\headheight 15pt
+\headsep 6mm
+\addtolength{\topmargin}{-\headheight}
+\addtolength{\topmargin}{-\headsep}
+\addtolength{\topmargin}{-1in}
+\oddsidemargin 25mm
+\setlength{\evensidemargin}{210mm}
+\addtolength{\evensidemargin}{-\textwidth}
+\addtolength{\evensidemargin}{-\oddsidemargin}
+\addtolength{\oddsidemargin}{-1in}
+\addtolength{\evensidemargin}{-1in}
+\baselineskip 15pt
+\newlength{\@titlewidth}
+\newlength{\@titleindent}
+\setlength{\@titlewidth}{\textwidth}
+\setlength{\@titleindent}{15mm}
+\addtolength{\@titlewidth}{-\@titleindent}
+\newlength{\@captionwidth}
+%\setlength{\@captionwidth}{\hsize}
+%\addtolength{\@captionwidth}{-2\parindent}
+%P%\renewcommand{\encodingdefault}{T1}
+%\renewcommand{\sfdefault}{phv}
+\renewcommand{\sfdefault}{\lat@sf}
+\frenchspacing
+\let\@afterindentfalse\@afterindenttrue
+
+\renewcommand\footnoterule{%
+  \kern-3\p@
+  \hrule height 0.4pt\@width.2\columnwidth
+  \kern2.6\p@}
+
+%%  Headings  %%
+
+%\def\sf@phv{\fontencoding{T1}\fontfamily{phv}\selectfont\upshape}
+%P1%\def\sf@phv{\fontencoding{T1}\fontfamily{\lat@sf}\selectfont\upshape}
+\def\sf@phv{\fontfamily{\lat@sf}\selectfont\upshape}
+\newcounter{isspage}
+\def\issue@page@odd{}
+\def\issue@page@even{}
+\def\issuepage#1{%
+      \oddsidemargin 20mm%
+      \setlength{\evensidemargin}{210mm}%
+      \addtolength{\evensidemargin}{-\textwidth}%
+      \addtolength{\evensidemargin}{-\oddsidemargin}%
+      \addtolength{\oddsidemargin}{-1in}
+      \addtolength{\evensidemargin}{-1in}
+                 \setcounter{isspage}{#1}%
+                 \addtocounter{isspage}{-1}%
+                 \def\issue@page@odd{%
+                     \stepcounter{isspage}%
+                     {\unitlength1mm%
+                     \begin{picture}(0,0)%
+%                     \put(30,10){\makebox(0,0)[l]{\vrule height 20pt}}%
+                     \put(30.5,10){\makebox(0,0)[l]{\rotatebox{90}{\textsf{\theisspage}}}}%
+                     \end{picture}}%
+                     }%
+                 \def\issue@page@even{%
+                     \stepcounter{isspage}%
+                     {\unitlength1mm%
+                     \begin{picture}(0,0)%
+%                     \put(-30,10){\makebox(0,0)[l]{\vrule height 20pt}}%
+                     \put(-30,10){\makebox(0,0)[r]{\rotatebox{90}{\textsf{\theisspage}}}}%
+                     \end{picture}}%
+                     }%
+}
+
+%----- begin headers footers
+
+\chead[]{}
+\cfoot[]{}
+
+\lhead[\fancyplain{}{\small\sf@phv\def\refaddr##1{}\textcolor{rulercolor}{\fancy@author}}]{}
+
+\rhead[]{\fancyplain{}{\small\sf@phv\textcolor{rulercolor}{\fancy@title}}}
+      
+\lfoot[\issue@page@even\normalsize\sf@phv\kio@page]{
+        %\copyright@size\@copyright\space\parbox[t]{0.9\textwidth}
+        %{\copyright@size\sf@phv\def\refaddr##1{}\copyright@author}
+   \copyright@size\sf@phv\textcolor{rulercolor}{\journal@section@name}
+}
+
+\rfoot[
+  %\fancyplain{\copyright@size\sf@phv\def\refaddr##1{}\copyright@author}%
+  %           {\copyright@size\sf@phv\def\refaddr##1{}\copyright@author}
+  \copyright@size\sf@phv\textcolor{rulercolor}{\copyright@journal}%
+]{\normalsize\sf@phv\kio@page\issue@page@odd}
+
+%------ end headers footers      
+
+%colorize rulers: http://ctan.uni-altai.ru/macros/latex/contrib/fancyhdr/fancyhdr.pdf
+
+\definecolor{rulercolor}{RGB}{145,56,40}
+
+\renewcommand{\headrule}{\fancyplain{}{{\color{rulercolor}%
+    \hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}}}
+
+\renewcommand{\footrule}{{\color{rulercolor}%
+    \vskip-\footruleskip\vskip-\headrulewidth%
+    \hrule width\headwidth height\headrulewidth\vskip\footruleskip}}
+
+%\renewcommand{\headrule}{\hbox to\headwidth{%
+%    \color{rulercolor}\leaders\hrule height \headrulewidth\hfill}}
+%\renewcommand{\footrule}{\hbox to\headwidth{%
+%    \color{rulercolor}\leaders\hrule height \headrulewidth\hfill}}      
+      
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\plainheadrulewidth}{0pt}
+\renewcommand{\plainfootrulewidth}{0.4pt}
+
+\pagestyle{fancyplain}
+%%
+%\newcommand{\No}{№}
+%\newcommand{\rd}{\mathrm{d}}
+%\newcommand{\re}{\mathrm{e}}
+%\newcommand{\ri}{\mathrm{i}}
+%\DeclareMathOperator{\Real}{Re}
+%\DeclareMathOperator{\Img}{Im}
+%\newcommand{\Real}{\mathop{\mathgroup\symoperators Re}\nolimits}
+%\newcommand{\Img}{\mathop{\mathgroup\symoperators Im}\nolimits}
+%\renewcommand{\Re}{\Real}
+%\renewcommand{\Im}{\Img}
+
+\newcommand\firstpage{\label{first@page}}
+\newcommand\lastpage{\label{last@page}}
+\lefthyphenmin=2
+\righthyphenmin=3
+
+\RequirePackage[T2A]{fontenc} % package 'fourier' sets T1 encoding
+\endinput
