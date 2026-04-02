@@ -20,6 +20,10 @@
 %%%                             iposov@gmail.com                         %%%
 %%%                                                                      %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
 \NeedsTeXFormat{LaTeX2e}
 
 % А. Б. Иванов1,  должность, orcid (если есть)
@@ -44,7 +48,7 @@
 \fi
 
 
-\RequirePackage{cmap} % pdf copy\paste + search package
+%\RequirePackage{cmap} % pdf copy\paste + search package
 
 %        Options       ====
 
@@ -66,44 +70,44 @@
 
 % font options
 
-\def\kio@sf{cmss}
+%\def\kio@sf{cmss}
 
-\def\lat@sf{\kio@sf}
-\def\cyr@sf{\kio@sf}
+% \def\lat@sf{\kio@sf}
+% \def\cyr@sf{\kio@sf}
 \def\Hv@scale{0.889}
 \def\Pr@scale{0.889}
-\def\cmpj@sf{}
+% \def\cmpj@sf{}
 
-\def\cmpj@sf@helvet{
-  %P%\IfFileExists{t1phv.fd}{
-  \IfFileExists{t2aphv.fd}{
-    \def\lat@sf{phv}
-  }{
-    \def\lat@sf{\kio@sf}
-  }
-  \IfFileExists{t2appr.fd}{
-    \def\cyr@sf{ppr}
-  }{
-    \def\cyr@sf{\kio@sf}
-  }
-}
+% \def\cmpj@sf@helvet{
+%   %P%\IfFileExists{t1phv.fd}{
+%   \IfFileExists{t2aphv.fd}{
+%     \def\lat@sf{phv}
+%   }{
+%     \def\lat@sf{\kio@sf}
+%   }
+%   \IfFileExists{t2appr.fd}{
+%     \def\cyr@sf{ppr}
+%   }{
+%     \def\cyr@sf{\kio@sf}
+%   }
+% }
 
-\def\cmpj@sf@droid{
-\RequirePackage{txfonts}
-\RequirePackage{fourier}
-\IfFileExists{omltxmi.fd}{\re@DeclareMathSymbol{\varkappa}{\mathord}{AMSb}{123}}{}
-\RequirePackage[default,scale=0.86]{droidserif}
-\RequirePackage[defaultsans,scale=0.86]{droidsans}
-\RequirePackage[defaultmono,scale=0.86]{droidsansmono}
-\def\lat@sf{droidsans}
-\def\cyr@sf{droidsans}
-}
+% \def\cmpj@sf@droid{
+% \RequirePackage{txfonts}
+% \RequirePackage{fourier}
+% \IfFileExists{omltxmi.fd}{\re@DeclareMathSymbol{\varkappa}{\mathord}{AMSb}{123}}{}
+% \RequirePackage[default,scale=0.86]{droidserif}
+% \RequirePackage[defaultsans,scale=0.86]{droidsans}
+% \RequirePackage[defaultmono,scale=0.86]{droidsansmono}
+% \def\lat@sf{droidsans}
+% \def\cyr@sf{droidsans}
+% }
 
-\DeclareOption{droid}{\let\cmpj@sf\cmpj@sf@droid}
+% \DeclareOption{droid}{\let\cmpj@sf\cmpj@sf@droid}
 
-\DeclareOption{helvet}{\let\cmpj@sf\cmpj@sf@helvet}
+% \DeclareOption{helvet}{\let\cmpj@sf\cmpj@sf@helvet}
 
-\DeclareOption{cm}{\def\cmpj@sf{}}
+% \DeclareOption{cm}{\def\cmpj@sf{}}
 
 %Two languages
 
@@ -128,7 +132,7 @@
 \def\@@copyright{\copyright}
 \def\copyright@size{\small}
 \def\copyright@author{\@author\cp@issue@year}
-\def\copyright@journal{\@unreverselang{\copyright\space\MakeTextUppercase{\journal@type}. \textnumero\issue@number, \issue@year}\@lang{ \space г.}{}}
+\def\copyright@journal{\@unreverselang{\copyright\space\MakeUppercase{\journal@type}. \textnumero\issue@number, \issue@year}\@lang{ \space г.}{}}
 \def\authorcopyright{\@ifnextchar[
         \iauthorcopyright{\iauthorcopyright[\small]}}
 \def\iauthorcopyright[#1]#2{\gdef\copyright@size{#1}
@@ -136,16 +140,18 @@
 
 \DeclareOption{nocopyright}{\def\@@copyright{}\authorcopyright{}}
 
-\ExecuteOptions{droid}
+% \ExecuteOptions{droid}
 
 \ProcessOptions\relax
 
-\RequirePackage[T2A]{fontenc}
-\@lang{
-  \RequirePackage[english,russian]{babel}
-}{
-  \RequirePackage[russian,english]{babel}
-}
+% \RequirePackage[T2A]{fontenc}
+% \@lang{
+%   \RequirePackage[english,russian]{babel}
+% }{
+%   \RequirePackage[russian,english]{babel}
+% }
+
+
 \RequirePackage{fancyhdr}
 \RequirePackage{graphicx}
 \@ifundefined{@noimages}{}{\renewcommand{\includegraphics}[2][]{\fbox{\detokenize{#2}}}}  
@@ -161,7 +167,7 @@
 \RequirePackage[tableposition=top,labelfont={bf,sf,small},font=small,skip=4mm,labelsep=period]{caption}
 \RequirePackage{subcaption}
 \RequirePackage[misc]{ifsym}  
-\RequirePackage{microtype}
+%\RequirePackage{microtype}
 
 \@lang{
   \renewcommand\thesubfigure{\asbuk{subfigure}}
@@ -176,7 +182,7 @@
 
 \urlstyle{same}
 
-\cmpj@sf
+%\cmpj@sf
 
 \def\hv@sf{\sffamily\upshape}
 
@@ -419,75 +425,6 @@
   \global\let\@thanks\@empty
   \firstpage
   
-
-
-% Сброс нумерации для библиографии
-
-\renewenvironment{thebibliography}[1]
-{\if@englishversion
-	\renewcommand\refname{References}
-	\setcounter{enumiv}{0}% ← СБРОС НУМЕРАЦИИ
-	
-	% Настройки для английского списка
-	\def\@bibitemsep{0pt}%   ← интервал между записями
-	\def\@bibparsep{0pt}%    ← интервал внутри записи
-	\def\@bibtopsep{-100pt}% ← отступ сверху/снизу всего списка
-	\else
-	\renewcommand\refname{Список литературы}
-	
-	% Настройки для русского списка
-	\def\@bibitemsep{0pt}%   ← интервал между записями
-	\def\@bibparsep{0pt}%    ← интервал внутри записи  
-	\def\@bibtopsep{0pt}%   ← отступ сверху/снизу всего списка
-	\fi
-	\section*{\refname}%
-	\list{\@biblabel{\@arabic\c@enumiv}}%
-	{\settowidth\labelwidth{\@biblabel{#1}}%
-		\leftmargin\labelwidth
-		\advance\leftmargin\labelsep
-		\itemsep=\@bibitemsep
-		\parsep=\@bibparsep
-		\topsep=\@bibtopsep
-		\partopsep=0pt
-		\@openbib@code
-		\usecounter{enumiv}%
-		\let\p@enumiv\@empty
-		\renewcommand\theenumiv{\@arabic\c@enumiv}}%
-	\sloppy
-	\clubpenalty4000
-	\@clubpenalty \clubpenalty
-	\widowpenalty4000%
-	\sfcode`\.\@m}
-{\def\@noitemerr
-	{\@latex@warning{Empty `thebibliography' environment}}%
-	\endlist}
-
-\newcounter{engbibnum}
-
-\def\reset@english@bib{
-	\setcounter{engbibnum}{0}
-	\makeatletter
-	% Временно переопределяем \bibitem для английской версии
-	\def\eng@bibitem{\@ifnextchar[{\eng@lbibitem}{\eng@lbibitem[]}}
-	\def\eng@lbibitem[##1]##2{%
-		\stepcounter{engbibnum}%
-		\item[\@biblabel{\theengbibnum}]%
-		\if@filesw
-		\immediate\write\@auxout{\string\bibcite{##2}{\theengbibnum}}%
-		\fi
-		\ignorespaces
-	}
-	\let\@lbibitem\eng@lbibitem
-	\let\bibitem\eng@bibitem
-	\makeatother
-}
-
-% Модифицируем englishversion для сброса библиографии
-\renewcommand{\englishversion}{
-	\@englishversiontrue
-	\reset@english@bib
-}
-
 \def\@title{}
 \def\@author{}
 \def\@address{}
@@ -509,11 +446,11 @@
 	\def\issue@year{#1}%
 	\def\cp@issue@year{,\space#1}%
 	\def\issue@number{#2}%
-	\def\@section@image@path@prefix{}
+	\def\@section@image@path@prefix{images/}
 	\ifthenelse{\equal{edu}{#3}}{%
 		\def\journal@type{\@langrev{Компьютерные инструменты в образовании}{Computer tools in education}}%
-		% \def\journal@type@ru{Компьютерные инструменты в образовании}%
-		% \def\journal@type@en{Computer tools in education}%
+		\def\journal@type@ru{Компьютерные инструменты в образовании}%
+		\def\journal@type@en{Computer tools in education}%
 	}{%
       \ifthenelse{\equal{cam}{#3}}{%
         \def\journal@type{\@langrev{Компьютерная математика}{Computer assisted mathematics}}%
@@ -1514,7 +1451,7 @@
 %\addtolength{\@captionwidth}{-2\parindent}
 %P%\renewcommand{\encodingdefault}{T1}
 %\renewcommand{\sfdefault}{phv}
-\renewcommand{\sfdefault}{\lat@sf}
+%\renewcommand{\sfdefault}{\lat@sf}
 \frenchspacing
 \let\@afterindentfalse\@afterindenttrue
 
@@ -1527,7 +1464,7 @@
 
 %\def\sf@phv{\fontencoding{T1}\fontfamily{phv}\selectfont\upshape}
 %P1%\def\sf@phv{\fontencoding{T1}\fontfamily{\lat@sf}\selectfont\upshape}
-\def\sf@phv{\fontfamily{\lat@sf}\selectfont\upshape}
+%\def\sf@phv{\fontfamily{\lat@sf}\selectfont\upshape}
 \newcounter{isspage}
 \def\issue@page@odd{}
 \def\issue@page@even{}
@@ -1582,7 +1519,7 @@
 	
 	% Верхние колонтитулы (на двух языках)
 	\fancyhead[RO]{%
-		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
+		\normalsize\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
 			\begin{tabular}{r@{}}
 				\@russianarticleheader \\
 				\@englisharticleheader
@@ -1591,7 +1528,7 @@
 	}
 	
 	\fancyhead[LE]{%
-		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
+		\normalsize\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
 			\begin{tabular}{@{}l@{}}
 				\@russianauthorsheader \\
 				\@englishauthorsheader
@@ -1601,20 +1538,20 @@
 	
 	% НИЖНИЕ КОЛОНТИТУЛЫ С НОМЕРАМИ СТРАНИЦ ВНУТРИ
 	\fancyfoot[RO]{%
-		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЖУРНАЛ РЫЖИЙ
+		\normalsize\textcolor{rulercolor}{% ← ЖУРНАЛ РЫЖИЙ
 			\begin{tabular}{@{}l@{}}
-				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ №\ \issue@number.\ C.\ \pages@span \\
-				©\ \MakeTextUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
+				©\ \MakeUppercase{\journal@type@ru}\ \issue@year.\ №\ \issue@number.\ С.\ \pages@span \\
+				©\ \MakeUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
 			\end{tabular}%
 		}%
 		\hfill
-		\normalsize\sf@phv\textcolor{black}{\kio@page} % Номер страницы справа (рыжий)
+		\normalsize\textcolor{black}{\kio@page} % Номер страницы справа (рыжий)
 	}
 	
 	\fancyfoot[LE]{%
-		\normalsize\sf@phv\textcolor{black}{\kio@page} % Номер страницы слева (рыжий)
+		\normalsize\textcolor{black}{\kio@page} % Номер страницы слева (рыжий)
 		\hfill
-		\normalsize\sf@phv\textcolor{rulercolor}{% 
+		\normalsize\textcolor{rulercolor}{% 
 			\begin{tabular}{@{}l@{}}
 				\@russiansectionheader \\
 				\@englishsectionheader
@@ -1636,7 +1573,7 @@
 	
 	%     ПРАВАЯ СТРАНИЦА (нечетная)    
 	\fancyfoot[RO]{%
-		\footnotesize\sf@phv%
+		\footnotesize%
 		\hspace*{0pt}% Компенсируем левый отступ
 		% Журнал к левому краю
 		\begin{minipage}[t]{0.6\textwidth}
@@ -1645,15 +1582,15 @@
 			\exhyphenpenalty=10000
 			\emergencystretch=0em
 			\textcolor{rulercolor}{%
-				\noindent\MakeTextUppercase{\journal@type@ru}\\
-				\noindent\MakeTextUppercase{\journal@type@en}%
+				\noindent\MakeUppercase{\journal@type@ru}\\
+				\noindent\MakeUppercase{\journal@type@en}%
 			}
 		\end{minipage}%
 		\hfill%
 		% Иконка по центру
 		\raisebox{-3.0ex}{%
-			\IfFileExists{cc-by.png}{%
-				\includegraphics[height=4.5ex]{cc-by.png}%
+			\IfFileExists{images/cc-by.png}{%
+				\includegraphics[height=4.5ex]{images/cc-by.png}%
 			}{}%
 		}%
 %		\hfill%
@@ -1665,7 +1602,7 @@
 	
 	%     ЛЕВАЯ СТРАНИЦА (четная)    
 	\fancyfoot[LE]{%
-		\footnotesize\sf@phv%
+		\footnotesize%
 		\hspace*{0pt}% Компенсируем левый отступ
 		% Номер страницы к левому краю
 		\normalsize\textcolor{black}{\kio@page}%
@@ -1684,8 +1621,8 @@
 			\exhyphenpenalty=10000
 			\emergencystretch=2em
 			\textcolor{rulercolor}{%
-				\noindent\MakeTextUppercase{\journal@type@ru}\\
-				\noindent\MakeTextUppercase{\journal@type@en}%
+				\noindent\MakeUppercase{\journal@type@ru}\\
+				\noindent\MakeUppercase{\journal@type@en}%
 			}
 		\end{minipage}%
 		\hspace*{0pt}% Компенсируем правый отступ
@@ -1706,7 +1643,7 @@
 		\noindent
 		\begin{minipage}[b]{\textwidth}%
 			\bfseries
-			\sf@phv
+			
 			
 			\def\authorlonginfo##1{
 				\setstretch{0.9}
@@ -1760,6 +1697,6 @@
 	\lastpage%
 }
 
-\RequirePackage[T2A]{fontenc} % package 'fourier' sets T1 encoding
+
 %\pagestyle{mainstyle}
 \endinput
