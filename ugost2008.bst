@@ -1316,12 +1316,6 @@ FUNCTION {format.date}
 
 INTEGERS { nameptr namesleft numnames }
 
-FUNCTION {fmt.names.first}
-{ #1
-  "{vv~}{ll}{~jj}{~ff}"
-  format.name$
-}
-
 FUNCTION {fmt.names.three}
 {
   's :=
@@ -1364,7 +1358,7 @@ FUNCTION {fmt.names.all}
     { namesleft #0 > }
     { s nameptr
       %"{vv~}{ll}" format.name$ 't :=
-      "{vv~}{ll}{~jj}{~ff}"
+      "{vv~}{ll}{~jj}{~f.}"
       format.name$ 't :=
       nameptr #1 >
         { namesleft #1 >
@@ -1389,53 +1383,46 @@ FUNCTION {fmt.names.all}
 }
 
 %%<long>    { author fmt.names.all emphasize}
-%%<!long&strict>    { author fmt.names.first emphasize}
 %%<!long&!strict>    { author fmt.names.three emphasize}
 FUNCTION {format.author}
 {
   author empty$
     { author } %%%'skip$
-    {author num.names$ #4 <
+    { author num.names$ #400 <
       {
-       author fmt.names.three
+       author fmt.names.all
       }
       { "" } %%%'skip$
     if$}
   if$
 }
 
-FUNCTION {format.bookauthors.rest}
-{ bookauthor empty$
-    { "" }
-    { bookauthor fmt.names.three emphasize }
-  if$
-}
 
 FUNCTION {format.editors.rest}
 { editor empty$
     { "" }
-    { bbl.edby "\ " * editor fmt.names.three * }
+    { bbl.edby "\ " * editor fmt.names.all * }
   if$
 }
 
 FUNCTION {format.chief.rest}
 { editor empty$
     { "" }
-    { bbl.chief "\ " * editor fmt.names.three * }
+    { bbl.chief "\ " * editor fmt.names.all * }
   if$
 }
 
 FUNCTION {format.executor.rest}
 { author empty$
     { "" }
-    { author fmt.names.three }
+    { author fmt.names.all }
   if$
 }
 
 FUNCTION {format.compiler.rest}
 { compiler empty$
     { "" }
-    { bbl.compiler "\ " * compiler fmt.names.three * }
+    { bbl.compiler "\ " * compiler fmt.names.all * }
   if$
 }
 
@@ -1635,9 +1622,9 @@ FUNCTION {output.author.head}
 {
   author empty$
     'skip$
-    {author num.names$ #4 <
+    {author num.names$ #400 <
       {
-       author fmt.names.three output
+       author fmt.names.all output
        new.sentence
       }
       'skip$
@@ -1647,15 +1634,16 @@ FUNCTION {output.author.head}
 
 FUNCTION {output.author.rest}
 {
-  author empty$
-    'skip$
-    {author num.names$ #3 >
-      { author fmt.names.all output
-        new.semicolon
-      }
-      'skip$
-    if$}
-  if$
+%'skip$
+% author empty$
+%   'skip$
+%   {author num.names$ #3 >
+%     { author fmt.names.all output
+%       new.semicolon
+%     }
+%     'skip$
+%   if$}
+% if$
 }
 
 FUNCTION {bookauthor.rest}
@@ -1737,7 +1725,7 @@ FUNCTION {format.isbn}
 FUNCTION {format.doi}
 { doi empty$
   { "" }
-  { "doi:~\nolinkurl{" doi * "}" * }
+  { "doi:\nolinkurl{" doi * "}" * }
   if$
 }
 
@@ -1834,8 +1822,8 @@ FUNCTION {article}
   new.sentence
   title add.media "title" output.check
   new.slash
-  output.author.rest
-  new.dblslash
+% output.author.rest
+ new.dblslash
   journal emphasize "journal" output.check % new in v1.2
   new.block
   format.date "year/date" output.check
@@ -1863,7 +1851,7 @@ FUNCTION {book}
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.slash
-  output.author.rest
+% output.author.rest
   editor.organization.rest
   new.sentence
   format.number.series output
@@ -1897,7 +1885,7 @@ FUNCTION {booklet}
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.slash
-  output.author.rest
+% output.author.rest
   editor.organization.rest
   new.block
   howpublished output
@@ -1922,7 +1910,7 @@ FUNCTION {inbook}
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.slash
-  output.author.rest
+% output.author.rest
   new.dblslash
   booktitle "booktitle" output.check
   new.slash
@@ -1961,7 +1949,7 @@ FUNCTION {incollection}
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.slash
-  output.author.rest
+% output.author.rest
   new.dblslash
   booktitle "booktitle" output.check
   new.slash
@@ -2021,7 +2009,7 @@ FUNCTION {inproceedings}
   new.colon                % added in v.1.2k
   titleaddon output        % added in v.1.2k
   new.slash
-  output.author.rest
+% output.author.rest
   new.dblslash
   booktitle "booktitle" output.check
   new.slash
@@ -2156,7 +2144,7 @@ FUNCTION {unpublished}
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.slash
-  output.author.rest
+% output.author.rest
   editor.organization.rest
   new.block
   format.date "year/date" output.check
@@ -2209,7 +2197,7 @@ FUNCTION {thesis}
   titleaddon output % date of defence and approvement; new in v.1.2i
   new.slash
   %%%format.author.rest output %% dupplicates athours from the head zone
-  output.author.rest            %% prints if num.names$ > 3 or > 1
+% output.author.rest            %% prints if num.names$ > 3 or > 1
   new.semicolon
   %institution "institution" output.check
   institution.or.school "institution/school" output.check
@@ -2277,7 +2265,7 @@ FUNCTION {phdthesis}
   titleaddon output % date of defence and approvement; new in v.1.2i
   new.slash
   %%%format.author.rest output %% dupplicates athours
-  output.author.rest            %% prints if num.names$ > 3 or > 1
+% output.author.rest            %% prints if num.names$ > 3 or > 1
   new.semicolon
   %institution "institution" output.check
   institution.or.school "institution/school" output.check
@@ -2309,7 +2297,7 @@ FUNCTION {mastersthesis}
   titleaddon output % date of defence and approvement; new in v.1.2i
   new.slash
   %%%format.author.rest output %% dupplicates athours
-  output.author.rest            %% prints if num.names$ > 3 or > 1
+% output.author.rest            %% prints if num.names$ > 3 or > 1
   new.semicolon
   %institution "institution" output.check
   institution.or.school "institution/school" output.check
@@ -2341,7 +2329,7 @@ FUNCTION {docthesis}
   titleaddon output % date of defence and approvement; new in v.1.2i
   new.slash
   %%%format.author.rest output %% dupplicate athours
-  output.author.rest            %% prints if num.names$ > 3 or > 1
+% output.author.rest            %% prints if num.names$ > 3 or > 1
   new.semicolon
   %institution "institution" output.check
   institution.or.school "institution/school" output.check

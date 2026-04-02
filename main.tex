@@ -7,12 +7,8 @@
 
 
 
-\makeatletter
-\newcommand{\printenc}{the current encoding is~\texttt{\f@encoding}}
-\makeatother
-
 % Пакет для точного контроля полей
-\usepackage{xcolor} % для цветного текста
+%\usepackage{xcolor} % для цветного текста
 
 % Подключение пакета с шаблоном журнала.
 % Необязательная опция eqsecnum указывает, что в каждом разделе формулы нумеруются заново.
@@ -208,8 +204,6 @@
 \makeatother
 \begin{document}
 
-\printenc
-	
 	% ========== РУССКАЯ ЧАСТЬ ==========
 
 	\russianversion % устанавливаем русскую версию
@@ -251,14 +245,6 @@
         \includegraphics[width=0.4\textwidth]{xkcd1301.png}
         \caption{Достоверность информации в зависимости от расширения файла} \label{fig-example}
     \end{figure}
-    
-	    \begin{figure}[htb]
-		\centering
-		\includegraphics[width=0.4\textwidth]{xkcd1301.png}
-		\caption{Достоверность информации в зависимости от расширения файла} \label{fig-example}
-		\end{figure}    
-	
-	
 	
     %Пример таблицы. [H] означает, что таблица должна быть ровно здесь и никуда не перемещаться.
     \begin{table}[H]
@@ -300,9 +286,8 @@
         \end{tabular}
     \end{table}
 
-    \subsection{Подраздел}
-    \label{sec:sub} %ссылка на раздел
-    Жуpнал "Компьютеpные инстpументы в обpазовании" выходит с января 1998 года.
+    \subsection{Подраздел}\label{sec:sub} %ссылка на раздел
+    Жуpнал <<Компьютеpные инстpументы в обpазовании>> выходит с января 1998 года.
     
     Научное направление периодического издания: алгоритмическая математика и математическое моделирование, информатика и информационные технологии, автоматизация процессов в области образования.
     
@@ -332,21 +317,17 @@
     \end{figure}
 
     \section{ЗАКЛЮЧЕНИЕ}
-    Текст заключения с примером ссылки на литературу:~\cite{layexpl7, matveenko, akim, Chernov2015, de430, pavlov, iers2010, standish, bizouard11, gubanov, iaaras, lopachev, sviridov, gost-radio}
+    Текст заключения с примером ссылки на литературу:~\cite{layexpl7, matveenko, akim, Chernov2015, de430, iers2010, standish, bizouard11, gubanov, iaaras, lopachev, sviridov, gost-radio, pavlov}
 
     %Оформляем литературу, 9 означает, что у нас не более 9 пунктов в списке, т.е. все номера состоят из не более, чем одной цифры. Если пунктов много, т.е. номера могут быть двузначными, пишем 99.
     
     \par\vspace{0pt}  % Компенсируем стандартный отступ
     
-    \printenc
-
     %IEEE, ugost2008
     \bibliographystyle{ugost2008} 
     \bibliography{references}
     \fontencoding{T2A}\selectfont 
 
-    \printenc
-    
     % \par\vspace{0pt}  % Компенсируем стандартный отступ
 
     % %дополнительная информация о статье
