@@ -44,6 +44,9 @@
 \fi
 
 
+
+
+
 \RequirePackage{cmap} % pdf copy\paste + search package
 
 %        Options       ====
@@ -146,10 +149,16 @@
 }{
   \RequirePackage[russian,english]{babel}
 }
+
+% \RequirePackage[style=gost-numeric, language=auto, autolang=other, blockpunct=space, movenames=false]{biblatex}
+% \renewcommand*{\specialitydelim}{\textemdash\space}
+% \renewcommand*{\subtitlepunct}{\addcolon\space}
+
+
 \RequirePackage{fancyhdr}
 \RequirePackage{graphicx}
 \@ifundefined{@noimages}{}{\renewcommand{\includegraphics}[2][]{\fbox{\detokenize{#2}}}}  
-\RequirePackage[square,comma,numbers,sort&compress]{natbib}
+%\RequirePackage[square,comma,numbers,sort&compress]{natbib}
 \RequirePackage{ifthen}
 \RequirePackage{textcase}
 \RequirePackage{setspace}
@@ -1364,9 +1373,9 @@
 
 %%  Floats  %%
 
-\bibsep=0pt
-\renewcommand{\bibnumfmt}[1]{#1.}
-\@ifundefined{bibfont}{\newcommand{\bibfont}{\small}}{\renewcommand{\bibfont}{\small}}
+%\bibsep=0pt
+%\renewcommand{\bibnumfmt}[1]{#1.}
+%\@ifundefined{bibfont}{\newcommand{\bibfont}{\small}}{\renewcommand{\bibfont}{\small}}
 
 %%  Английская часть  %%
 
