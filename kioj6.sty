@@ -397,7 +397,7 @@
 		\hb@xt@1.8em{%
 			\hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
 	\global\@topnum\z@   % Prevents figures from going at top of page
-	\@maketitle
+    \@maketitle
 	\thispagestyle{firstpagestyle} % Специальный стиль для первой страницы
 	\global\@firstpagefalse % Сбрасываем флаг
 	\pagestyle{mainstyle} % Устанавливаем основной стиль для следующих страниц
@@ -598,7 +598,7 @@
 	}{%
 		\ifthenelse{\equal{programming-practice}{#1}}{%
 			\def\journal@section@name{\@lang{ПРАКТИКА ПРОГРАММИРОВАНИЯ}{PROGRAMMING PRACTICE}}%
-			\setsectionheader{ПРАКТИКА ПРОГРАММИРОВАНИЯ}{PROGRAMMING PRACTICE}% <-- ДОБАВИТЬ
+ 			\setsectionheader{ПРАКТИКА ПРОГРАММИРОВАНИЯ}{PROGRAMMING PRACTICE}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{editorial-column}{#1}}{%
 			\def\journal@section@name{\@lang{КОЛОНКА РЕДАКТОРА}{EDITORIAL COLUMN}}%
@@ -725,13 +725,13 @@
 	%----------------------------
 	\ifthenelse{\isodd{\value{page}}}{%
 	% Нечетные страницы: метаданные слева, картинка справа
-	\noindent\title@full@article@info\hfill\title@section@image%
+%	\noindent\title@full@article@info\hfill\title@section@image%
 	}{%
 	% Четные страницы: картинка слева, метаданные справа
-	\noindent\title@section@image%
+%	\noindent\title@section@image%
 	\begin{minipage}[t]{0.67\linewidth\relax}
 		\raggedleft\hspace{0pt}
-		\title@full@article@info
+%		\title@full@article@info
 	\end{minipage}%
 	}%
 	%
@@ -1286,17 +1286,17 @@
 
 %        Настройка колонтитулов       
 \newcommand{\setarticleheader}[2]{%
-	\def\@russianarticleheader{#1}%
+	\def\@russianarticleheader{\begin{otherlanguage*}{russian}#1\end{otherlanguage*}}%
 	\def\@englisharticleheader{#2}%
 }
 
 \newcommand{\setauthorsheader}[2]{%
-	\def\@russianauthorsheader{#1}%
+	\def\@russianauthorsheader{\begin{otherlanguage*}{russian}#1\end{otherlanguage*}}%
 	\def\@englishauthorsheader{#2}%
 }
 
 \newcommand{\setsectionheader}[2]{%
-	\def\@russiansectionheader{#1}%
+	\def\@russiansectionheader{\begin{otherlanguage*}{russian}#1\end{otherlanguage*}}%
 	\def\@englishsectionheader{#2}%
 }
 
@@ -1602,7 +1602,7 @@
 	\fancyfoot[RO]{%
 		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЖУРНАЛ РЫЖИЙ
 			\begin{tabular}{@{}l@{}}
-				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ №\ \issue@number.\ C.\ \pages@span \\
+				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ \begin{otherlanguage*}{russian}№\ \issue@number.\ С.\ \pages@span\end{otherlanguage*} \\
 				©\ \MakeTextUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
 			\end{tabular}%
 		}%

@@ -76,7 +76,7 @@
 % =============== РУССКИЕ ДАННЫЕ ===============
 
 % Заголовок статьи (русский)
-\title[AVO]{НАЗВАНИЕ СТАТЬИ}
+\title[Сокр. назв.]{Название статьи на русском}
 
 % Аннотация и ключевые слова (русские)
 \abstractru{Русская аннотация}
@@ -147,7 +147,7 @@
 % ========== АНГЛИЙСКИЕ ДАННЫЕ ==========
 
 % Заголовок статьи (английский)
-\titleen[Article Title]{ARTICLE TITLE}
+\titleen[Short Title]{Article title in English}
 
 % Аннотация и ключевые слова (английские)
 \abstracten{English abstract goes here.}
@@ -323,9 +323,16 @@
     \end{figure}
 
     \section{ЗАКЛЮЧЕНИЕ}
-    Текст заключения с примером ссылки на литературу.
-      \cite{matveenko}.
-%      \nocitesec{matveenko}.
+    Текст заключения с примером ссылок. Ссылка на статью на русском, у которой есть английский перевод: \cite{Matveenko}.
+    Ссылка на книгу на русском, у которой нет английского перевода: \cite{Gubanov}.
+    Ссылка на книгу на английском, у которой есть русский перевод: \cite{Hairer}.
+    Ссылка на главу в книге на русском, у которой нет английского перевода: \cite{layexpl7}.
+    Ссылка на книгу на английском: \cite{IERS2010}.
+    Ссылка на технический отчёт на английском: \cite{DE430}.
+    Ссылка на статью в трудах конференции на русском: \cite{BYSIS2022}.
+    Ссылка на сайт, имеющий английскую версию: \cite{ETU}.
+    Ссылка на ГОСТ: \cite{gost-radio}.
+    Ссылка на патент: \cite{sviridov}.
 
 
 %  , matveenko, akim, Chernov2015, de430, iers2010, standish, bizouard11, gubanov, iaaras, lopachev, sviridov, gost-radio, pavlov
@@ -337,10 +344,11 @@
     \bibliographystyle{ugost2008}
     \bibliography{references-clones}
 
-%    \fontencoding{T2A}\selectfont
+    \begin{otherlanguage*}{english}
     \bibliographystylesec{ieee} 
-    \bibliographysec{references-clones}
-    
+    \fontencoding{T2A}\selectfont
+    \bibliographysec{references-en,references-clones}
+    \end{otherlanguage*}
 
     % \par\vspace{0pt}  % Компенсируем стандартный отступ
 
