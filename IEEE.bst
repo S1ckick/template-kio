@@ -1973,6 +1973,7 @@ FUNCTION {article}
   if.url.std.interword.spacing
 }
 
+
 FUNCTION {book}
 { std.status.using.comma
   start.entry
@@ -2149,7 +2150,7 @@ FUNCTION {misc}
   if.url.alt.interword.spacing
   format.authors output
   name.or.dash
-  format.article.title output
+  format.article.title "title" output.warn
   format.howpublished "howpublished" bibinfo.check output 
   format.organization "organization" bibinfo.check output
   format.address "address" bibinfo.check output

@@ -2079,7 +2079,7 @@ FUNCTION {manual}
 FUNCTION {patent}
 {
   output.bibitem
-  title add.media output.nonnull
+  title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
   new.colon
@@ -2633,6 +2633,9 @@ FUNCTION {begin.bib}
   "\providecommand{\BibAnnote}[1]{}"                 write$ newline$
   "\providecommand*{\BibEmph}[1]{#1}"                write$ newline$
   "\setlength{\itemsep}{-5pt}"            write$ newline$
+  "\setlength{\labelwidth}{20pt}"          write$ newline$
+
+
   "\ProvideTextCommandDefault{\cyrdash}{\iflanguage{russian}{\hbox to.8em{--\hss--}}{\textemdash}}" write$ newline$
   "\providecommand*{\BibDash}{\ifdim\lastskip>0pt\unskip\nobreak\hskip.2em plus 0.1em\fi" write$ newline$
   "\cyrdash\hskip.2em plus 0.1em\ignorespaces}" write$ newline$
