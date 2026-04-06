@@ -2632,6 +2632,7 @@ FUNCTION {begin.bib}
   "\providecommand*{\BibUrl}[1]{\url{#1}}"           write$ newline$
   "\providecommand{\BibAnnote}[1]{}"                 write$ newline$
   "\providecommand*{\BibEmph}[1]{#1}"                write$ newline$
+  "\setlength{\itemsep}{-5pt}"            write$ newline$
   "\ProvideTextCommandDefault{\cyrdash}{\iflanguage{russian}{\hbox to.8em{--\hss--}}{\textemdash}}" write$ newline$
   "\providecommand*{\BibDash}{\ifdim\lastskip>0pt\unskip\nobreak\hskip.2em plus 0.1em\fi" write$ newline$
   "\cyrdash\hskip.2em plus 0.1em\ignorespaces}" write$ newline$

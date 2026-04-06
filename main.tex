@@ -19,6 +19,10 @@
 
 \let\originalcite\cite
 \def\cite#1{\originalcite{#1}\nocitesec{EN-#1}}
+\makeatletter
+\renewcommand\@biblabel[1]{#1.}
+\makeatother
+
 
 
 % Здесь можно подключить свои пакеты. Некоторые пакеты работают только если их подключить перед предыдущей строкой \usepackage[eqsecnum]{kioj6}
@@ -322,6 +326,15 @@
         \caption{Пример двух изображений рядом на одном рисунке} \label{fig-example-2}
     \end{figure}
 
+    Также представлен пример математической формулы~\ref{eq:gaussian}.
+
+    \begin{equation}
+        \int_{-\infty}^{\infty} e^{-x^2} \, dx = \sqrt{\pi}
+        \label{eq:gaussian}
+    \end{equation}
+
+    
+
     \section{ЗАКЛЮЧЕНИЕ}
     Текст заключения с примером ссылок. Ссылка на статью на русском, у которой есть английский перевод: \cite{Matveenko}.
     Ссылка на книгу на русском, у которой нет английского перевода: \cite{Gubanov}.
@@ -344,45 +357,43 @@
     \bibliographystyle{ugost2008}
     \bibliography{references-clones}
 
-    \begin{otherlanguage*}{english}
-    \bibliographystylesec{ieee} 
-    \fontencoding{T2A}\selectfont
-    \bibliographysec{references-en,references-clones}
-    \end{otherlanguage*}
+    \par\vspace{0pt}  % Компенсируем стандартный отступ
 
-    % \par\vspace{0pt}  % Компенсируем стандартный отступ
-
-    % %дополнительная информация о статье
-    % \additionalinfo{Поступила в редакцию 2 января 2014, окончательный вариант 24 января 2016 г.}
+    %дополнительная информация о статье
+    \additionalinfo{Поступила в редакцию 7 октября 2025, окончательный вариант 28 января 2026 г.}
     
-    % \par\vspace{5pt}  % Компенсируем стандартный отступ
+    \par\vspace{5pt}  % Компенсируем стандартный отступ
     
-    % \printauthorsinfo
+    \printauthorsinfo
 
-    % % ========== АНГЛИЙСКАЯ ЧАСТЬ ==========
-    % \begin{translatedpart}
-    %     \englishversion % переключаем на английскую версию
+    % ========== АНГЛИЙСКАЯ ЧАСТЬ ==========
+    \begin{translatedpart}
+        \englishversion % переключаем на английскую версию
         
-    %     %даем команду на печать английского заголовка
-    %     \maketranslatedtitle
+        %даем команду на печать английского заголовка
+        \maketranslatedtitle
 
-    %     \begin{abstract}
-    %         \insertabstract    % ← Автоматически подставит АНГЛИЙСКУЮ аннотацию
-    %         \insertkeywords    % ← Автоматически подставит АНГЛИЙСКИЕ ключевые слова
-    %         \autocitationexample
+        \begin{abstract}
+            \insertabstract    % ← Автоматически подставит АНГЛИЙСКУЮ аннотацию
+            \insertkeywords    % ← Автоматически подставит АНГЛИЙСКИЕ ключевые слова
+            \autocitationexample
             
-    %     \end{abstract}
+        \end{abstract}
         
-    %     \par\vspace{0pt}  % Компенсируем стандартный отступ
+        \par\vspace{0pt}  % Компенсируем стандартный отступ
 
-
+        \begin{otherlanguage*}{english}
+            \bibliographystylesec{IEEE} 
+            \fontencoding{T2A}\selectfont
+            \bibliographysec{references-en,references-clones}
+        \end{otherlanguage*}
 
        
         
-    %     \additionalinfo{Received October 7, 2001, The final version: December 28, 2015}
+        \additionalinfo{Received October 7, 2025, The final version: January 28, 2026}
         
-    %     \par\vspace{-25pt}  % Компенсируем стандартный отступ
+        \par\vspace{-25pt}  % Компенсируем стандартный отступ
             
-    % \end{translatedpart}   
+    \end{translatedpart}   
     
 \end{document}
