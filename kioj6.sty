@@ -149,7 +149,6 @@
 \RequirePackage{fancyhdr}
 \RequirePackage{graphicx}
 \@ifundefined{@noimages}{}{\renewcommand{\includegraphics}[2][]{\fbox{\detokenize{#2}}}}  
-\RequirePackage[square,comma,numbers,sort&compress]{natbib}
 \RequirePackage{ifthen}
 \RequirePackage{textcase}
 \RequirePackage{setspace}
@@ -423,70 +422,70 @@
 
 % Сброс нумерации для библиографии
 
-\renewenvironment{thebibliography}[1]
-{\if@englishversion
-	\renewcommand\refname{References}
-	\setcounter{enumiv}{0}% ← СБРОС НУМЕРАЦИИ
+%% \renewenvironment{thebibliography}[1]
+%% {\if@englishversion
+%% 	\renewcommand\refname{References}
+%% 	\setcounter{enumiv}{0}% ← СБРОС НУМЕРАЦИИ
 	
-	% Настройки для английского списка
-	\def\@bibitemsep{0pt}%   ← интервал между записями
-	\def\@bibparsep{0pt}%    ← интервал внутри записи
-	\def\@bibtopsep{-100pt}% ← отступ сверху/снизу всего списка
-	\else
-	\renewcommand\refname{Список литературы}
+%% 	% Настройки для английского списка
+%% 	\def\@bibitemsep{0pt}%   ← интервал между записями
+%% 	\def\@bibparsep{0pt}%    ← интервал внутри записи
+%% 	\def\@bibtopsep{-100pt}% ← отступ сверху/снизу всего списка
+%% 	\else
+%% 	\renewcommand\refname{Список литературы}
 	
-	% Настройки для русского списка
-	\def\@bibitemsep{0pt}%   ← интервал между записями
-	\def\@bibparsep{0pt}%    ← интервал внутри записи  
-	\def\@bibtopsep{0pt}%   ← отступ сверху/снизу всего списка
-	\fi
-	\section*{\refname}%
-	\list{\@biblabel{\@arabic\c@enumiv}}%
-	{\settowidth\labelwidth{\@biblabel{#1}}%
-		\leftmargin\labelwidth
-		\advance\leftmargin\labelsep
-		\itemsep=\@bibitemsep
-		\parsep=\@bibparsep
-		\topsep=\@bibtopsep
-		\partopsep=0pt
-		\@openbib@code
-		\usecounter{enumiv}%
-		\let\p@enumiv\@empty
-		\renewcommand\theenumiv{\@arabic\c@enumiv}}%
-	\sloppy
-	\clubpenalty4000
-	\@clubpenalty \clubpenalty
-	\widowpenalty4000%
-	\sfcode`\.\@m}
-{\def\@noitemerr
-	{\@latex@warning{Empty `thebibliography' environment}}%
-	\endlist}
+%% 	% Настройки для русского списка
+%% 	\def\@bibitemsep{0pt}%   ← интервал между записями
+%% 	\def\@bibparsep{0pt}%    ← интервал внутри записи  
+%% 	\def\@bibtopsep{0pt}%   ← отступ сверху/снизу всего списка
+%% 	\fi
+%% 	\section*{\refname}%
+%% 	\list{\@biblabel{\@arabic\c@enumiv}}%
+%% 	{\settowidth\labelwidth{\@biblabel{#1}}%
+%% 		\leftmargin\labelwidth
+%% 		\advance\leftmargin\labelsep
+%% 		\itemsep=\@bibitemsep
+%% 		\parsep=\@bibparsep
+%% 		\topsep=\@bibtopsep
+%% 		\partopsep=0pt
+%% 		\@openbib@code
+%% 		\usecounter{enumiv}%
+%% 		\let\p@enumiv\@empty
+%% 		\renewcommand\theenumiv{\@arabic\c@enumiv}}%
+%% 	\sloppy
+%% 	\clubpenalty4000
+%% 	\@clubpenalty \clubpenalty
+%% 	\widowpenalty4000%
+%% 	\sfcode`\.\@m}
+%% {\def\@noitemerr
+%% 	{\@latex@warning{Empty `thebibliography' environment}}%
+%% 	\endlist}
 
-\newcounter{engbibnum}
+%% \newcounter{engbibnum}
 
-\def\reset@english@bib{
-	\setcounter{engbibnum}{0}
-	\makeatletter
-	% Временно переопределяем \bibitem для английской версии
-	\def\eng@bibitem{\@ifnextchar[{\eng@lbibitem}{\eng@lbibitem[]}}
-	\def\eng@lbibitem[##1]##2{%
-		\stepcounter{engbibnum}%
-		\item[\@biblabel{\theengbibnum}]%
-		\if@filesw
-		\immediate\write\@auxout{\string\bibcite{##2}{\theengbibnum}}%
-		\fi
-		\ignorespaces
-	}
-	\let\@lbibitem\eng@lbibitem
-	\let\bibitem\eng@bibitem
-	\makeatother
-}
+%% \def\reset@english@bib{
+%% 	\setcounter{engbibnum}{0}
+%% 	\makeatletter
+%% 	% Временно переопределяем \bibitem для английской версии
+%% 	\def\eng@bibitem{\@ifnextchar[{\eng@lbibitem}{\eng@lbibitem[]}}
+%% 	\def\eng@lbibitem[##1]##2{%
+%% 		\stepcounter{engbibnum}%
+%% 		\item[\@biblabel{\theengbibnum}]%
+%% 		\if@filesw
+%% 		\immediate\write\@auxout{\string\bibcite{##2}{\theengbibnum}}%
+%% 		\fi
+%% 		\ignorespaces
+%% 	}
+%% 	\let\@lbibitem\eng@lbibitem
+%% 	\let\bibitem\eng@bibitem
+%% 	\makeatother
+%% }
 
-% Модифицируем englishversion для сброса библиографии
-\renewcommand{\englishversion}{
-	\@englishversiontrue
-	\reset@english@bib
-}
+%% % Модифицируем englishversion для сброса библиографии
+%% \renewcommand{\englishversion}{
+%% 	\@englishversiontrue
+%% 	\reset@english@bib
+%% }
 
 \def\@title{}
 \def\@author{}
@@ -1364,8 +1363,8 @@
 
 %%  Floats  %%
 
-\bibsep=0pt
-\renewcommand{\bibnumfmt}[1]{#1.}
+%\bibsep=0pt
+%\renewcommand{\bibnumfmt}[1]{#1.}
 \@ifundefined{bibfont}{\newcommand{\bibfont}{\small}}{\renewcommand{\bibfont}{\small}}
 
 %%  Английская часть  %%

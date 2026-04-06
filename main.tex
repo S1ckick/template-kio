@@ -14,6 +14,12 @@
 % Необязательная опция eqsecnum указывает, что в каждом разделе формулы нумеруются заново.
 % Опция authorsinfo заставляет выводиться информацию об авторе
 \usepackage[eqsecnum,authorsinfo]{kioj6}
+\usepackage[resetlabels]{multibib}
+\newcites{sec}{References}
+
+\let\originalcite\cite
+\def\cite#1{\originalcite{#1}\nocitesec{EN-#1}}
+
 
 % Здесь можно подключить свои пакеты. Некоторые пакеты работают только если их подключить перед предыдущей строкой \usepackage[eqsecnum]{kioj6}
 % \usepackage[•]{•}
@@ -317,16 +323,24 @@
     \end{figure}
 
     \section{ЗАКЛЮЧЕНИЕ}
-    Текст заключения с примером ссылки на литературу:~\cite{layexpl7, matveenko, akim, Chernov2015, de430, iers2010, standish, bizouard11, gubanov, iaaras, lopachev, sviridov, gost-radio, pavlov}
+    Текст заключения с примером ссылки на литературу.
+      \cite{matveenko}.
+%      \nocitesec{matveenko}.
+
+
+%  , matveenko, akim, Chernov2015, de430, iers2010, standish, bizouard11, gubanov, iaaras, lopachev, sviridov, gost-radio, pavlov
 
     %Оформляем литературу, 9 означает, что у нас не более 9 пунктов в списке, т.е. все номера состоят из не более, чем одной цифры. Если пунктов много, т.е. номера могут быть двузначными, пишем 99.
     
     \par\vspace{0pt}  % Компенсируем стандартный отступ
     
-    %IEEE, ugost2008
-    \bibliographystyle{ugost2008} 
-    \bibliography{references}
-    \fontencoding{T2A}\selectfont 
+    \bibliographystyle{ugost2008}
+    \bibliography{references-clones}
+
+%    \fontencoding{T2A}\selectfont
+    \bibliographystylesec{ieee} 
+    \bibliographysec{references-clones}
+    
 
     % \par\vspace{0pt}  % Компенсируем стандартный отступ
 

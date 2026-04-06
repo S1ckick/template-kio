@@ -1358,7 +1358,7 @@ FUNCTION {fmt.names.all}
     { namesleft #0 > }
     { s nameptr
       %"{vv~}{ll}" format.name$ 't :=
-      "{vv~}{ll}{~jj}{~f.}"
+      "{vv~}{ll}{~jj}{~ff}"
       format.name$ 't :=
       nameptr #1 >
         { namesleft #1 >
