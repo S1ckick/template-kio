@@ -28,7 +28,7 @@
 % 2. Полное наименование организации, адрес, город, индекс, страна
 % Цифры 1 и 2 - это верхние индексы, как у нас и было. Если автор один, индекс также нужен.
 %
-
+\RequirePackage{iftex}
 \ProvidesPackage{kioj6}[2020/04/15 v0.4 The KIO and CAM journals package]
 \def\filename{kioj6.sty}
 \def\fileversion{4.00}
@@ -43,8 +43,9 @@
    \PackageWarning{kioj6.sty}{Bad \noexpand\documentclass option, use 11pt}
 \fi
 
-
-\RequirePackage{cmap} % pdf copy\paste + search package
+\ifpdftex
+	\RequirePackage{cmap} % pdf copy\paste + search package
+\fi
 
 %        Options       ====
 
@@ -140,7 +141,9 @@
 
 \ProcessOptions\relax
 
-\RequirePackage[T2A]{fontenc}
+\ifpdftex
+	\RequirePackage[T2A]{fontenc}
+\fi
 \@lang{
   \RequirePackage[english,russian]{babel}
 }{
@@ -1753,7 +1756,8 @@
 \AtEndDocument{%
 	\lastpage%
 }
-
-\RequirePackage[T2A]{fontenc} % package 'fourier' sets T1 encoding
+\ifpdftex
+	\RequirePackage[T2A]{fontenc} % package 'fourier' sets T1 encoding
+\fi
 %\pagestyle{mainstyle}
 \endinput

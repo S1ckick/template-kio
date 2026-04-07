@@ -5,7 +5,8 @@
 % текст статьи рекомендуется писать в кодировке utf-8
 
 
-
+% \usepackage[default]{droidserif}
+% \usepackage[defaultsans]{droidsans}
 
 % Пакет для точного контроля полей
 %\usepackage{xcolor} % для цветного текста
@@ -24,7 +25,6 @@
 \makeatother
 
 
-
 % Здесь можно подключить свои пакеты. Некоторые пакеты работают только если их подключить перед предыдущей строкой \usepackage[eqsecnum]{kioj6}
 % \usepackage[•]{•}
 \usepackage{array}
@@ -38,6 +38,8 @@
 
 % Указываем номер страницы, с которой начинается статья, можно не указывать, будет нумероваться с первой.
 \setcounter{page}{41}
+
+
 
 % Рубрика в журнале, обычно не известна при подаче статьи, поэтому не указываем
 %\journalsectionnoimage{}
@@ -206,12 +208,18 @@
 %\affiliationen{4}{Institute of Applied Physics, Russian Academy of Sciences, Full Name, Address, Nizhny Novgorod, Postal Code, Russia}
 %\affiliationen{5}{Novosibirsk State University, Full Name, Address, Novosibirsk, Postal Code, Russia}
 
+\ifpdftex
+    \makeatletter
+        \AtBeginDocument{%
+            \gdef\f@encoding{T2A}%
+        }
+    \makeatother
+\fi
+\ifxetex
+    \usepackage{fontspec}
+\fi
 
-\makeatletter
-\AtBeginDocument{%
-  \gdef\f@encoding{T2A}%
-}
-\makeatother
+
 \begin{document}
 
 	% ========== РУССКАЯ ЧАСТЬ ==========
@@ -384,7 +392,9 @@
 
         \begin{otherlanguage*}{english}
             \bibliographystylesec{IEEE} 
-            \fontencoding{T2A}\selectfont
+            \ifpdftex
+                \fontencoding{T2A}\selectfont
+            \fi
             \bibliographysec{references-en,references-clones}
         \end{otherlanguage*}
 
