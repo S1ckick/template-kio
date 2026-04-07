@@ -1,13 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                                                                      %%%
-%%%    INSTITUTE FOR CONDENSED MATTER PHYSICS                            %%%
-%%%                                                                      %%%
 %%%    Style file for preparing an article for publication               %%%
 %%%    in the Computer Tools in Education journal <info@ipo.spb.ru>,     %%%
 %%%    http://cte.eltech.ru/ojs                                          %%%
 %%%    using LaTeX2e                                                     %%%
 %%%                                                                      %%%
-%%%    Copyright (C) 2019 by the center for informatization of Education %%%
+%%%    Copyright (C) 2026 by the center for informatization of Education %%%
 %%%                      "KIO", all rights reserved.                     %%%
 %%%                                                                      %%%
 %%%    This file can be redistributed and/or modified under the terms    %%%
@@ -16,8 +14,8 @@
 %%%    The work is based on the Style for the journal Condensed          %%%
 %%%    Matter Physics (https://ctan.org/pkg/cmpj)                        %%%
 %%%                                                                      %%%
-%%%    Please report errors to: Ilya Posov                               %%%
-%%%                             iposov@gmail.com                         %%%
+%%%    Please report errors to: Maksim Subbotin                          %%%
+%%%                             mosubbotin@etu.ru                        %%%
 %%%                                                                      %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
@@ -29,10 +27,10 @@
 % Цифры 1 и 2 - это верхние индексы, как у нас и было. Если автор один, индекс также нужен.
 %
 \RequirePackage{iftex}
-\ProvidesPackage{kioj6}[2020/04/15 v0.4 The KIO and CAM journals package]
+\ProvidesPackage{kioj6}[2026/04/07 The KIO and CAM journals package]
 \def\filename{kioj6.sty}
-\def\fileversion{4.00}
-\def\filedate{2020/04/15}
+\def\fileversion{5.00}
+\def\filedate{2026/04/07}
 \immediate\write32{This is '\filename' v\fileversion \space <\filedate> ^^J%
      the KIO and CTE journals package}
 \newif\if@firstpage
@@ -164,6 +162,8 @@
 \RequirePackage{subcaption}
 \RequirePackage[misc]{ifsym}  
 \RequirePackage{microtype}
+\RequirePackage[resetlabels]{multibib}
+
 
 \@lang{
   \renewcommand\thesubfigure{\asbuk{subfigure}}
@@ -420,75 +420,6 @@
 %  \global\let\maketitle\relax
   \global\let\@thanks\@empty
 %  \firstpage
-  
-
-
-% Сброс нумерации для библиографии
-
-%% \renewenvironment{thebibliography}[1]
-%% {\if@englishversion
-%% 	\renewcommand\refname{References}
-%% 	\setcounter{enumiv}{0}% ← СБРОС НУМЕРАЦИИ
-	
-%% 	% Настройки для английского списка
-%% 	\def\@bibitemsep{0pt}%   ← интервал между записями
-%% 	\def\@bibparsep{0pt}%    ← интервал внутри записи
-%% 	\def\@bibtopsep{-100pt}% ← отступ сверху/снизу всего списка
-%% 	\else
-%% 	\renewcommand\refname{Список литературы}
-	
-%% 	% Настройки для русского списка
-%% 	\def\@bibitemsep{0pt}%   ← интервал между записями
-%% 	\def\@bibparsep{0pt}%    ← интервал внутри записи  
-%% 	\def\@bibtopsep{0pt}%   ← отступ сверху/снизу всего списка
-%% 	\fi
-%% 	\section*{\refname}%
-%% 	\list{\@biblabel{\@arabic\c@enumiv}}%
-%% 	{\settowidth\labelwidth{\@biblabel{#1}}%
-%% 		\leftmargin\labelwidth
-%% 		\advance\leftmargin\labelsep
-%% 		\itemsep=\@bibitemsep
-%% 		\parsep=\@bibparsep
-%% 		\topsep=\@bibtopsep
-%% 		\partopsep=0pt
-%% 		\@openbib@code
-%% 		\usecounter{enumiv}%
-%% 		\let\p@enumiv\@empty
-%% 		\renewcommand\theenumiv{\@arabic\c@enumiv}}%
-%% 	\sloppy
-%% 	\clubpenalty4000
-%% 	\@clubpenalty \clubpenalty
-%% 	\widowpenalty4000%
-%% 	\sfcode`\.\@m}
-%% {\def\@noitemerr
-%% 	{\@latex@warning{Empty `thebibliography' environment}}%
-%% 	\endlist}
-
-%% \newcounter{engbibnum}
-
-%% \def\reset@english@bib{
-%% 	\setcounter{engbibnum}{0}
-%% 	\makeatletter
-%% 	% Временно переопределяем \bibitem для английской версии
-%% 	\def\eng@bibitem{\@ifnextchar[{\eng@lbibitem}{\eng@lbibitem[]}}
-%% 	\def\eng@lbibitem[##1]##2{%
-%% 		\stepcounter{engbibnum}%
-%% 		\item[\@biblabel{\theengbibnum}]%
-%% 		\if@filesw
-%% 		\immediate\write\@auxout{\string\bibcite{##2}{\theengbibnum}}%
-%% 		\fi
-%% 		\ignorespaces
-%% 	}
-%% 	\let\@lbibitem\eng@lbibitem
-%% 	\let\bibitem\eng@bibitem
-%% 	\makeatother
-%% }
-
-%% % Модифицируем englishversion для сброса библиографии
-%% \renewcommand{\englishversion}{
-%% 	\@englishversiontrue
-%% 	\reset@english@bib
-%% }
 
 \def\@title{}
 \def\@author{}
@@ -1759,5 +1690,27 @@
 \ifpdftex
 	\RequirePackage[T2A]{fontenc} % package 'fourier' sets T1 encoding
 \fi
+
+\ifpdftex
+    \makeatletter
+        \AtBeginDocument{%
+            \gdef\f@encoding{T2A}%
+        }
+    \makeatother
+\fi
+\ifxetex
+    \usepackage{fontspec}
+\fi
+
+\newcites{eng}{References}
+
+\let\originalcite\cite
+\def\cite#1{\originalcite{#1}\nociteeng{EN-#1}}
+\makeatletter
+\renewcommand\@biblabel[1]{#1.}
+\makeatother
+
+
+
 %\pagestyle{mainstyle}
 \endinput

@@ -9,15 +9,6 @@
 % Необязательная опция eqsecnum указывает, что в каждом разделе формулы нумеруются заново.
 % Опция authorsinfo заставляет выводиться информацию об авторе
 \usepackage[eqsecnum,authorsinfo]{kioj6}
-\usepackage[resetlabels]{multibib}
-\newcites{eng}{References}
-
-\let\originalcite\cite
-\def\cite#1{\originalcite{#1}\nociteeng{EN-#1}}
-\makeatletter
-\renewcommand\@biblabel[1]{#1.}
-\makeatother
-
 
 
 % ========== НАСТРОЙКИ ДЛЯ ПРЕДОТВРАЩЕНИЯ ВИСЯЧИХ СТРОК ==========
@@ -27,9 +18,8 @@
 
 % ===================== НАСТРОЙКИ ЖУРНАЛА ====================
 
-% Указываем номер страницы, с которой начинается статья, можно не указывать, будет нумероваться с первой.
+% Указываем номер страницы, с которой начинается статья
 \setcounter{page}{1}
-
 
 % Рубрика в журнале (не всегда известна при подаче статьи)
 
@@ -50,7 +40,7 @@
 
 % Указывам год, номер выпуска неизвестен, поэтому ставим прочерк, указываем edu, что означает журнал "Компьютерные инструменты в образовании".
 
-\issue{2026}{2}{edu}
+\issue{2026}{--}{edu}
 
 % ===== ТИП СТАТЬИ ====
 
@@ -63,11 +53,11 @@
 %
 % =========================
 
-\articletype{1} % ← 
+\articletype{1}
 
 
-\udknumber{621.320}
-\doinumber{10.32603/2071-2340-2025-2-5-123}
+\udknumber{999.999}
+\doinumber{99.99999/9999999999-99.99}
 
 % =============== РУССКИЕ ДАННЫЕ ===============
 
@@ -80,65 +70,67 @@
 \keywordsru{Русские ключевые слова.}
 
 % Авторы (русская версия)
-\authorI[Андреев А.~А.\affil{1,2}]{Андреев Андрей Андреевич}
+\authorI[Андреев А.~А.\affil{1,3}]{Андреев Андрей Андреевич}
 \authorIpos{}
 \authorIinfo{информация об авторе длинная}
-\authorIorcid{orcid.org/0000-0002-0261-3113}
-\authorIemailEnvelope{aaa6@org.com}
+\authorIorcid{orcid.org/0000-0000-9999-9999}
+\authorIemailEnvelope{aaandreev@etu.ru} % адрес для корреспонденции
 
 \authorII[Борисов Б.~Б.\affil{2}]{Борисов Борис Борисович}
 \authorIIpos{}
 \authorIIinfo{информация о втором авторе длинная}
-\authorIIemail{aaa6@org.com}  % ИСПРАВЛЕНО: было authorIIemailEnvelope
+\authorIIemail{borisov@iaaras.ru}
 
 \authorIII[Воронов В.~В.\affil{3}]{Воронов Владимир Владимирович}
 \authorIIIpos{}
 \authorIIIinfo{информация о третьем авторе}
-\authorIIIemail{vvv@university.com}
+\authorIIIemail{v.v.voronov@spbu.ru}
 
-\authorIV[Громова Г.~Г.\affil{1,3}]{Громова Галина Геннадьевна}
+\authorIV[Громова Г.~Г.\affil{4}]{Громова Галина Геннадьевна}
 \authorIVpos{}
 \authorIVinfo{информация о четвертом авторе}
-\authorIVemail{ggg@science.ru}
+\authorIVorcid{orcid.org/0000-9999-9999-9999}
+\authorIVemail{gromoff@quantori.com}
 %
 %\authorV[Дмитриев Д.~Д.\affil{4}]{Дмитриев Дмитрий Дмитриевич}
 %\authorVpos{}
 %\authorVinfo{информация о пятом авторе}
-%\authorVemail{ddd@lab.org}
+%\authorVemail{}
 
-%% Автор для корреспонденции
 %\authorVI[Ершова Е.~Е.\affil{2,4}]{Ершова Елена Евгеньевна}
 %\authorVIpos{}
 %\authorVIinfo{информация о шестом авторе}
-%\authorVIemailEnvelope{aaa6@org.com}
-%\authorVIemail{eee@correspondence.org}
+%\authorVIemailEnvelope{}
+%\authorVIemail{}
 %
 %\authorVII[Фёдоров Ф.~Ф.\affil{5}]{Фёдоров Фёдор Фёдорович}
 %\authorVIIpos{}
 %\authorVIIinfo{информация о седьмом авторе}
-%\authorVIIemail{fff@institute.com}
+%\authorVIIemail{}
 %
 %\authorVIII[Зайцева З.~З.\affil{1,5}]{Зайцева Зоя Захаровна}
 %\authorVIIIpos{}
 %\authorVIIIinfo{информация о восьмом авторе}
-%\authorVIIIemail{zzz@research.net}
+%\authorVIIIemail{}
 %
 %\authorIX[Иванов И.~И.\affil{3}]{Иванов Иван Иванович}
 %\authorIXpos{}
 %\authorIXinfo{информация о девятом авторе}
-%\authorIXemail{iii@tech.ru}
+%\authorIXemail{}
 %
 %\authorX[Кузнецов К.~К.\affil{4,5}]{Кузнецов Кирилл Константинович}
 %\authorXpos{}
 %\authorXinfo{информация о десятом авторе}
-%\authorXemail{kkk@univ.ac.ru}
+%\authorXemail{}
 
 % Аффилиации
-\affiliation{1}{СПбГУ, полное наименование организации, адрес, город, индекс, страна}
-\affiliation{2}{СПбЭТУ, полное наименование организации, адрес, город, индекс, страна}
-\affiliation{3}{МГУ, полное наименование организации, адрес, Москва, индекс, Россия}
-%\affiliation{4}{ИПФ РАН, полное наименование организации, адрес, Нижний Новгород, индекс, Россия}
-%\affiliation{5}{НГУ, полное наименование организации, адрес, Новосибирск, индекс, Россия}
+\affiliation{1}{Санкт-Петербургский государственный электротехнический университет «ЛЭТИ»,
+  ул. Профессора Попова, 5, 197022, Санкт-Петербург, Россия}
+\affiliation{2}{Федеральное государственное бюджетное учреждение науки
+  Институт прикладной астрономии Российской академии наук, наб. Кутузова, 10, 191187, Санкт-Петербург, Россия}
+\affiliation{3}{Санкт-Петербургский государственный университет,
+  Университетская набережная, д. 7–9, 199034, Санкт-Петербург, Россия}
+\affiliation{4}{Quantori LLC, 1 Broadway, Cambridge, MA 02142, United States}
 
 % ========== АНГЛИЙСКИЕ ДАННЫЕ ==========
 
@@ -198,38 +190,22 @@
 %\affiliationen{4}{Institute of Applied Physics, Russian Academy of Sciences, Full Name, Address, Nizhny Novgorod, Postal Code, Russia}
 %\affiliationen{5}{Novosibirsk State University, Full Name, Address, Novosibirsk, Postal Code, Russia}
 
-\ifpdftex
-    \makeatletter
-        \AtBeginDocument{%
-            \gdef\f@encoding{T2A}%
-        }
-    \makeatother
-\fi
-\ifxetex
-    \usepackage{fontspec}
-\fi
-
-
 \begin{document}
 
 	% ========== РУССКАЯ ЧАСТЬ ==========
 
 	\russianversion % устанавливаем русскую версию
 	
-
 	\maketitle
 	
 	\pagestyle{mainstyle} 
 	
-
 	\begin{abstract}
 		\insertabstract    % ← Автоматически подставит РУССКУЮ аннотацию
 		\insertkeywords    % ← Автоматически подставит РУССКИЕ ключевые слова
 		
 		% Можно добавить пример цитирования:
 		\citationexample Андреев А.~А., Борисов Б.~Б. Шаблон статьи для журнала КИО. Нигде не опубликовано
-		
-		
 	\end{abstract}
 
     \section{ВВЕДЕНИЕ}
@@ -244,12 +220,12 @@
         \item Первый пункт;
         \item Второй пункт.
     \end{enumerate}
-    Ссылка на рис.~\ref{fig-example}.
+    Ссылка на рис.~\ref{fig:example}.
 
     \begin{figure}[htb]
         \centering
         \includegraphics[width=0.4\textwidth]{xkcd1301.png}
-        \caption{Достоверность информации в зависимости от расширения файла} \label{fig-example}
+        \caption{Достоверность информации в зависимости от расширения файла} \label{fig:example}
     \end{figure}
 	
     %Пример таблицы. [H] означает, что таблица должна быть ровно здесь и никуда не перемещаться.
@@ -302,24 +278,23 @@
     Большое внимание журнал уделяет донесению актуальных исследований до студентов, поэтому привествуются статьи, разъясняющие новые идеи информатики и алгоритмической математики и статьи с постановкой задач для молодых ученых.
 
     \subsubsection{Подподраздел}
-    Сначала, ссылка на~\ref{sec:sub}.
-    %Далее пример двух изображений рядом на одном рисунке
-    %Чтобы это работало, в начале файла нужно подключить пакет subcaption:
-    %\usepackage{subcaption}
+
+    Рис.~\ref{fig:example-2} содержит два изображения: \ref{fig:example-2a} и \ref{fig:example-2b}.
+    
     \begin{figure}[H]
         \centering
         \begin{subfigure}[t]{70mm} %указываем размер подрисунка, без буквы [t] картинки будут вертикально отцентрованы
             \includegraphics[width=\textwidth]{xkcd1301.png} %width=\textwidth указывает, что ширина совпадает с шириной подрисунка
             \subcaption{Необязательный подзаголовок}
-            \label{fig-example-2a}
+            \label{fig:example-2a}
         \end{subfigure}
         \quad %это широкий пробел между двумя рисунками
         \begin{subfigure}[t]{50mm}
             \includegraphics[width=\textwidth]{xkcd1301.png}
             \subcaption{} % Здесь подзаголовок не указан
-            \label{fig-example-2b}
+            \label{fig:example-2b}
         \end{subfigure}
-        \caption{Пример двух изображений рядом на одном рисунке} \label{fig-example-2}
+        \caption{Пример двух изображений рядом на одном рисунке} \label{fig:example-2}
     \end{figure}
 
     Ссылка на формулу~(\ref{eq:gaussian}).
@@ -332,7 +307,11 @@
     
 
     \section{ЗАКЛЮЧЕНИЕ}
-    Текст заключения с примером ссылок. Ссылка на статью на русском, у которой есть английский перевод: \cite{Matveenko}.
+    Текст заключения с примером ссылок.
+
+    Ссылка на разд.~\ref{sec:sub}.
+
+    Ссылка на статью на русском, у которой есть английский перевод: \cite{Matveenko}.
     Ссылка на книгу на русском, у которой нет английского перевода: \cite{Gubanov}.
     Ссылка на книгу на английском, у которой есть русский перевод: \cite{Hairer}.
     Ссылка на главу в книге на русском, у которой нет английского перевода: \cite{layexpl7}.
@@ -344,17 +323,11 @@
     Ссылка на патент: \cite{sviridov}.
 
 
-    \par\vspace{0pt}  % Компенсируем стандартный отступ
-    
     \bibliographystyle{ugost2008}
     \bibliography{references-clones}
 
-    \par\vspace{0pt}  % Компенсируем стандартный отступ
-
-    %дополнительная информация о статье
+    % Дополнительная информация о статье
     \additionalinfo{Поступила в редакцию 7 октября 2025, окончательный вариант 28 января 2026 г.}
-    
-    \par\vspace{5pt}  % Компенсируем стандартный отступ
     
     \printauthorsinfo
 
@@ -372,22 +345,13 @@
             
         \end{abstract}
         
-        \par\vspace{0pt}  % Компенсируем стандартный отступ
-
         \begin{otherlanguage*}{english}
             \bibliographystyleeng{IEEE} 
-            \ifpdftex
-                \fontencoding{T2A}\selectfont
-            \fi
             \bibliographyeng{references-en,references-clones}
         \end{otherlanguage*}
 
-       
-        
         \additionalinfo{Received October 7, 2025, The final version: January 28, 2026}
         
-        \par\vspace{-25pt}  % Компенсируем стандартный отступ
-            
     \end{translatedpart}   
     
 \end{document}
