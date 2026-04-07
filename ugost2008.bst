@@ -2082,6 +2082,7 @@ FUNCTION {patent}
   title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
+  add.period$
   new.colon
   format.type.number output
   add.blank
