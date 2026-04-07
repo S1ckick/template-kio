@@ -10,10 +10,10 @@
 % Опция authorsinfo заставляет выводиться информацию об авторе
 \usepackage[eqsecnum,authorsinfo]{kioj6}
 \usepackage[resetlabels]{multibib}
-\newcites{sec}{References}
+\newcites{eng}{References}
 
 \let\originalcite\cite
-\def\cite#1{\originalcite{#1}\nocitesec{EN-#1}}
+\def\cite#1{\originalcite{#1}\nociteeng{EN-#1}}
 \makeatletter
 \renewcommand\@biblabel[1]{#1.}
 \makeatother
@@ -377,11 +377,11 @@
         \par\vspace{0pt}  % Компенсируем стандартный отступ
 
         \begin{otherlanguage*}{english}
-            \bibliographystylesec{IEEE} 
+            \bibliographystyleeng{IEEE} 
             \ifpdftex
                 \fontencoding{T2A}\selectfont
             \fi
-            \bibliographysec{references-en,references-clones}
+            \bibliographyeng{references-en,references-clones}
         \end{otherlanguage*}
 
        
