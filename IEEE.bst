@@ -5,6 +5,8 @@
 %% 
 %% Copyright (c) 2003-2015 Michael Shell
 %% 
+%% Модификация: добавлена поддержка поля titleraw (titleraw [title])
+%% 
 %% Original starting code base and algorithms obtained from the output of
 %% Patrick W. Daly's makebst package as well as from prior versions of
 %% IEEE BibTeX styles:
@@ -283,6 +285,7 @@ ENTRY
     series
     revision
     title
+    titleraw
     type
     url
     doi
@@ -395,7 +398,7 @@ FUNCTION {initialize.controls}
 % illustration of two most recently formatted entry fields (on the stack):
 %
 %               CURRENT_ITEM
-%               "PREVIOUS_ITEM
+%               "PREVIOUS_ITEM"
 %
 % which, in this example, is to eventually appear in the bibliography as:
 % 
@@ -611,31 +614,34 @@ numnames
 
 FUNCTION {output.nonnull}
 { swap$
-  prev.status.punct punct.comma =
-     { "," * }
-     { skip$ }
-   if$
-  prev.status.punct punct.period =
-     { add.period$ }
-     { skip$ }
-   if$ 
+  % Сначала закрывающие кавычки (если они были открыты)
   prev.status.quote quote.close =
      { "''" * }
      { skip$ }
-   if$
+  if$
+  % Затем пунктуация: запятая или точка
+  prev.status.punct punct.comma =
+     { "," * }
+     { skip$ }
+  if$
+  prev.status.punct punct.period =
+     { add.period$ }
+     { skip$ }
+  if$ 
+  % Затем пробелы
   prev.status.space space.normal =
      { " " * }
      { skip$ }
-   if$
+  if$
   prev.status.space space.large =
      { large.space * }
      { skip$ }
-   if$
+  if$
   write$
   prev.status.nline nline.newblock =
      { newline$ "\newblock " write$ }
      { skip$ }
-   if$
+  if$
 }
 
 FUNCTION {output}
@@ -1421,16 +1427,22 @@ FUNCTION {format.in.booktitle.edition}
   if$
 }
 
+%% МОДИФИЦИРОВАННАЯ ФУНКЦИЯ: добавлена поддержка titleraw
 FUNCTION {format.article.title}
 { title duplicate$ empty$ 'skip$
-    { this.to.prev.status
-      this.status.std
-      "t" change.case$
-    }
+    { "t" change.case$ }
   if$
   "title" bibinfo.check
+  titleraw empty$
+    { skip$ }
+    { titleraw "t" change.case$ "titleraw" bibinfo.check
+      swap$ " [" swap$ * "]" * *
+    }
+  if$
   duplicate$ empty$ 'skip$
-    { quote.close 'this.status.quote :=
+    { this.to.prev.status
+      this.status.std
+      quote.close 'this.status.quote :=
       is.last.char.not.punct
         { punct.std 'this.status.punct := }
         { punct.no 'this.status.punct := }
@@ -1442,23 +1454,36 @@ FUNCTION {format.article.title}
   if$
 }
 
+%% МОДИФИЦИРОВАННАЯ ФУНКЦИЯ: добавлена поддержка titleraw
 FUNCTION {format.article.title.electronic}
 { title duplicate$ empty$ 'skip$
+    { "t" change.case$ }
+  if$
+  "title" bibinfo.check
+  titleraw empty$
+    { skip$ }
+    { titleraw "t" change.case$ "titleraw" bibinfo.check
+      swap$ " [" swap$ * "]" * *
+    }
+  if$
+  duplicate$ empty$ 'skip$
     { this.to.prev.status
       this.status.std
       cap.status.std
-      "t" change.case$ 
+      select.language
     }
-  if$
-  "title" bibinfo.check
-  duplicate$ empty$ 
-    { skip$ } 
-    { select.language }
   if$
 }
 
+%% МОДИФИЦИРОВАННАЯ ФУНКЦИЯ: добавлена поддержка titleraw
 FUNCTION {format.book.title.edition}
 { title "title" bibinfo.check
+  titleraw empty$
+    { skip$ }
+    { titleraw "titleraw" bibinfo.check
+      swap$ " [" swap$ * "]" * *
+    }
+  if$
   duplicate$ empty$
     { "empty title in " cite$ * warning$ }
     { this.to.prev.status
@@ -1482,8 +1507,15 @@ FUNCTION {format.book.title.edition}
   if$
 }
 
+%% МОДИФИЦИРОВАННАЯ ФУНКЦИЯ: добавлена поддержка titleraw
 FUNCTION {format.book.title}
 { title "title" bibinfo.check
+  titleraw empty$
+    { skip$ }
+    { titleraw "titleraw" bibinfo.check
+      swap$ " [" swap$ * "]" * *
+    }
+  if$
   duplicate$ empty$ 'skip$
     { this.to.prev.status
       this.status.std
