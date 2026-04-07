@@ -5,7 +5,6 @@
 %% 
 %% Copyright (c) 2003-2015 Michael Shell
 %% 
-%% Модификация: добавлена поддержка поля titleraw (titleraw [title])
 %% 
 %% Original starting code base and algorithms obtained from the output of
 %% Patrick W. Daly's makebst package as well as from prior versions of
@@ -1427,7 +1426,7 @@ FUNCTION {format.in.booktitle.edition}
   if$
 }
 
-%% МОДИФИЦИРОВАННАЯ ФУНКЦИЯ: добавлена поддержка titleraw
+
 FUNCTION {format.article.title}
 { title duplicate$ empty$ 'skip$
     { "t" change.case$ }
@@ -1436,7 +1435,8 @@ FUNCTION {format.article.title}
   titleraw empty$
     { skip$ }
     { titleraw "t" change.case$ "titleraw" bibinfo.check
-      swap$ " [" swap$ * "]" * *
+      emphasize                     
+      swap$ " [" swap$ * "]" * *   
     }
   if$
   duplicate$ empty$ 'skip$
@@ -1454,7 +1454,7 @@ FUNCTION {format.article.title}
   if$
 }
 
-%% МОДИФИЦИРОВАННАЯ ФУНКЦИЯ: добавлена поддержка titleraw
+
 FUNCTION {format.article.title.electronic}
 { title duplicate$ empty$ 'skip$
     { "t" change.case$ }
@@ -1463,6 +1463,7 @@ FUNCTION {format.article.title.electronic}
   titleraw empty$
     { skip$ }
     { titleraw "t" change.case$ "titleraw" bibinfo.check
+      emphasize
       swap$ " [" swap$ * "]" * *
     }
   if$
@@ -1475,12 +1476,13 @@ FUNCTION {format.article.title.electronic}
   if$
 }
 
-%% МОДИФИЦИРОВАННАЯ ФУНКЦИЯ: добавлена поддержка titleraw
+
 FUNCTION {format.book.title.edition}
 { title "title" bibinfo.check
   titleraw empty$
     { skip$ }
     { titleraw "titleraw" bibinfo.check
+      emphasize                    
       swap$ " [" swap$ * "]" * *
     }
   if$
@@ -1489,7 +1491,6 @@ FUNCTION {format.book.title.edition}
     { this.to.prev.status
       this.status.std
       select.language
-      emphasize
       edition empty$ 'skip$
         { ", " *
           edition
@@ -1507,12 +1508,13 @@ FUNCTION {format.book.title.edition}
   if$
 }
 
-%% МОДИФИЦИРОВАННАЯ ФУНКЦИЯ: добавлена поддержка titleraw
+
 FUNCTION {format.book.title}
 { title "title" bibinfo.check
   titleraw empty$
     { skip$ }
     { titleraw "titleraw" bibinfo.check
+      emphasize
       swap$ " [" swap$ * "]" * *
     }
   if$
@@ -1521,7 +1523,6 @@ FUNCTION {format.book.title}
       this.status.std
       cap.status.std
       select.language
-      emphasize
     }
   if$
 }
