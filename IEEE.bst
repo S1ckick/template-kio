@@ -613,34 +613,31 @@ numnames
 
 FUNCTION {output.nonnull}
 { swap$
-  % Сначала закрывающие кавычки (если они были открыты)
-  prev.status.quote quote.close =
-     { "''" * }
-     { skip$ }
-  if$
-  % Затем пунктуация: запятая или точка
   prev.status.punct punct.comma =
      { "," * }
      { skip$ }
-  if$
+   if$
   prev.status.punct punct.period =
      { add.period$ }
      { skip$ }
-  if$ 
-  % Затем пробелы
+   if$ 
+  prev.status.quote quote.close =
+     { "''" * }
+     { skip$ }
+   if$
   prev.status.space space.normal =
      { " " * }
      { skip$ }
-  if$
+   if$
   prev.status.space space.large =
      { large.space * }
      { skip$ }
-  if$
+   if$
   write$
   prev.status.nline nline.newblock =
      { newline$ "\newblock " write$ }
      { skip$ }
-  if$
+   if$
 }
 
 FUNCTION {output}
@@ -1172,7 +1169,7 @@ FUNCTION {format.address.org.or.pub.date}
       t empty$
         { skip$ }
         { punct.period 'prev.status.punct :=
-          space.large 'prev.status.space :=
+          space.normal 'prev.status.space :=
           address empty$
             { skip$ }
             { ": " * }
@@ -1436,7 +1433,7 @@ FUNCTION {format.article.title}
     { skip$ }
     { titleraw "t" change.case$ "titleraw" bibinfo.check
       emphasize                     
-      swap$ " [" swap$ * "]" * *   
+      swap$ " [" swap$ * "]" * *
     }
   if$
   duplicate$ empty$ 'skip$
