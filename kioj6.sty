@@ -88,9 +88,15 @@
 }
 
 \def\cmpj@sf@droid{
-\RequirePackage{txfonts}
+\ifpdftex
 \RequirePackage{fourier}
-\IfFileExists{omltxmi.fd}{\re@DeclareMathSymbol{\varkappa}{\mathord}{AMSb}{123}}{}
+\fi
+\ifxetex
+\RequirePackage{fourier-otf}
+\fi
+
+%\RequirePackage{txfonts}
+%\IfFileExists{omltxmi.fd}{\re@DeclareMathSymbol{\varkappa}{\mathord}{AMSb}{123}}{}
 \RequirePackage[default,scale=0.86]{droidserif}
 \RequirePackage[defaultsans,scale=0.86]{droidsans}
 \RequirePackage[defaultmono,scale=0.86]{droidsansmono}
@@ -1633,7 +1639,7 @@
 		\clubpenalty=300
 		\noindent
 		\begin{minipage}[b]{\textwidth}%
-			\bfseries
+%			\bfseries
 			\sf@phv
 			
 			\def\authorlonginfo##1{
