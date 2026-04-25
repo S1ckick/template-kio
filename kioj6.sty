@@ -1713,7 +1713,12 @@
 \newcites{eng}{References}
 
 \let\originalcite\cite
-\def\cite#1{\originalcite{#1}\nociteeng{EN-#1}}
+\def\cite#1{%
+  \originalcite{#1}%
+  \@for\@citekey:=#1\do{%
+    \nociteeng{EN-\@citekey}%
+  }%
+}
 \makeatletter
 \renewcommand\@biblabel[1]{#1.}
 \makeatother
