@@ -1712,17 +1712,29 @@
 
 \newcites{eng}{References}
 
-\let\originalcite\cite
-\def\cite#1{%
-  \originalcite{#1}%
-  \@for\@citekey:=#1\do{%
-    \nociteeng{EN-\@citekey}%
+\usepackage{letltxmacro}
+
+\LetLtxMacro{\originalcite}{\cite}
+
+%\let\originalcite\cite
+
+\makeatletter
+\renewcommand{\cite}[2][]{%
+  \originalcite[#1]{#2}%
+  \begingroup
+  \def\@temp##1{%
+    \nociteeng{EN-##1}%
   }%
+  \@for\@tmp:=#2\do{%
+    \expandafter\@temp\expandafter{\@tmp}%
+  }%
+  \endgroup
 }
+\makeatother
+
 \makeatletter
 \renewcommand\@biblabel[1]{#1.}
 \makeatother
-
 
 
 %\pagestyle{mainstyle}
