@@ -453,12 +453,12 @@
 	\def\@section@image@path@prefix{"images/"}
 	\ifthenelse{\equal{edu}{#3}}{%
 		\def\journal@type{\@langrev{Компьютерные инструменты в образовании}{Computer tools in education}}%
-		\def\journal@type@ru{\begin{otherlanguage*}{russian}Компьютерные инструменты в образовании\end{otherlanguage*}}%
+		\def\journal@type@ru{{\selectlanguage{russian}Компьютерные инструменты в образовании}}%
 		\def\journal@type@en{Computer tools in education}%
 	}{%
       \ifthenelse{\equal{cam}{#3}}{%
         \def\journal@type{\@langrev{Компьютерная математика}{Computer assisted mathematics}}%
-        \def\journal@type@ru{\begin{otherlanguage*}{russian}Компьютерная математика\end{otherlanguage*}}%
+        \def\journal@type@ru{{\selectlanguage{russian}Компьютерная математика}}%
         \def\journal@type@en{Computer assisted mathematics}%
         \def\@section@image@path@prefix{cam-}%
       }{%
@@ -472,7 +472,7 @@
     }%
 }
 
-\def\article@type@ru{\begin{otherlanguage*}{russian}Исследовательская статья\end{otherlanguage*}}
+\def\article@type@ru{{\selectlanguage{russian}Исследовательская статья}}
 \def\article@type@en{Research article}
 
 \newcommand{\articletr}[2]{%
@@ -483,22 +483,22 @@
 \newcommand{\articletype}[1]{%
 	\ifcase#1\relax
 	\or % 1
-	\gdef\article@type@ru{\begin{otherlanguage*}{russian}Исследовательская статья\end{otherlanguage*}}%
+	\gdef\article@type@ru{{\selectlanguage{russian}Исследовательская статья}}%
 	\gdef\article@type@en{Research article}%
 	\or % 2
-	\gdef\article@type@ru{\begin{otherlanguage*}{russian}Обзорная статья\end{otherlanguage*}}%
+	\gdef\article@type@ru{{\selectlanguage{russian}Обзорная статья}}%
 	\gdef\article@type@en{Review article}%
 	\or % 3
-	\gdef\article@type@ru{\begin{otherlanguage*}{russian}Материалы конференции\end{otherlanguage*}}%
+	\gdef\article@type@ru{{\selectlanguage{russian}Материалы конференции}}%
 	\gdef\article@type@en{Conference paper}%
 	\or % 4
-	\gdef\article@type@ru{\begin{otherlanguage*}{russian}Редакционная статья\end{otherlanguage*}}%
+	\gdef\article@type@ru{{\selectlanguage{russian}Редакционная статья}}%
 	\gdef\article@type@en{Editorial article}%
 	\or % 5
-	\gdef\article@type@ru{\begin{otherlanguage*}{russian}Дискуссионная статья\end{otherlanguage*}}%
+	\gdef\article@type@ru{{\selectlanguage{russian}Дискуссионная статья}}%
 	\gdef\article@type@en{Discussion article}%
 	\or % 6
-	\gdef\article@type@ru{\begin{otherlanguage*}{russian}Краткое сообщение\end{otherlanguage*}}%
+	\gdef\article@type@ru{{\selectlanguage{russian}Краткое сообщение}}%
 	\gdef\article@type@en{Short Communication}%
 	\fi
 }
@@ -520,63 +520,63 @@
 	\def\journal@section@id{#1}
 	\ifthenelse{\equal{informatics}{#1}}{%
 		\def\journal@section@name{\@lang{ИНФОРМАТИКА}{COMPUTER SCIENCE}}%
-		\setsectionheader{\begin{otherlanguage*}{russian}ИНФОРМАТИКА\end{otherlanguage*}}{COMPUTER SCIENCE}% <-- ДОБАВИТЬ
+		\setsectionheader{{\selectlanguage{russian}ИНФОРМАТИКА}}{COMPUTER SCIENCE}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{information-systems}{#1}}{%
 			\def\journal@section@name{\@lang{ИНФОРМАЦИОННЫЕ СИСТЕМЫ}{INFORMATION SYSTEMS}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}ИНФОРМАЦИОННЫЕ СИСТЕМЫ\end{otherlanguage*}}{INFORMATION SYSTEMS}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}ИНФОРМАЦИОННЫЕ СИСТЕМЫ}}{INFORMATION SYSTEMS}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{software-engineering}{#1}}{%
 			\def\journal@section@name{\@lang{ИНЖЕНЕРИЯ ПРОГРАММНОГО ОБЕСПЕЧЕНИЯ}{SOFTWARE ENGINEERING}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}ИНЖЕНЕРИЯ ПРОГРАММНОГО ОБЕСПЕЧЕНИЯ\end{otherlanguage*}}{SOFTWARE ENGINEERING}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}ИНЖЕНЕРИЯ ПРОГРАММНОГО ОБЕСПЕЧЕНИЯ}}{SOFTWARE ENGINEERING}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{computer-in-education}{#1}}{%
 			\def\journal@section@name{\@lang{КОМПЬЮТЕР В УЧЕБНОМ ПРОЦЕССЕ}{COMPUTER IN EDUCATION}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}КОМПЬЮТЕР В УЧЕБНОМ ПРОЦЕССЕ\end{otherlanguage*}}{COMPUTER IN EDUCATION}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}КОМПЬЮТЕР В УЧЕБНОМ ПРОЦЕССЕ}}{COMPUTER IN EDUCATION}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{popular-science-articles}{#1}}{%
 			\def\journal@section@name{\@lang{НАУЧНО-ПОПУЛЯРНЫЕ СТАТЬИ}{POPULAR-SCIENCE ARTICLES}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}НАУЧНО-ПОПУЛЯРНЫЕ СТАТЬИ\end{otherlanguage*}}{POPULAR-SCIENCE ARTICLES}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}НАУЧНО-ПОПУЛЯРНЫЕ СТАТЬИ}}{POPULAR-SCIENCE ARTICLES}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{programming-practice}{#1}}{%
 			\def\journal@section@name{\@lang{ПРАКТИКА ПРОГРАММИРОВАНИЯ}{PROGRAMMING PRACTICE}}%
- 			\setsectionheader{\begin{otherlanguage*}{russian}ПРАКТИКА ПРОГРАММИРОВАНИЯ\end{otherlanguage*}}{PROGRAMMING PRACTICE}% <-- ДОБАВИТЬ
+ 			\setsectionheader{{\selectlanguage{russian}ПРАКТИКА ПРОГРАММИРОВАНИЯ}}{PROGRAMMING PRACTICE}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{editorial-column}{#1}}{%
 			\def\journal@section@name{\@lang{КОЛОНКА РЕДАКТОРА}{EDITORIAL COLUMN}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}КОЛОНКА РЕДАКТОРА\end{otherlanguage*}}{EDITORIAL COLUMN}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}КОЛОНКА РЕДАКТОРА}}{EDITORIAL COLUMN}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{specialists-training-new-teaching-methods}{#1}}{%
 			\def\journal@section@name{\@lang{ПОДГОТОВКА СПЕЦИАЛИСТОВ: новые методы обучения}{SPECIALISTS TRAINING: new teaching methods}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}ПОДГОТОВКА СПЕЦИАЛИСТОВ: новые методы обучения\end{otherlanguage*}}{SPECIALISTS TRAINING: new teaching methods}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}ПОДГОТОВКА СПЕЦИАЛИСТОВ: новые методы обучения}}{SPECIALISTS TRAINING: new teaching methods}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{specialists-training-training-programs}{#1}}{%
 			\def\journal@section@name{\@lang{ПОДГОТОВКА СПЕЦИАЛИСТОВ: программы обучения}{SPECIALISTS TRAINING: training programs}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}ПОДГОТОВКА СПЕЦИАЛИСТОВ: программы обучения\end{otherlanguage*}}{SPECIALISTS TRAINING: training programs}% 
+			\setsectionheader{{\selectlanguage{russian}ПОДГОТОВКА СПЕЦИАЛИСТОВ: программы обучения}}{SPECIALISTS TRAINING: training programs}% 
 	}{%
 		\ifthenelse{\equal{specialists-training-professional-standards}{#1}}{%
 			\def\journal@section@name{\@lang{ПОДГОТОВКА СПЕЦИАЛИСТОВ: профессиональные стандарты}{SPECIALISTS TRAINING: professional standards}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}ПОДГОТОВКА СПЕЦИАЛИСТОВ: профессиональные стандарты\end{otherlanguage*}}{SPECIALISTS TRAINING: professional standards}% 
+			\setsectionheader{{\selectlanguage{russian}ПОДГОТОВКА СПЕЦИАЛИСТОВ: профессиональные стандарты}}{SPECIALISTS TRAINING: professional standards}% 
 	}{%
 		\ifthenelse{\equal{algorithmic-mathematics}{#1}}{%
 			\def\journal@section@name{\@lang{АЛГОРИТМИЧЕСКАЯ МАТЕМАТИКА И МАТЕМАТИЧЕСКОЕ МОДЕЛИРОВАНИЕ}{ALGORITHMIC MATHEMATIC AND MATHEMATICAL MODELING}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}АЛГОРИТМИЧЕСКАЯ МАТЕМАТИКА И МАТЕМАТИЧЕСКОЕ МОДЕЛИРОВАНИЕ\end{otherlanguage*}}{ALGORITHMIC MATHEMATIC AND MATHEMATICAL MODELING}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}АЛГОРИТМИЧЕСКАЯ МАТЕМАТИКА И МАТЕМАТИЧЕСКОЕ МОДЕЛИРОВАНИЕ}}{ALGORITHMIC MATHEMATIC AND MATHEMATICAL MODELING}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{mathematical-modeling}{#1}}{%
 			\def\journal@section@name{\@lang{МАТЕМАТИЧЕСКОЕ МОДЕЛИРОВАНИЕ}{MATHEMATICAL MODELING}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}МАТЕМАТИЧЕСКОЕ МОДЕЛИРОВАНИЕ\end{otherlanguage*}}{MATHEMATICAL MODELING}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}МАТЕМАТИЧЕСКОЕ МОДЕЛИРОВАНИЕ}}{MATHEMATICAL MODELING}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{open-problems-for-young-scientists}{#1}}{%
 			\def\journal@section@name{\@lang{НЕРЕШЕННЫЕ ЗАДАЧИ ДЛЯ МОЛОДЫХ УЧЕНЫХ}{OPEN PROBLEMS FOR YOUNG SCIENTISTS}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}НЕРЕШЕННЫЕ ЗАДАЧИ ДЛЯ МОЛОДЫХ УЧЕНЫХ\end{otherlanguage*}}{OPEN PROBLEMS FOR YOUNG SCIENTISTS}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}НЕРЕШЕННЫЕ ЗАДАЧИ ДЛЯ МОЛОДЫХ УЧЕНЫХ}}{OPEN PROBLEMS FOR YOUNG SCIENTISTS}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{new-section}{#1}}{%
 			\def\journal@section@name{\@lang{НОВЫЙ РАЗДЕЛ}{A NEW SECTION}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}НОВЫЙ РАЗДЕЛ\end{otherlanguage*}}{A NEW SECTION}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}НОВЫЙ РАЗДЕЛ}}{A NEW SECTION}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{artificial-intelligence}{#1}}{%
 			\def\journal@section@name{\@lang{ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ И МАШИННОЕ ОБУЧЕНИЕ}{ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING}}%
-			\setsectionheader{\begin{otherlanguage*}{russian}ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ И МАШИННОЕ ОБУЧЕНИЕ\end{otherlanguage*}}{ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING}% <-- ДОБАВИТЬ
+			\setsectionheader{{\selectlanguage{russian}ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ И МАШИННОЕ ОБУЧЕНИЕ}}{ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING}% <-- ДОБАВИТЬ
 	}{%
 		\ifthenelse{\equal{empty}{#1}}{%
 			\def\journal@section@name{}%
@@ -584,7 +584,7 @@
 			\setsectionheader{}{}% <-- ДОБАВИТЬ (пустые значения)
 	}{%
 		\def\journal@section@name{\@lang{раздел не указан или неизвестен}{section not specified or unknown} #1}%
-		\setsectionheader{\begin{otherlanguage*}{russian}раздел не указан или неизвестен #1\end{otherlanguage*}}{section not specified or unknown #1}% <-- ДОБАВИТЬ
+		\setsectionheader{{\selectlanguage{russian}раздел не указан или неизвестен #1}}{section not specified or unknown #1}% <-- ДОБАВИТЬ
 	}%
 	}%
 	}%
@@ -1228,17 +1228,17 @@
 
 %        Настройка колонтитулов       
 \newcommand{\setarticleheader}[2]{%
-	\def\@russianarticleheader{\begin{otherlanguage*}{russian}#1\end{otherlanguage*}}%
+	\def\@russianarticleheader{{\selectlanguage{russian}#1}}%
 	\def\@englisharticleheader{#2}%
 }
 
 \newcommand{\setauthorsheader}[2]{%
-	\def\@russianauthorsheader{\begin{otherlanguage*}{russian}#1\end{otherlanguage*}}%
+	\def\@russianauthorsheader{{\selectlanguage{russian}#1}}%
 	\def\@englishauthorsheader{#2}%
 }
 
 \newcommand{\setsectionheader}[2]{%
-	\def\@russiansectionheader{\begin{otherlanguage*}{russian}#1\end{otherlanguage*}}%
+	\def\@russiansectionheader{{\selectlanguage{russian}#1}}%
 	\def\@englishsectionheader{#2}%
 }
 
@@ -1539,7 +1539,7 @@
 	\fancyfoot[RO]{%
 		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЖУРНАЛ РЫЖИЙ
 			\begin{tabular}{@{}l@{}}
-				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ \begin{otherlanguage*}{russian}№\ \issue@number.\ С.\ \pages@span\end{otherlanguage*} \\
+				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ {\selectlanguage{russian}№\ \issue@number.\ С.\ \pages@span} \\
 				©\ \MakeTextUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
 			\end{tabular}%
 		}%
