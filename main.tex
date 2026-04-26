@@ -1,14 +1,9 @@
 % Пример статьи для журнала КИО
-% Кодировка файла должна быть UTF-8.
-\documentclass[intlimits,twoside,a4paper,11pt]{article}
+
+\documentclass[eqsecnum,authorsinfo]{kioj6}
 
 
 % Здесь можно подключить свои пакеты.
-
-% Подключение пакета с шаблоном журнала.
-% Необязательная опция eqsecnum указывает, что в каждом разделе формулы нумеруются заново.
-% Опция authorsinfo заставляет выводиться информацию об авторе
-\usepackage[eqsecnum,authorsinfo]{kioj6}
 
 
 % ========== НАСТРОЙКИ ДЛЯ ПРЕДОТВРАЩЕНИЯ ВИСЯЧИХ СТРОК ==========
@@ -70,58 +65,58 @@
 \keywordsru{Русские ключевые слова.}
 
 % Авторы (русская версия)
-\authorI[Андреев А.~А.\affil{1,3}]{Андреев Андрей Андреевич}
-\authorIpos{}
-\authorIinfo{информация об авторе длинная}
-\authorIorcid{orcid.org/0000-0000-9999-9999}
-\authorIemailEnvelope{aaandreev@etu.ru} % адрес для корреспонденции
+\author{1}[Андреев А.~А.\affil{1,3}]{Андреев Андрей Андреевич}
+\authorpos{1}{}
+\authorinfo{1}{информация об авторе длинная}
+\authororcid{1}{orcid.org/0000-0000-9999-9999}
+\authoremailEnvelope{1}{aaandreev@etu.ru} % адрес для корреспонденции
 
-\authorII[Борисов Б.~Б.\affil{2}]{Борисов Борис Борисович}
-\authorIIpos{}
-\authorIIinfo{информация о втором авторе длинная}
-\authorIIemail{borisov@iaaras.ru}
+\author{2}[Борисов Б.~Б.\affil{2}]{Борисов Борис Борисович}
+\authorpos{2}{}
+\authorinfo{2}{информация о втором авторе длинная}
+\authoremail{2}{borisov@iaaras.ru}
 
-\authorIII[Воронов В.~В.\affil{3}]{Воронов Владимир Владимирович}
-\authorIIIpos{}
-\authorIIIinfo{информация о третьем авторе}
-\authorIIIemail{v.v.voronov@spbu.ru}
+\author{3}[Воронов В.~В.\affil{3}]{Воронов Владимир Владимирович}
+\authorpos{3}{}
+\authorinfo{3}{информация о третьем авторе}
+\authoremail{3}{v.v.voronov@spbu.ru}
 
-\authorIV[Громова Г.~Г.\affil{4}]{Громова Галина Геннадьевна}
-\authorIVpos{}
-\authorIVinfo{информация о четвертом авторе}
-\authorIVorcid{orcid.org/0000-9999-9999-9999}
-\authorIVemail{gromoff@quantori.com}
+\author{4}[Громова Г.~Г.\affil{4}]{Громова Галина Геннадьевна}
+\authorpos{4}{}
+\authorinfo{4}{информация о четвертом авторе}
+\authororcid{4}{orcid.org/0000-9999-9999-9999}
+\authoremail{4}{gromoff@quantori.com}
 %
-%\authorV[Дмитриев Д.~Д.\affil{4}]{Дмитриев Дмитрий Дмитриевич}
-%\authorVpos{}
-%\authorVinfo{информация о пятом авторе}
-%\authorVemail{}
+%\author{5}[Дмитриев Д.~Д.\affil{4}]{Дмитриев Дмитрий Дмитриевич}
+%\authorpos{5}{}
+%\authorinfo{5}{информация о пятом авторе}
+%\authoremail{5}{}
 
-%\authorVI[Ершова Е.~Е.\affil{2,4}]{Ершова Елена Евгеньевна}
-%\authorVIpos{}
-%\authorVIinfo{информация о шестом авторе}
-%\authorVIemailEnvelope{}
-%\authorVIemail{}
+%\author{6}[Ершова Е.~Е.\affil{2,4}]{Ершова Елена Евгеньевна}
+%\authorpos{6}{}
+%\authorinfo{6}{информация о шестом авторе}
+%\authoremailEnvelope{6}{}
+%\authoremail{6}{}
 %
-%\authorVII[Фёдоров Ф.~Ф.\affil{5}]{Фёдоров Фёдор Фёдорович}
-%\authorVIIpos{}
-%\authorVIIinfo{информация о седьмом авторе}
-%\authorVIIemail{}
+%\author{7}[Фёдоров Ф.~Ф.\affil{5}]{Фёдоров Фёдор Фёдорович}
+%\authorpos{7}{}
+%\authorinfo{7}{информация о седьмом авторе}
+%\authoremail{7}{}
 %
-%\authorVIII[Зайцева З.~З.\affil{1,5}]{Зайцева Зоя Захаровна}
-%\authorVIIIpos{}
-%\authorVIIIinfo{информация о восьмом авторе}
-%\authorVIIIemail{}
+%\author{8}[Зайцева З.~З.\affil{1,5}]{Зайцева Зоя Захаровна}
+%\authorpos{8}{}
+%\authorinfo{8}{информация о восьмом авторе}
+%\authoremail{8}{}
 %
-%\authorIX[Иванов И.~И.\affil{3}]{Иванов Иван Иванович}
-%\authorIXpos{}
-%\authorIXinfo{информация о девятом авторе}
-%\authorIXemail{}
+%\author{9}[Иванов И.~И.\affil{3}]{Иванов Иван Иванович}
+%\authorpos{9}{}
+%\authorinfo{9}{информация о девятом авторе}
+%\authoremail{9}{}
 %
-%\authorX[Кузнецов К.~К.\affil{4,5}]{Кузнецов Кирилл Константинович}
-%\authorXpos{}
-%\authorXinfo{информация о десятом авторе}
-%\authorXemail{}
+%\author{10}[Кузнецов К.~К.\affil{4,5}]{Кузнецов Кирилл Константинович}
+%\authorpos{10}{}
+%\authorinfo{10}{информация о десятом авторе}
+%\authoremail{10}{}
 
 % Аффилиации
 \affiliation{1}{Санкт-Петербургский государственный электротехнический университет «ЛЭТИ»,
@@ -143,45 +138,45 @@
 \keywordsen{keywords1, keywords2, keywords3}
 
 % Авторы (английская версия)
-\authorIen[Andreev A.~A.\affil{1,2}]{Andreev Andrey Andreevich}
-\authorIposen{}
-\authorIinfoen{1st author info}
+\authoren{1}[Andreev A.~A.\affil{1,2}]{Andreev Andrey Andreevich}
+\authorposen{1}{}
+\authorinfoen{1}{1st author info}
 
-\authorIIen[Borisov B.~B.\affil{2}]{Borisov Boris Borisovich}
-\authorIIposen{}
-\authorIIinfoen{2nd author info}
+\authoren{2}[Borisov B.~B.\affil{2}]{Borisov Boris Borisovich}
+\authorposen{2}{}
+\authorinfoen{2}{2nd author info}
 
-\authorIIIen[Voronov V.~V.\affil{3}]{Voronov Vladimir Vladimirovich}
-\authorIIIposen{}
-\authorIIIinfoen{3rd author info}
+\authoren{3}[Voronov V.~V.\affil{3}]{Voronov Vladimir Vladimirovich}
+\authorposen{3}{}
+\authorinfoen{3}{3rd author info}
 
-\authorIVen[Gromova G.~G.\affil{1,3}]{Gromova Galina Gennadievna}
-\authorIVposen{}
-\authorIVinfoen{4th author info}
+\authoren{4}[Gromova G.~G.\affil{1,3}]{Gromova Galina Gennadievna}
+\authorposen{4}{}
+\authorinfoen{4}{4th author info}
 %
-%\authorVen[Dmitriev D.~D.\affil{4}]{Dmitriev Dmitry Dmitrievich}
-%\authorVposen{}
-%\authorVinfoen{5th author info}
+%\authoren{5}[Dmitriev D.~D.\affil{4}]{Dmitriev Dmitry Dmitrievich}
+%\authorposen{5}{}
+%\authorinfoen{5}{5th author info}
 %
-%\authorVIen[Ershova E.~E.\affil{2,4}]{Ershova Elena Evgenievna}
-%\authorVIposen{}
-%\authorVIinfoen{6th author info}
+%\authoren{6}[Ershova E.~E.\affil{2,4}]{Ershova Elena Evgenievna}
+%\authorposen{6}{}
+%\authorinfoen{6}{6th author info}
 %
-%\authorVIIen[Fedorov F.~F.\affil{5}]{Fedorov Fedor Fedorovich}
-%\authorVIIposen{}
-%\authorVIIinfoen{7th author info}
+%\authoren{7}[Fedorov F.~F.\affil{5}]{Fedorov Fedor Fedorovich}
+%\authorposen{7}{}
+%\authorinfoen{7}{7th author info}
 %
-%\authorVIIIen[Zaitseva Z.~Z.\affil{1,5}]{Zaitseva Zoya Zakharovna}
-%\authorVIIIposen{}
-%\authorVIIIinfoen{8th author info}
+%\authoren{8}[Zaitseva Z.~Z.\affil{1,5}]{Zaitseva Zoya Zakharovna}
+%\authorposen{8}{}
+%\authorinfoen{8}{8th author info}
 %
-%\authorIXen[Ivanov I.~I.\affil{3}]{Ivanov Ivan Ivanovich}
-%\authorIXposen{}
-%\authorIXinfoen{9th author info}
+%\authoren{9}[Ivanov I.~I.\affil{3}]{Ivanov Ivan Ivanovich}
+%\authorposen{9}{}
+%\authorinfoen{9}{9th author info}
 %
-%\authorXen[Kuznetsov K.~K.\affil{4,5}]{Kuznetsov Kirill Konstantinovich}
-%\authorXposen{}
-%\authorXinfoen{10th author info}
+%\authoren{10}[Kuznetsov K.~K.\affil{4,5}]{Kuznetsov Kirill Konstantinovich}
+%\authorposen{10}{}
+%\authorinfoen{10}{10th author info}
 
 % Аффилиации (английские)
 \affiliationen{1}{Saint Petersburg State Electrotechnical University, Professora Poposa st.,, 5, 197022, St. Petersburg, Russia}

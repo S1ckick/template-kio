@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                                                                      %%%
-%%%    Style file for preparing an article for publication               %%%
+%%%    Document class for preparing an article for publication           %%%
 %%%    in the Computer Tools in Education journal <info@ipo.spb.ru>,     %%%
 %%%    http://cte.eltech.ru/ojs                                          %%%
 %%%    using LaTeX2e                                                     %%%
@@ -27,19 +27,14 @@
 % Цифры 1 и 2 - это верхние индексы, как у нас и было. Если автор один, индекс также нужен.
 %
 \RequirePackage{iftex}
-\ProvidesPackage{kioj6}[2026/04/07 The KIO and CAM journals package]
-\def\filename{kioj6.sty}
+\ProvidesClass{kioj6}[2026/04/07 The KIO and CAM journals class]
+\def\filename{kioj6.cls}
 \def\fileversion{5.00}
 \def\filedate{2026/04/07}
 \immediate\write32{This is '\filename' v\fileversion \space <\filedate> ^^J%
-     the KIO and CTE journals package}
+     the KIO and CTE journals class}
 \newif\if@firstpage
 \@firstpagetrue
-
-\if\@ptsize1
-   \else
-   \PackageWarning{kioj6.sty}{Bad \noexpand\documentclass option, use 11pt}
-\fi
 
 \ifpdftex
 	\RequirePackage{cmap} % pdf copy\paste + search package
@@ -141,9 +136,17 @@
 
 \DeclareOption{nocopyright}{\def\@@copyright{}\authorcopyright{}}
 
+% Forward unknown options to the underlying article class.
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+
 \ExecuteOptions{droid}
 
 \ProcessOptions\relax
+
+% Load article with our enforced defaults. Any options the user passed to
+% \documentclass (e.g. eqsecnum, authorsinfo) that are NOT among the local
+% options above were forwarded to article by \DeclareOption*.
+\LoadClass[intlimits,twoside,a4paper,11pt]{article}
 
 \ifpdftex
 	\RequirePackage[T2A]{fontenc}
@@ -382,7 +385,7 @@
 
 \renewcommand\maketitle{\par
 	\@firstpagetrue % Устанавливаем флаг первой страницы
-	\author{\mbox\authors@short@split@by@comma}
+	\gdef\@author{\mbox\authors@short@split@by@comma}
 	
 	\ifcsname fancy@title\endcsname
 	\setarticleheader{\fancy@title}{\fancy@title@en}
@@ -741,10 +744,65 @@
 \newcommand\pacs{\par\vskip 1ex
         \noindent\raggedright\upshape{\hv@sf\bfseries PACS:}\slshape\space}
 
-\def\author{\@dblarg{\make@author}}
-\long\def\make@author[#1]#2{
-	\gdef\@author{#2} 
-	\gdef\@copyright{\@@copyright}
+% =========================================================================
+% Generic author API: \author{N}[short]{full}, \authoren{N}[short]{full},
+% \authorpos{N}{...}, \authorposen{N}{...}, \authorinfo{N}{...},
+% \authorinfoen{N}{...}, \authoremail{N}{...}, \authoremailEnvelope{N}{...},
+% \authororcid{N}{...}.
+% N is an Arabic numeral 1..10. Internally we still use Roman suffixes
+% (authorI@short, authorII@short, ...) so the rest of the package is unchanged.
+% =========================================================================
+
+% Map Arabic 1..10 -> Roman suffix used as the internal control-sequence key.
+\def\@author@roman#1{\ifcase\numexpr#1\relax\or I\or II\or III\or IV\or V\or VI\or VII\or VIII\or IX\or X\fi}
+
+% \author{N}[short]{full}
+\def\author#1{\@dblarg{\make@author{\@author@roman{#1}}}}
+\long\def\make@author#1[#2]#3{%
+	\expandafter\gdef\csname author#1@short\endcsname{#2}%
+	\expandafter\gdef\csname author#1@full\endcsname{#3}%
+	% English defaults (overridden by \authoren{N}[...]{...} if used)
+	\expandafter\gdef\csname author#1@short@en\endcsname{#2}%
+	\expandafter\gdef\csname author#1@full@en\endcsname{#3}%
+}
+
+% \authoren{N}[short]{full}
+\def\authoren#1{\@dblarg{\make@authoren{\@author@roman{#1}}}}
+\long\def\make@authoren#1[#2]#3{%
+	\expandafter\gdef\csname author#1@short@en\endcsname{#2}%
+	\expandafter\gdef\csname author#1@full@en\endcsname{#3}%
+}
+
+% \authorpos{N}{...} / \authorposen{N}{...}
+\newcommand{\authorpos}[2]{%
+	\expandafter\def\csname author\@author@roman{#1}@pos\endcsname{#2}%
+	\expandafter\def\csname author\@author@roman{#1}@pos@en\endcsname{#2}%
+}
+\newcommand{\authorposen}[2]{%
+	\expandafter\def\csname author\@author@roman{#1}@pos@en\endcsname{#2}%
+}
+
+% \authorinfo{N}{...} / \authorinfoen{N}{...}
+\newcommand{\authorinfo}[2]{%
+	\expandafter\def\csname author\@author@roman{#1}@info\endcsname{#2}%
+	\expandafter\def\csname author\@author@roman{#1}@info@en\endcsname{#2}%
+}
+\newcommand{\authorinfoen}[2]{%
+	\expandafter\def\csname author\@author@roman{#1}@info@en\endcsname{#2}%
+}
+
+% \authoremail{N}{...} / \authoremailEnvelope{N}{...}
+\newcommand{\authoremail}[2]{%
+	\expandafter\def\csname author\@author@roman{#1}@email\endcsname{#2}%
+}
+\newcommand{\authoremailEnvelope}[2]{%
+	\authoremail{#1}{#2}%
+	\expandafter\def\csname author\@author@roman{#1}@email@recepient\endcsname{}%
+}
+
+% \authororcid{N}{...}
+\newcommand{\authororcid}[2]{%
+	\expandafter\def\csname author\@author@roman{#1}@orcid\endcsname{#2}%
 }
 
 \def\title{\@dblarg{\make@title}}
@@ -762,72 +820,6 @@
 	\gdef\fancy@header@title@en{#1}
 	\gdef\@title@en{#2}
 }
-
-\def\authorI{\@dblarg{\def@authorI}}
-\def\authorII{\@dblarg{\def@authorII}}
-\def\authorIII{\@dblarg{\def@authorIII}}
-\def\authorIV{\@dblarg{\def@authorIV}}
-\def\authorV{\@dblarg{\def@authorV}}
-\def\authorVI{\@dblarg{\def@authorVI}}
-\def\authorVII{\@dblarg{\def@authorVII}}
-\def\authorVIII{\@dblarg{\def@authorVIII}}
-\def\authorIX{\@dblarg{\def@authorIX}}
-\def\authorX{\@dblarg{\def@authorX}}
-
-\def\authorIpos#1{\def\authorI@pos@en{#1}}
-\def\authorIIpos#1{\def\authorII@pos@en{#1}}
-\def\authorIIIpos#1{\def\authorIII@pos@en{#1}}
-\def\authorIVpos#1{\def\authorIV@pos@en{#1}}
-\def\authorVpos#1{\def\authorV@pos@en{#1}}
-\def\authorVIpos#1{\def\authorVI@pos@en{#1}}
-\def\authorVIIpos#1{\def\authorVII@pos@en{#1}}
-\def\authorVIIIpos#1{\def\authorVIII@pos@en{#1}}
-\def\authorIXpos#1{\def\authorIX@pos@en{#1}}
-\def\authorXpos#1{\def\authorX@pos@en{#1}}
-
-\def\authorIinfo#1{\def\authorI@info@en{#1}}
-\def\authorIIinfo#1{\def\authorII@info@en{#1}}
-\def\authorIIIinfo#1{\def\authorIII@info@en{#1}}
-\def\authorIVinfo#1{\def\authorIV@info@en{#1}}
-\def\authorVinfo#1{\def\authorV@info@en{#1}}
-\def\authorVIinfo#1{\def\authorVI@info@en{#1}}
-\def\authorVIIinfo#1{\def\authorVII@info@en{#1}}
-\def\authorVIIIinfo#1{\def\authorVIII@info@en{#1}}
-\def\authorIXinfo#1{\def\authorIX@info@en{#1}}
-\def\authorXinfo#1{\def\authorX@info@en{#1}}
-
-\def\authorIemail#1{\def\authorI@info@en{#1}}
-\def\authorIIemail#1{\def\authorII@info@en{#1}}
-\def\authorIIIemail#1{\def\authorIII@info@en{#1}}
-\def\authorIVemail#1{\def\authorIV@info@en{#1}}
-\def\authorVemail#1{\def\authorV@info@en{#1}}
-\def\authorVIemail#1{\def\authorVI@info@en{#1}}
-\def\authorVIIemail#1{\def\authorVII@info@en{#1}}
-\def\authorVIIIemail#1{\def\authorVIII@info@en{#1}}
-\def\authorIXemailo#1{\def\authorIX@info@en{#1}}
-\def\authorXemail#1{\def\authorX@info@en{#1}}
-
-\def\authorIorcid#1{\def\authorI@info@en{#1}}
-\def\authorIIorcid#1{\def\authorII@info@en{#1}}
-\def\authorIIIorcid#1{\def\authorIII@info@en{#1}}
-\def\authorIVorcid#1{\def\authorIV@info@en{#1}}
-\def\authorVorcid#1{\def\authorV@info@en{#1}}
-\def\authorVIorcid#1{\def\authorVI@info@en{#1}}
-\def\authorVIIorcid#1{\def\authorVII@info@en{#1}}
-\def\authorVIIIorcid#1{\def\authorVIII@info@en{#1}}
-\def\authorIXorcid#1{\def\authorIX@info@en{#1}}
-\def\authorXorcid#1{\def\authorX@info@en{#1}}
-
-\def\authorIemailEnvelope#1{\def\authorI@info@en{#1}}
-\def\authorIIemailEnvelope#1{\def\authorII@info@en{#1}}
-\def\authorIIIemailEnvelope#1{\def\authorIII@info@en{#1}}
-\def\authorIVemailEnvelope#1{\def\authorIV@info@en{#1}}
-\def\authorVemailEnvelope#1{\def\authorV@info@en{#1}}
-\def\authorVIemailEnvelope#1{\def\authorVI@info@en{#1}}
-\def\authorVIIemailEnvelope#1{\def\authorVII@info@en{#1}}
-\def\authorVIIIemailEnvelope#1{\def\authorVIII@info@en{#1}}
-\def\authorIXemailEnvelope#1{\def\authorIX@info@en{#1}}
-\def\authorXemailEnvelope#1{\def\authorX@info@en{#1}}
 
 \def\print@author@en{%
 	\vskip 1.5em%
@@ -901,98 +893,6 @@
 	\fi%
 }
 
-% Автор I
-
-% Команды для автора (русская версия)
-\def\def@authorI[#1]#2{
-	\gdef\authorI@short{#1}
-	\gdef\authorI@full{#2}
-	% Английские версии (если не указаны явно)
-	\gdef\authorI@short@en{#1}
-	\gdef\authorI@full@en{#2}
-}
-
-% Английская версия
-\def\authorIen{\@dblarg{\def@authorIen}}
-\def\def@authorIen[#1]#2{
-	\gdef\authorI@short@en{#1}
-	\gdef\authorI@full@en{#2}
-}
-
-% Позиция/должность (отключены)
-\def\authorIpos#1{\def\authorI@pos{#1}\def\authorI@pos@en{#1}}
-\def\authorIposen#1{\def\authorI@pos@en{#1}}
-
-% Информация об авторе
-\def\authorIinfo#1{\def\authorI@info{#1}\def\authorI@info@en{#1}}
-\def\authorIinfoen#1{\def\authorI@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorIemail#1{\def\authorI@email{#1}}
-\def\authorIemailEnvelope#1{\authorIemail{#1}\def\authorI@email@recepient{}}
-\def\authorIorcid#1{\def\authorI@orcid{#1}}
-
-% Автор II
-
-\def\def@authorII[#1]#2{
-	\gdef\authorII@short{#1}
-	\gdef\authorII@full{#2}
-%	Английские версии (если не указаны явно)
-	\gdef\authorII@short@en{#1}
-	\gdef\authorII@full@en{#2}
-}
-
-% Английская версия
-\def\authorIIen{\@dblarg{\def@authorIIen}}
-\def\def@authorIIen[#1]#2{
-	\gdef\authorII@short@en{#1}
-	\gdef\authorII@full@en{#2}
-}
-
-% Позиция/должность (отключены)
-\def\authorIIpos#1{\def\authorII@pos{#1}\def\authorII@pos@en{#1}}
-\def\authorIIposen#1{\def\authorII@pos@en{#1}}
-
-% Информация об авторе
-\def\authorIIinfo#1{\def\authorII@info{#1}\def\authorII@info@en{#1}}
-\def\authorIIinfoen#1{\def\authorII@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorIIemail#1{\def\authorII@email{#1}}
-\def\authorIIemailEnvelope#1{\authorIIemail{#1}\def\authorII@email@recepient{}}
-\def\authorIIorcid#1{\def\authorII@orcid{#1}}
-
-
-% Автор III
-
-% 
-\def\def@authorIII[#1]#2{
-	\gdef\authorIII@short{#1}
-	\gdef\authorIII@full{#2}
-%	Английские версии (если не указаны явно)
-	\gdef\authorIII@short@en{#1}
-	\gdef\authorIII@full@en{#2}
-}
-
-% Английская версия
-\def\authorIIIen{\@dblarg{\def@authorIIIen}}
-\def\def@authorIIIen[#1]#2{
-	\gdef\authorIII@short@en{#1}
-	\gdef\authorIII@full@en{#2}
-}
-
-% Позиция/должность (отключены)
-\def\authorIIIpos#1{\def\authorIII@pos{#1}\def\authorIII@pos@en{#1}}
-\def\authorIIIposen#1{\def\authorIII@pos@en{#1}}
-
-% Информация об авторе
-\def\authorIIIinfo#1{\def\authorIII@info{#1}\def\authorIII@info@en{#1}}
-\def\authorIIIinfoen#1{\def\authorIII@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorIIIemail#1{\def\authorIII@email{#1}}
-\def\authorIIIemailEnvelope#1{\authorIIIemail{#1}\def\authorIII@email@recepient{}}
-\def\authorIIIorcid#1{\def\authorIII@orcid{#1}}
 
 \def\address#1{\gdef\@address{#1}}
 \def\addresses#1{\gdef\@address{%
@@ -1007,224 +907,6 @@
     \setlength{\labelsep}{2pt}
     #1
     \end{enumerate}}}
-
-% Автор IV
-
-% 
-\def\def@authorIV[#1]#2{
-	\gdef\authorIV@short{#1}
-	\gdef\authorIV@full{#2}
-%	Английские версии (если не указаны явно)
-	\gdef\authorIV@short@en{#1}
-	\gdef\authorIV@full@en{#2}
-}
-
-% Английская версия
-\def\authorIVen{\@dblarg{\def@authorIVen}}
-\def\def@authorIVen[#1]#2{
-	\gdef\authorIV@short@en{#1}
-	\gdef\authorIV@full@en{#2}
-}
-
-% Позиция/должность (отключены)
-\def\authorIVpos#1{\def\authorIV@pos{#1}\def\authorIV@pos@en{#1}}
-\def\authorIVposen#1{\def\authorIV@pos@en{#1}}
-
-% Информация об авторе
-\def\authorIVinfo#1{\def\authorIV@info{#1}\def\authorIV@info@en{#1}}
-\def\authorIVinfoen#1{\def\authorIV@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorIVemail#1{\def\authorIV@email{#1}}
-\def\authorIVemailEnvelope#1{\authorIVemail{#1}\def\authorIV@email@recepient{}}
-\def\authorIVorcid#1{\def\authorIV@orcid{#1}}
-
-% Автор V
-
-% 
-\def\def@authorV[#1]#2{
-	\gdef\authorV@short{#1}
-	\gdef\authorV@full{#2}
-%	Английские версии (если не указаны явно)
-	\gdef\authorV@short@en{#1}
-	\gdef\authorV@full@en{#2}
-}
-
-% Английская версия
-\def\authorVen{\@dblarg{\def@authorVen}}
-\def\def@authorVen[#1]#2{
-	\gdef\authorV@short@en{#1}
-	\gdef\authorV@full@en{#2}
-}
-
-% Позиция/должность (отключены) 
-\def\authorVpos#1{\def\authorV@pos{#1}\def\authorV@pos@en{#1}}
-\def\authorVposen#1{\def\authorV@pos@en{#1}}
-
-% Информация об авторе
-\def\authorVinfo#1{\def\authorV@info{#1}\def\authorV@info@en{#1}}
-\def\authorVinfoen#1{\def\authorV@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorVemail#1{\def\authorV@email{#1}}
-\def\authorVemailEnvelope#1{\authorVemail{#1}\def\authorV@email@recepient{}}
-\def\authorVorcid#1{\def\authorV@orcid{#1}}
-
-% Автор VI
-
-% 
-\def\def@authorVI[#1]#2{
-	\gdef\authorVI@short{#1}
-	\gdef\authorVI@full{#2}
-%	Английские версии (если не указаны явно)
-	\gdef\authorVI@short@en{#1}
-	\gdef\authorVI@full@en{#2}
-}
-
-% Английская версия
-\def\authorVIen{\@dblarg{\def@authorIVen}}
-\def\def@authorVIen[#1]#2{
-	\gdef\authorVI@short@en{#1}
-	\gdef\authorVI@full@en{#2}
-}
-
-% Позиция/должность (отключены)
-\def\authorVIpos#1{\def\authorVI@pos{#1}\def\authorVI@pos@en{#1}}
-\def\authorVIposen#1{\def\authorVI@pos@en{#1}}
-
-% Информация об авторе
-\def\authorVIinfo#1{\def\authorVI@info{#1}\def\authorVI@info@en{#1}}
-\def\authorVIinfoen#1{\def\authorVI@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorVIemail#1{\def\authorVI@email{#1}}
-\def\authorVIemailEnvelope#1{\authorVIemail{#1}\def\authorVI@email@recepient{}}
-\def\authorVIorcid#1{\def\authorVI@orcid{#1}}
-
-% Автор VII
-
-% 
-\def\def@authorVII[#1]#2{
-	\gdef\authorVII@short{#1}
-	\gdef\authorVII@full{#2}
-%	Английские версии (если не указаны явно)
-	\gdef\authorVII@short@en{#1}
-	\gdef\authorVII@full@en{#2}
-}
-
-% Английская версия
-\def\authorVIIen{\@dblarg{\def@authorVIIen}}
-\def\def@authorVIIen[#1]#2{
-	\gdef\authorVII@short@en{#1}
-	\gdef\authorVII@full@en{#2}
-}
-
-% Позиция/должность (отключены)
-\def\authorVIIpos#1{\def\authorVII@pos{#1}\def\authorVII@pos@en{#1}}
-\def\authorVIIposen#1{\def\authorVII@pos@en{#1}}
-
-% Информация об авторе
-\def\authorVIIinfo#1{\def\authorVII@info{#1}\def\authorVII@info@en{#1}}
-\def\authorVIIinfoen#1{\def\authorVII@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorVIIemail#1{\def\authorVII@email{#1}}
-\def\authorVIIemailEnvelope#1{\authorVIIemail{#1}\def\authorVII@email@recepient{}}
-\def\authorVIIorcid#1{\def\authorVII@orcid{#1}}
-
-% Автор VIII
-
-% 
-\def\def@authorVIII[#1]#2{
-	\gdef\authorVIII@short{#1}
-	\gdef\authorVIII@full{#2}
-%	Английские версии (если не указаны явно)
-	\gdef\authorVIII@short@en{#1}
-	\gdef\authorVIII@full@en{#2}
-}
-
-% Английская версия
-\def\authorVIIIen{\@dblarg{\def@authorVIIIen}}
-\def\def@authorVIIIen[#1]#2{
-	\gdef\authorVIII@short@en{#1}
-	\gdef\authorVIII@full@en{#2}
-}
-
-% Позиция/должность (отключены)
-\def\authorVIIIpos#1{\def\authorVIII@pos{#1}\def\authorVIII@pos@en{#1}}
-\def\authorVIIIposen#1{\def\authorVIII@pos@en{#1}}
-
-% Информация об авторе
-\def\authorVIIIinfo#1{\def\authorVIII@info{#1}\def\authorVIII@info@en{#1}}
-\def\authorVIIIinfoen#1{\def\authorVIII@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorVIIIemail#1{\def\authorVIII@email{#1}}
-\def\authorVIIIemailEnvelope#1{\authorVIIIemail{#1}\def\authorVIII@email@recepient{}}
-\def\authorVIIIorcid#1{\def\authorVIII@orcid{#1}}
-
-% Автор IX
-
-% 
-\def\def@authorIX[#1]#2{
-	\gdef\authorIX@short{#1}
-	\gdef\authorIX@full{#2}
-%	Английские версии (если не указаны явно)
-	\gdef\authorIX@short@en{#1}
-	\gdef\authorIX@full@en{#2}
-}
-
-% Английская версия
-\def\authorIXen{\@dblarg{\def@authorIXen}}
-\def\def@authorIXen[#1]#2{
-	\gdef\authorIX@short@en{#1}
-	\gdef\authorIX@full@en{#2}
-}
-
-% Позиция/должность (отключены)
-\def\authorIXpos#1{\def\authorIX@pos{#1}\def\authorIX@pos@en{#1}}
-\def\authorIXposen#1{\def\authorIX@pos@en{#1}}
-
-% Информация об авторе
-\def\authorIXinfo#1{\def\authorIX@info{#1}\def\authorIX@info@en{#1}}
-\def\authorIXinfoen#1{\def\authorIX@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorIXemail#1{\def\authorIX@email{#1}}
-\def\authorIXemailEnvelope#1{\authorIXemail{#1}\def\authorIX@email@recepient{}}
-\def\authorIXorcid#1{\def\authorIX@orcid{#1}}
-
-% Автор X
-
-% 
-\def\def@authorX[#1]#2{
-	\gdef\authorX@short{#1}
-	\gdef\authorX@full{#2}
-%	Английские версии (если не указаны явно)
-	\gdef\authorX@short@en{#1}
-	\gdef\authorX@full@en{#2}
-}
-
-% Английская версия
-\def\authorXen{\@dblarg{\def@authorXen}}
-\def\def@authorXen[#1]#2{
-	\gdef\authorX@short@en{#1}
-	\gdef\authorX@full@en{#2}
-}
-
-% Позиция/должность (отключены)
-\def\authorXpos#1{\def\authorX@pos{#1}\def\authorX@pos@en{#1}}
-\def\authorXposen#1{\def\authorX@pos@en{#1}}
-
-% Информация об авторе
-\def\authorXinfo#1{\def\authorX@info{#1}\def\authorX@info@en{#1}}
-\def\authorXinfoen#1{\def\authorX@info@en{#1}}
-
-% Email и ORCID общие для всех языков
-\def\authorXemail#1{\def\authorX@email{#1}}
-\def\authorXemailEnvelope#1{\authorXemail{#1}\def\authorX@email@recepient{}}
-\def\authorXorcid#1{\def\authorX@orcid{#1}}
-
 
 %        Настройка колонтитулов       
 \newcommand{\setarticleheader}[2]{%
