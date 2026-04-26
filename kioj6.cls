@@ -475,7 +475,7 @@
     }%
 }
 
-\def\article@type@ru{{\selectlanguage{russian}Исследовательская статья}}
+\def\article@type@ru{{\selectlanguage{russian}Оригинальное исследование}}
 \def\article@type@en{Research article}
 
 \newcommand{\articletr}[2]{%
@@ -486,7 +486,7 @@
 \newcommand{\articletype}[1]{%
 	\ifcase#1\relax
 	\or % 1
-	\gdef\article@type@ru{{\selectlanguage{russian}Исследовательская статья}}%
+	\gdef\article@type@ru{{\selectlanguage{russian}Оригинальное исследование}}%
 	\gdef\article@type@en{Research article}%
 	\or % 2
 	\gdef\article@type@ru{{\selectlanguage{russian}Обзорная статья}}%
