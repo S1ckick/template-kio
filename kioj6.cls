@@ -1111,7 +1111,7 @@
 \addtolength{\topmargin}{-\headheight}
 \addtolength{\topmargin}{-\headsep}
 \addtolength{\topmargin}{-1in}
-\oddsidemargin 25mm
+\oddsidemargin 35mm
 \setlength{\evensidemargin}{210mm}
 \addtolength{\evensidemargin}{-\textwidth}
 \addtolength{\evensidemargin}{-\oddsidemargin}
