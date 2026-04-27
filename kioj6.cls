@@ -669,16 +669,12 @@
 
 	%----------------------------
 	\ifthenelse{\isodd{\value{page}}}{%
-	% Нечетные страницы: метаданные слева, картинка справа
-	\noindent\title@full@article@info\hfill\title@section@image%
-	}{%
-	% Четные страницы: картинка слева, метаданные справа
-	\noindent\title@section@image%
-	\begin{minipage}[t]{0.67\linewidth\relax}
-		\raggedleft\hspace{0pt}
-%		\title@full@article@info
-	\end{minipage}%
-	}%
+    % Нечетные страницы: метаданные слева, картинка справа
+    \noindent\title@full@article@info\hfill\title@section@image%
+}{%
+    % Четные страницы: картинка слева, метаданные справа
+    \noindent\title@section@image\hfill\title@full@article@info%
+}%
 	%
 	%----------------------------  
 	%ruler below title
