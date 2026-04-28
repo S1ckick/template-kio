@@ -266,30 +266,44 @@
 % Переменная для английских аффилиации
 \def\affiliation@footnotes@en{}
 
-%% Authors splitted by ,
+%% Generic helpers for iterating over authors 1..10 (\author@i holds the index).
 
-\def\authorI@short@cont{\@ifundefined{authorII@short}{}{, \authorII@short\authorII@short@cont}}
-\def\authorII@short@cont{\@ifundefined{authorIII@short}{}{, \authorIII@short\authorIII@short@cont}}
-\def\authorIII@short@cont{\@ifundefined{authorIV@short}{}{, \authorIV@short\authorIV@short@cont}}
-\def\authorIV@short@cont{\@ifundefined{authorV@short}{}{, \authorV@short\authorV@short@cont}}
-\def\authorV@short@cont{\@ifundefined{authorVI@short}{}{, \authorVI@short\authorVI@short@cont}}
-\def\authorVI@short@cont{\@ifundefined{authorVII@short}{}{, \authorVII@short\authorVII@short@cont}}
-\def\authorVII@short@cont{\@ifundefined{authorVIII@short}{}{, \authorVIII@short\authorVIII@short@cont}}
-\def\authorVIII@short@cont{\@ifundefined{authorIX@short}{}{, \authorIX@short\authorIX@short@cont}}
-\def\authorIX@short@cont{\@ifundefined{authorX@short}{}{, \authorX@short}}
-\def\authors@short@split@by@comma{\authorI@short\authorI@short@cont}
+\def\@author@indices{1,2,3,4,5,6,7,8,9,10}
 
-\def\authorI@short@first@lang@cont{\@ifundefined{authorII@short@first@lang}{}{, \authorII@short@first@lang\authorII@short@first@lang@cont}}
-\def\authorII@short@first@lang@cont{\@ifundefined{authorIII@short@first@lang}{}{, \authorIII@short@first@lang\authorIII@short@first@lang@cont}}
-\def\authorIII@short@first@lang@cont{\@ifundefined{authorIV@short@first@lang}{}{, \authorIV@short@first@lang\authorIV@short@first@lang@cont}}
-\def\authorIV@short@first@lang@cont{\@ifundefined{authorV@short@first@lang}{}{, \authorV@short@first@lang\authorV@short@first@lang@cont}}
-\def\authorV@short@first@lang@cont{\@ifundefined{authorVI@short@first@lang}{}{, \authorVI@short@first@lang\authorVI@short@first@lang@cont}}
-\def\authorVI@short@first@lang@cont{\@ifundefined{authorVII@short@first@lang}{}{, \authorVII@short@first@lang\authorVII@short@first@lang@cont}}
-\def\authorVII@short@first@lang@cont{\@ifundefined{authorVIII@short@first@lang}{}{, \authorVIII@short@first@lang\authorVIII@short@first@lang@cont}}
-\def\authorVIII@short@first@lang@cont{\@ifundefined{authorIX@short@first@lang}{}{, \authorIX@short@first@lang\authorIX@short@first@lang@cont}}
-\def\authorIX@short@first@lang@cont{\@ifundefined{authorX@short@first@lang}{}{, \authorX@short@first@lang}}
+% \@authors@iter{<probe-suffix>}{<body>}: run <body> for every author<i><probe-suffix> that is defined.
+\long\def\@authors@iter#1#2{%
+	\@for\author@i:=\@author@indices\do{%
+		\ifcsname author\author@i#1\endcsname#2\fi%
+	}%
+}
 
-\def\authors@short@first@lang@split@by@comma{\authorI@short@first@lang\authorI@short@first@lang@cont}
+% Comma-separated list of \csname author<i><suffix>\endcsname.
+% Expandable (safe inside \edef): walks indices 1..10 carrying the current separator.
+\def\@authors@split@by@comma#1{\@authors@walk{1}{#1}{}}
+\def\@authors@walk#1#2#3{%
+	\ifnum#1>10 \else
+		\@ifundefined{author#1#2}%
+			{\expandafter\@authors@walk\expandafter{\the\numexpr#1+1\relax}{#2}{#3}}%
+			{#3\csname author#1#2\endcsname\expandafter\@authors@walk\expandafter{\the\numexpr#1+1\relax}{#2}{, }}%
+	\fi
+}
+
+% First N authors comma-separated; if more exist, append <more-text>.
+\def\@authors@truncated#1#2#3{%
+	\count@\z@\let\@author@sep\@empty
+	\@authors@iter{#2}{%
+		\advance\count@\@ne
+		\ifnum\count@>#1\else
+			\@author@sep
+			\csname author\author@i#2\endcsname
+			\def\@author@sep{, }%
+		\fi
+	}%
+	\ifnum\count@>#1 #3\fi
+}
+
+\def\authors@short@split@by@comma{\@authors@split@by@comma{@short}}
+\def\authors@short@first@lang@split@by@comma{\@authors@split@by@comma{@short@first@lang}}
 \def\authors@short@first@lang@split@by@comma@remove@affil{%
 \global\let\@@affil\affil%
 \global\let\affil\relax@with@arg%
@@ -297,18 +311,7 @@
 \global\let\affil\@@affil%
 }
 
-% Аналогичные команды для английских авторов
-\def\authorI@short@en@cont{\@ifundefined{authorII@short@en}{}{, \authorII@short@en\authorII@short@en@cont}}
-\def\authorII@short@en@cont{\@ifundefined{authorIII@short@en}{}{, \authorIII@short@en\authorIII@short@en@cont}}
-\def\authorIII@short@en@cont{\@ifundefined{authorIV@short@en}{}{, \authorIV@short@en\authorIV@short@en@cont}}
-\def\authorIV@short@en@cont{\@ifundefined{authorV@short@en}{}{, \authorV@short@en\authorV@short@en@cont}}
-\def\authorV@short@en@cont{\@ifundefined{authorVI@short@en}{}{, \authorVI@short@en\authorVI@short@en@cont}}
-\def\authorVI@short@en@cont{\@ifundefined{authorVII@short@en}{}{, \authorVII@short@en\authorVII@short@en@cont}}
-\def\authorVII@short@en@cont{\@ifundefined{authorVIII@short@en}{}{, \authorVIII@short@en\authorVIII@short@en@cont}}
-\def\authorVIII@short@en@cont{\@ifundefined{authorIX@short@en}{}{, \authorIX@short@en\authorIX@short@en@cont}}
-\def\authorIX@short@en@cont{\@ifundefined{authorX@short@en}{}{, \authorX@short@en}}
-
-\def\authors@short@en@split@by@comma{\authorI@short@en\authorI@short@en@cont}
+\def\authors@short@en@split@by@comma{\@authors@split@by@comma{@short@en}}
 
 \def\@Letter{{\footnotesize \Letter}}  
 
@@ -334,16 +337,7 @@
 		, \href{https://\csname author##1@orcid\endcsname}{\csname author##1@orcid\endcsname}%  
 		\fi
 	}
-	\ifcsname authorI@short\endcsname\authorinfo{I}\par\fi
-	\ifcsname authorII@short\endcsname\authorinfo{II}\par\fi
-	\ifcsname authorIII@short\endcsname\authorinfo{III}\par\fi
-	\ifcsname authorIV@short\endcsname\authorinfo{IV}\par\fi
-	\ifcsname authorV@short\endcsname\authorinfo{V}\par\fi
-	\ifcsname authorVI@short\endcsname\authorinfo{VI}\par\fi
-	\ifcsname authorVII@short\endcsname\authorinfo{VII}\par\fi
-	\ifcsname authorVIII@short\endcsname\authorinfo{VIII}\par\fi
-	\ifcsname authorIX@short\endcsname\authorinfo{IX}\par\fi
-	\ifcsname authorX@short\endcsname\authorinfo{X}\par\fi
+	\@authors@iter{@short}{\authorinfo{\author@i}\par}%
 }
 
 %        Верхний колонтитул       
@@ -352,27 +346,18 @@
 \def\authors@names@only@ru{%
 	\begingroup
 	\def\affil##1{}%
-	\authorI@short%
-	\ifcsname authorII@short\endcsname, \authorII@short\fi%
-	\ifcsname authorIII@short\endcsname, \authorIII@short\fi%
-	\ifcsname authorIV@short\endcsname\ и~др.\fi%
+	\@authors@truncated{3}{@short}{\ и~др.}%
 	\endgroup
 }
 
-% Для английских авторов  
+% Для английских авторов
 \def\authors@names@only@en{%
 	\begingroup
 	\def\affil##1{}%
-	\ifcsname authorI@short@en\endcsname
-	\authorI@short@en%
-	\ifcsname authorII@short@en\endcsname, \authorII@short@en\fi%
-	\ifcsname authorIII@short@en\endcsname, \authorIII@short@en\fi%
-	\ifcsname authorIV@short@en\endcsname\ et al.\fi%
+	\ifcsname author1@short@en\endcsname
+		\@authors@truncated{3}{@short@en}{\ et al.}%
 	\else
-	\authorI@short%
-	\ifcsname authorII@short\endcsname, \authorII@short\fi%
-	\ifcsname authorIII@short\endcsname, \authorIII@short\fi%
-	\ifcsname authorIV@short\endcsname\ et al.\fi%
+		\@authors@truncated{3}{@short}{\ et al.}%
 	\fi
 	\endgroup
 }
@@ -383,16 +368,31 @@
 \newcommand\firstpage{\label{first@page}}
 \newcommand\lastpage{\label{last@page}}
 
+% Сноска без маркера на первой странице: английские авторы + английское название.
+% Печатается всегда, независимо от языка статьи.
+\def\@firstpage@english@citation{%
+	\begingroup
+		\def\@thefnmark{}%
+		\def\@makefnmark{}%
+		\long\def\@makefntext##1{\noindent##1}%
+		\@footnotetext{%
+		%	\textit{For citation:}\space
+			\temp@authors@en.\space
+			\fancy@title@en.%
+		}%
+	\endgroup
+}
+
 \renewcommand\maketitle{\par
 	\@firstpagetrue % Устанавливаем флаг первой страницы
 	\gdef\@author{\mbox\authors@short@split@by@comma}
-	
+
 	\ifcsname fancy@title\endcsname
 	\setarticleheader{\fancy@title}{\fancy@title@en}
 	\else
 	\setarticleheader{\@title}{\@title@en}
 	\fi
-	
+
 	\begingroup
 	\let\affil\@gobble  % Игнорируем команду \affil
 	% Русские авторы (без аффилиаций)
@@ -400,10 +400,10 @@
 	% Английские авторы
 	\global\edef\temp@authors@en{\authors@short@en@split@by@comma}
 	\endgroup
-	
+
 	% разные авторы для русского и английского
 	\setauthorsheader{\authors@names@only@ru}{\authors@names@only@en}
-	
+
 	\begingroup
 	\renewcommand\thefootnote{\@fnsymbol\c@footnote}%
 	\def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
@@ -412,6 +412,7 @@
 			\hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
 	\global\@topnum\z@   % Prevents figures from going at top of page
     \@maketitle
+	\@firstpage@english@citation % сноска с английскими авторами и названием
 	\thispagestyle{firstpagestyle} % Специальный стиль для первой страницы
 	\global\@firstpagefalse % Сбрасываем флаг
 	\pagestyle{mainstyle} % Устанавливаем основной стиль для следующих страниц
@@ -442,10 +443,10 @@
 \def\journal@section@img{kio-logo-col.png}
 \def\journal@section@name{????}
 \def\cp@issue@year{}
-\def\authorI@short{???}
-\def\authorI@full{????}
-\def\authorI@addr{??????}
-\def\authorI@email{???@???}
+\expandafter\def\csname author1@short\endcsname{???}
+\expandafter\def\csname author1@full\endcsname{????}
+\expandafter\def\csname author1@addr\endcsname{??????}
+\expandafter\def\csname author1@email\endcsname{???@???}
 \def\journal@type@ru{????}
 \def\journal@type@en{????}
 
@@ -473,6 +474,16 @@
     }{%
         \definecolor{rulercolor}{RGB}{145,56,40}
     }%
+}
+
+\newif\if@in@translatedpart
+\@in@translatedpartfalse
+
+% Текущий тип статьи: английский, если \englishversion или внутри \translatedpart, иначе русский.
+\def\article@type@current{%
+	\if@englishversion\article@type@en%
+	\else\if@in@translatedpart\article@type@en%
+	\else\article@type@ru\fi\fi%
 }
 
 \def\article@type@ru{{\selectlanguage{russian}Оригинальное исследование}}
@@ -638,12 +649,8 @@
 %		\fbox{% ← Рамка 
 			\parbox{\linewidth}{% ← Вложенный parbox для точности
 				\small\hv@sf 
-				% ТИП СТАТЬИ ЖИРНЫМ ШРИФТОМ
-				\if@englishversion
-				\textbf{\article@type@en}\\ [0.6ex]%  ← ТОЛЬКО ТИП СТАТЬИ (АНГЛ)
-				\else
-				\textbf{\article@type@ru}\\ [0.6ex]%   ← ТОЛЬКО ТИП СТАТЬИ (РУС)
-				\fi
+				% ТИП СТАТЬИ ЖИРНЫМ ШРИФТОМ — язык согласно \article@type@current
+				\textbf{\article@type@current}\\ [0.6ex]
 				№~\issue@number:\space
 				\pages@span%
 				\@langrev{%no UDC in english
@@ -745,15 +752,11 @@
 % \authorpos{N}{...}, \authorposen{N}{...}, \authorinfo{N}{...},
 % \authorinfoen{N}{...}, \authoremail{N}{...}, \authoremailEnvelope{N}{...},
 % \authororcid{N}{...}.
-% N is an Arabic numeral 1..10. Internally we still use Roman suffixes
-% (authorI@short, authorII@short, ...) so the rest of the package is unchanged.
+% N is an Arabic numeral; it is used directly as the key inside \csname...\endcsname.
 % =========================================================================
 
-% Map Arabic 1..10 -> Roman suffix used as the internal control-sequence key.
-\def\@author@roman#1{\ifcase\numexpr#1\relax\or I\or II\or III\or IV\or V\or VI\or VII\or VIII\or IX\or X\fi}
-
 % \author{N}[short]{full}
-\def\author#1{\@dblarg{\make@author{\@author@roman{#1}}}}
+\def\author#1{\@dblarg{\make@author{#1}}}
 \long\def\make@author#1[#2]#3{%
 	\expandafter\gdef\csname author#1@short\endcsname{#2}%
 	\expandafter\gdef\csname author#1@full\endcsname{#3}%
@@ -763,7 +766,7 @@
 }
 
 % \authoren{N}[short]{full}
-\def\authoren#1{\@dblarg{\make@authoren{\@author@roman{#1}}}}
+\def\authoren#1{\@dblarg{\make@authoren{#1}}}
 \long\def\make@authoren#1[#2]#3{%
 	\expandafter\gdef\csname author#1@short@en\endcsname{#2}%
 	\expandafter\gdef\csname author#1@full@en\endcsname{#3}%
@@ -771,34 +774,34 @@
 
 % \authorpos{N}{...} / \authorposen{N}{...}
 \newcommand{\authorpos}[2]{%
-	\expandafter\def\csname author\@author@roman{#1}@pos\endcsname{#2}%
-	\expandafter\def\csname author\@author@roman{#1}@pos@en\endcsname{#2}%
+	\expandafter\def\csname author#1@pos\endcsname{#2}%
+	\expandafter\def\csname author#1@pos@en\endcsname{#2}%
 }
 \newcommand{\authorposen}[2]{%
-	\expandafter\def\csname author\@author@roman{#1}@pos@en\endcsname{#2}%
+	\expandafter\def\csname author#1@pos@en\endcsname{#2}%
 }
 
 % \authorinfo{N}{...} / \authorinfoen{N}{...}
 \newcommand{\authorinfo}[2]{%
-	\expandafter\def\csname author\@author@roman{#1}@info\endcsname{#2}%
-	\expandafter\def\csname author\@author@roman{#1}@info@en\endcsname{#2}%
+	\expandafter\def\csname author#1@info\endcsname{#2}%
+	\expandafter\def\csname author#1@info@en\endcsname{#2}%
 }
 \newcommand{\authorinfoen}[2]{%
-	\expandafter\def\csname author\@author@roman{#1}@info@en\endcsname{#2}%
+	\expandafter\def\csname author#1@info@en\endcsname{#2}%
 }
 
 % \authoremail{N}{...} / \authoremailEnvelope{N}{...}
 \newcommand{\authoremail}[2]{%
-	\expandafter\def\csname author\@author@roman{#1}@email\endcsname{#2}%
+	\expandafter\def\csname author#1@email\endcsname{#2}%
 }
 \newcommand{\authoremailEnvelope}[2]{%
 	\authoremail{#1}{#2}%
-	\expandafter\def\csname author\@author@roman{#1}@email@recepient\endcsname{}%
+	\expandafter\def\csname author#1@email@recepient\endcsname{}%
 }
 
 % \authororcid{N}{...}
 \newcommand{\authororcid}[2]{%
-	\expandafter\def\csname author\@author@roman{#1}@orcid\endcsname{#2}%
+	\expandafter\def\csname author#1@orcid\endcsname{#2}%
 }
 
 \def\title{\@dblarg{\make@title}}
@@ -835,16 +838,7 @@
 			, \href{https://\csname author##1@orcid\endcsname}{\csname author##1@orcid\endcsname}%
 			\fi
 		}
-		\ifcsname authorI@short@en\endcsname\authorinfo{I}\par\fi
-		\ifcsname authorII@short@en\endcsname\authorinfo{II}\par\fi
-		\ifcsname authorIII@short@en\endcsname\authorinfo{III}\par\fi
-		\ifcsname authorIV@short@en\endcsname\authorinfo{IV}\par\fi
-		\ifcsname authorV@short@en\endcsname\authorinfo{V}\par\fi
-		\ifcsname authorVI@short@en\endcsname\authorinfo{VI}\par\fi
-		\ifcsname authorVII@short@en\endcsname\authorinfo{VII}\par\fi
-		\ifcsname authorVIII@short@en\endcsname\authorinfo{VIII}\par\fi
-		\ifcsname authorIX@short@en\endcsname\authorinfo{IX}\par\fi
-		\ifcsname authorX@short@en\endcsname\authorinfo{X}\par\fi
+		\@authors@iter{@short@en}{\authorinfo{\author@i}\par}%
 		\par}
 }
 
@@ -860,33 +854,12 @@
 \firstpagetrue
 
 
-% Русские аннотация и ключевые слова
-\def\@abstract@ru{}
-\def\@keywords@ru{}
-\def\abstractru#1{\gdef\@abstract@ru{#1}}
-\def\keywordsru#1{\gdef\@keywords@ru{#1}}
-
-% Английские аннотация и ключевые слова  
-\def\@abstract@en{}
-\def\@keywords@en{}
-\def\abstracten#1{\gdef\@abstract@en{#1}}
-\def\keywordsen#1{\gdef\@keywords@en{#1}}
-
-% Команды для вставки аннотации и ключевых слов
-\newcommand\insertabstract{%
-	\if@englishversion
-	\@abstract@en%
-	\else
-	\@abstract@ru%
-	\fi%
+% Ключевые слова — печатают свой блок прямо на месте вызова.
+\newcommand{\keywordsru}[1]{%
+	\par\vskip 0.5ex\noindent\textbf{Ключевые слова: }\textit{#1}%
 }
-
-\newcommand\insertkeywords{%
-	\if@englishversion
-	\par\vskip 0.5ex\noindent\textbf{Keywords: } \textit{\@keywords@en}%
-	\else
-	\par\vskip 0.5ex\noindent\textbf{Ключевые слова: } \textit{\@keywords@ru}%
-	\fi%
+\newcommand{\keywordsen}[1]{%
+	\par\vskip 0.5ex\noindent\textbf{Keywords: }\textit{#1}%
 }
 
 
@@ -1049,6 +1022,7 @@
 
 \newenvironment{translatedpart}{%
 	\def\@has@translated@part{}
+	\@in@translatedparttrue
 	\lefthyphenmin=2 \righthyphenmin=2 % disallow x- or -x breaks; -xx OK
 	\lccode`\'=`\'
 	\def\@reverse@lang{}
@@ -1194,47 +1168,39 @@
 	\renewcommand{\headrulewidth}{0.4pt}
 	\renewcommand{\footrulewidth}{0.4pt}
 	
-	% Верхние колонтитулы (на двух языках)
+	% Верхние колонтитулы (язык согласно \if@englishversion)
 	\fancyhead[RO]{%
-		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
-			\begin{tabular}{r@{}}
-				\@russianarticleheader \\
-				\@englisharticleheader
-			\end{tabular}%
+		\normalsize\sf@phv\textcolor{rulercolor}{%
+			\if@englishversion\@englisharticleheader\else\@russianarticleheader\fi
 		}%
 	}
-	
+
 	\fancyhead[LE]{%
-		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЦВЕТ КАК ЛИНИЯ
-			\begin{tabular}{@{}l@{}}
-				\@russianauthorsheader \\
-				\@englishauthorsheader
-			\end{tabular}%
+		\normalsize\sf@phv\textcolor{rulercolor}{%
+			\if@englishversion\@englishauthorsheader\else\@russianauthorsheader\fi
 		}%
 	}
-	
+
 	% НИЖНИЕ КОЛОНТИТУЛЫ С НОМЕРАМИ СТРАНИЦ ВНУТРИ
 	\fancyfoot[RO]{%
-		\normalsize\sf@phv\textcolor{rulercolor}{% ← ЖУРНАЛ РЫЖИЙ
-			\begin{tabular}{@{}l@{}}
-				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ {\selectlanguage{russian}№\ \issue@number.\ С.\ \pages@span} \\
+		\normalsize\sf@phv\textcolor{rulercolor}{%
+			\if@englishversion
 				©\ \MakeTextUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
-			\end{tabular}%
+			\else
+				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ {\selectlanguage{russian}№\ \issue@number.\ С.\ \pages@span}
+			\fi
 		}%
 		\hfill
-		\normalsize\sf@phv\textcolor{black}{\kio@page} % Номер страницы справа (рыжий)
+		\normalsize\sf@phv\textcolor{black}{\kio@page}
 	}
-	
+
 	\fancyfoot[LE]{%
-		\normalsize\sf@phv\textcolor{black}{\kio@page} % Номер страницы слева (рыжий)
+		\normalsize\sf@phv\textcolor{black}{\kio@page}
 		\hfill
-		\normalsize\sf@phv\textcolor{rulercolor}{% 
-			\begin{tabular}{@{}l@{}}
-				\@russiansectionheader \\
-				\@englishsectionheader
-			\end{tabular}%
+		\normalsize\sf@phv\textcolor{rulercolor}{%
+			\if@englishversion\@englishsectionheader\else\@russiansectionheader\fi
 		}%
-	}  
+	}
 }
 
 % КОЛОНТИТУЛЫ ПЕРВОЙ СТРАНИЦЫ 
@@ -1259,8 +1225,11 @@
 			\exhyphenpenalty=10000
 			\emergencystretch=0em
 			\textcolor{rulercolor}{%
-				\noindent\MakeTextUppercase{\journal@type@ru}\\
-				\noindent\MakeTextUppercase{\journal@type@en}%
+				\if@englishversion
+					\noindent\MakeTextUppercase{\journal@type@en}%
+				\else
+					\noindent\MakeTextUppercase{\journal@type@ru}%
+				\fi
 			}
 		\end{minipage}%
 		\hfill%
@@ -1298,8 +1267,11 @@
 			\exhyphenpenalty=10000
 			\emergencystretch=2em
 			\textcolor{rulercolor}{%
-				\noindent\MakeTextUppercase{\journal@type@ru}\\
-				\noindent\MakeTextUppercase{\journal@type@en}%
+				\if@englishversion
+					\noindent\MakeTextUppercase{\journal@type@en}%
+				\else
+					\noindent\MakeTextUppercase{\journal@type@ru}%
+				\fi
 			}
 		\end{minipage}%
 		\hspace*{0pt}% Компенсируем правый отступ
@@ -1349,16 +1321,12 @@
 					\fi%
 					\fi%
 				}%
-				\ifcsname authorI@short\endcsname\authorlonginfo{I}\par\fi%
-				\ifcsname authorII@short\endcsname\vskip 2mm\authorlonginfo{II}\par\fi%
-				\ifcsname authorIII@short\endcsname\vskip 2mm\authorlonginfo{III}\par\fi%
-				\ifcsname authorIV@short\endcsname\vskip 2mm\authorlonginfo{IV}\par\fi%
-				\ifcsname authorV@short\endcsname\vskip 2mm\authorlonginfo{V}\par\fi%
-				\ifcsname authorVI@short\endcsname\vskip 2mm\authorlonginfo{VI}\par\fi%
-				\ifcsname authorVII@short\endcsname\vskip 2mm\authorlonginfo{VII}\par\fi%
-				\ifcsname authorVIII@short\endcsname\vskip 2mm\authorlonginfo{VIII}\par\fi%
-				\ifcsname authorIX@short\endcsname\vskip 2mm\authorlonginfo{IX}\par\fi%
-				\ifcsname authorX@short\endcsname\vskip 2mm\authorlonginfo{X}\par\fi%
+				\let\@author@sep\@empty
+				\@authors@iter{@short}{%
+					\@author@sep
+					\authorlonginfo{\author@i}\par
+					\def\@author@sep{\vskip 2mm}%
+				}%
 			}
 			
 			\allauthorslonginfo

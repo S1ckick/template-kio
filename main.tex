@@ -59,11 +59,6 @@
 % Заголовок статьи (русский)
 \title[Сокр. назв.]{Название статьи на русском}
 
-% Аннотация и ключевые слова (русские)
-\abstractru{Русская аннотация.}
-
-\keywordsru{Русские ключевые слова.}
-
 % Авторы (русская версия)
 \author{1}[Андреев А.~А.\affil{1,3}]{Андреев Андрей Андреевич}
 \authorpos{1}{}
@@ -132,11 +127,6 @@
 % Заголовок статьи (английский)
 \titleen[Short Title]{Article title in English}
 
-% Аннотация и ключевые слова (английские)
-\abstracten{English abstract goes here.}
-
-\keywordsen{keywords1, keywords2, keywords3}
-
 % Авторы (английская версия)
 \authoren{1}[Andreev A.~A.\affil{1,2}]{Andreev Andrey Andreevich}
 \authorposen{1}{}
@@ -195,9 +185,9 @@
 	\pagestyle{mainstyle} 
 	
 	\begin{abstract}
-		\insertabstract    % ← Автоматически подставит РУССКУЮ аннотацию
-		\insertkeywords    % ← Автоматически подставит РУССКИЕ ключевые слова
-		
+		Русская аннотация.
+		\keywordsru{Русские ключевые слова.}
+
 		% Можно добавить пример цитирования:
 		\citationexample Андреев А.~А., Борисов Б.~Б. Шаблон статьи для журнала КИО. Нигде не опубликовано
 	\end{abstract}
@@ -327,16 +317,16 @@
 
     % ========== АНГЛИЙСКАЯ ЧАСТЬ ==========
     \begin{translatedpart}
-        \englishversion % переключаем на английскую версию
+       % \englishversion % переключаем на английскую версию
         
         %даем команду на печать английского заголовка
         \maketranslatedtitle
 
         \begin{abstract}
-            \insertabstract    % ← Автоматически подставит АНГЛИЙСКУЮ аннотацию
-            \insertkeywords    % ← Автоматически подставит АНГЛИЙСКИЕ ключевые слова
+            English abstract goes here.
+            \keywordsen{keywords1, keywords2, keywords3}
             \autocitationexample
-            
+
         \end{abstract}
         
         \begin{otherlanguage*}{english}
