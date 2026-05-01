@@ -1277,7 +1277,7 @@ FUNCTION {format.address}
 FUNCTION {format.doi}
 { doi empty$
   { "" }
-  { "doi:\nolinkurl{" doi * "}" * }
+  { "doi:\mylinkurl{" doi * "}" * }
   if$
 }
 

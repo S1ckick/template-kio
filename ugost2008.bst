@@ -1725,7 +1725,7 @@ FUNCTION {format.isbn}
 FUNCTION {format.doi}
 { doi empty$
   { "" }
-  { "doi:\nolinkurl{" doi * "}" * }
+  { "doi:\mylinkurl{" doi * "}" * }
   if$
 }
 

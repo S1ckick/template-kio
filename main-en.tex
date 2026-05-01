@@ -1,0 +1,282 @@
+% Example article for the KIO journal
+
+\documentclass[eqsecnum,authorsinfo]{kioj6}
+
+
+% You can load your own packages here.
+
+
+% ========== SETTINGS TO PREVENT WIDOW LINES ==========
+%\raggedbottom
+%\widowpenalty=10000
+%\clubpenalty=10000
+
+% ===================== JOURNAL SETTINGS ====================
+
+% Page number on which the article starts
+\setcounter{page}{2}
+
+% Journal section (may not be known at submission time)
+
+%\journalsectionnoimage{algorithmic-mathematics}
+%\journalsectionnoimage{artificial-intelligence}
+%\journalsectionnoimage{informatics}
+%\journalsectionnoimage{information-systems}
+%\journalsectionnoimage{software-engineering}
+%\journalsectionnoimage{computer-in-education}
+%\journalsectionnoimage{popular-science-articles}
+%\journalsectionnoimage{programming-practice}
+%\journalsectionnoimage{editorial-column}
+%\journalsectionnoimage{specialists-training-new-teaching-methods}
+%\journalsectionnoimage{specialists-training-training-programs}
+%\journalsectionnoimage{specialists-training-professional-standards}
+%\journalsectionnoimage{open-problems-for-young-scientists}
+\journalsectionnoimage{empty}
+
+% Year is set; the issue number is unknown so a dash is used.
+% "edu" stands for the "Computer Tools in Education" journal.
+
+\issue{2026}{--}{edu}
+
+% ===== ARTICLE TYPE ====
+
+% 1. {1}  -> Research article
+% 2. {2}  -> Review article
+% 3. {3}  -> Conference paper
+% 4. {4}  -> Editorial article
+% 5. {5}  -> Discussion article
+% 6. {6}  -> Short Communication
+%
+% =========================
+
+\articletype{1}
+
+
+\udknumber{999.999}
+\doinumber{10.32603/2071-2340-2026-4-XXX-XXX}
+
+% =============== RUSSIAN-LANGUAGE DATA ===============
+
+% Article title (Russian)
+\title[Сокр. назв.]{Название статьи на русском}
+
+% Authors (Russian version)
+\author{1}[Андреев А.~А.\affil{1,3}]{Андреев Андрей Андреевич}
+\authorpos{1}{}
+\authorinfo{1}{информация об авторе длинная}
+\authororcid{1}{orcid.org/0000-0000-9999-9999}
+\authoremailEnvelope{1}{aaandreev@etu.ru} % corresponding-author address
+
+\author{2}[Борисов Б.~Б.\affil{2}]{Борисов Борис Борисович}
+\authorpos{2}{}
+\authorinfo{2}{информация о втором авторе длинная}
+\authoremail{2}{borisov@iaaras.ru}
+
+\author{3}[Воронов В.~В.\affil{3}]{Воронов Владимир Владимирович}
+\authorpos{3}{}
+\authorinfo{3}{информация о третьем авторе}
+\authoremail{3}{v.v.voronov@spbu.ru}
+
+\author{4}[Громова Г.~Г.\affil{4}]{Громова Галина Геннадьевна}
+\authorpos{4}{}
+\authorinfo{4}{информация о четвертом авторе}
+\authororcid{4}{orcid.org/0000-9999-9999-9999}
+\authoremail{4}{gromoff@quantori.com}
+
+% Affiliations
+\affiliation{1}{Санкт-Петербургский государственный электротехнический университет «ЛЭТИ»,
+  ул. Профессора Попова, 5, 197022, Санкт-Петербург, Россия}
+\affiliation{2}{Федеральное государственное бюджетное учреждение науки
+  Институт прикладной астрономии Российской академии наук, наб. Кутузова, 10, 191187, Санкт-Петербург, Россия}
+\affiliation{3}{Санкт-Петербургский государственный университет,
+  Университетская набережная, д. 7–9, 199034, Санкт-Петербург, Россия}
+\affiliation{4}{Quantori LLC, 1 Broadway, Cambridge, MA 02142, United States}
+
+% ========== ENGLISH-LANGUAGE DATA ==========
+
+% Article title (English)
+\titleen[Short Title]{Article title in English}
+
+% Authors (English version)
+\authoren{1}[Andreev A.~A.\affil{1,2}]{Andreev Andrey Andreevich}
+\authorposen{1}{}
+\authorinfoen{1}{1st author info}
+
+\authoren{2}[Borisov B.~B.\affil{2}]{Borisov Boris Borisovich}
+\authorposen{2}{}
+\authorinfoen{2}{2nd author info}
+
+\authoren{3}[Voronov V.~V.\affil{3}]{Voronov Vladimir Vladimirovich}
+\authorposen{3}{}
+\authorinfoen{3}{3rd author info}
+
+\authoren{4}[Gromova G.~G.\affil{1,3}]{Gromova Galina Gennadievna}
+\authorposen{4}{}
+\authorinfoen{4}{4th author info}
+
+
+% Affiliations (English)
+\affiliationen{1}{Saint Petersburg State Electrotechnical University, Professora Poposa st.,, 5, 197022, St. Petersburg, Russia}
+\affiliationen{2}{Institute of Applied Astronomy of the Russian Academy of Sciences, Kutuzova emb. 10, 191187, St. Petersburg, Russia}
+\affiliationen{3}{Saint Petersburg State University, Universitetskaya emb. 7--9, 199034, St. Petersburg, Russia}
+\affiliationen{4}{Quantori LLC, 1 Broadway, Cambridge, MA 02142, United States}
+
+\begin{document}
+
+	% ========== ENGLISH MAIN PART ==========
+
+	\englishversion
+
+	\maketitle
+
+	\pagestyle{mainstyle}
+
+	\begin{abstract}
+		English abstract goes here.
+		\keywordsen{keywords1, keywords2, keywords3}
+
+		\citationexample Andreev A.~A., Borisov B.~B. Article template for the KIO journal. Unpublished
+	\end{abstract}
+
+    \section{INTRODUCTION}
+    All section headings are written in capital letters. Subsections and below are in normal case.
+
+
+    \section{FIRST SECTION}
+    Example of section text.
+
+    Now an example of a numbered list.
+    \begin{enumerate}
+        \item First item;
+        \item Second item.
+    \end{enumerate}
+    Reference to fig.~\ref{fig:example}.
+
+    \begin{figure}[htb]
+        \centering
+        \includegraphics[width=0.4\textwidth]{xkcd1301.png}
+        \caption{Reliability of information depending on the file extension} \label{fig:example}
+    \end{figure}
+
+    % Table example. [H] means the table must stay exactly here and not float.
+    \begin{table}[H]
+        \centering
+        \caption{Example table}
+        \label{table-example}
+        \small
+        \begin{tabular}{|p{5cm}|c|}
+            \hline
+            \centering
+            Question & ? \\
+            \hline
+            Answer & 42 \\
+            \hline
+        \end{tabular}
+                \begin{tabular}{|p{5cm}|c|}
+        	\hline
+        	\centering
+        	Question & ? \\
+        	\hline
+        	Answer & 42 \\
+        	\hline
+        \end{tabular}
+                \begin{tabular}{|p{5cm}|c|}
+        	\hline
+        	\centering
+        	Question & ? \\
+        	\hline
+        	Answer & 42 \\
+        	\hline
+        \end{tabular}
+                \begin{tabular}{|p{5cm}|c|}
+        	\hline
+        	\centering
+        	Question & ? \\
+        	\hline
+        	Answer & 42 \\
+        	\hline
+        \end{tabular}
+    \end{table}
+
+    \subsection{Subsection}\label{sec:sub} % section reference
+    The journal ``Computer Tools in Education'' has been published since January 1998.
+
+    The scientific scope of the periodical is: algorithmic mathematics and mathematical modelling, computer science and information technology, automation of processes in education.
+
+    Historically the journal has formed a common space for discussing problems related to enriching mathematics and computer science education through the use of computer tools.
+    Because the use of computer tools today directly influences mathematics itself, the journal pays more and more attention to computer mathematics and computer science.
+    The journal also focuses on bringing current research to students, so it welcomes papers that explain new ideas in computer science and algorithmic mathematics, as well as papers that pose problems for young researchers.
+
+    \subsubsection{Subsubsection}
+
+    Fig.~\ref{fig:example-2} contains two images: \ref{fig:example-2a} and \ref{fig:example-2b}.
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}[t]{70mm} % subfigure width; without [t] the images would be vertically centred
+            \includegraphics[width=\textwidth]{xkcd1301.png} % width=\textwidth makes width match the subfigure
+            \subcaption{Optional subcaption}
+            \label{fig:example-2a}
+        \end{subfigure}
+        \quad % wide horizontal space between the two figures
+        \begin{subfigure}[t]{50mm}
+            \includegraphics[width=\textwidth]{xkcd1301.png}
+            \subcaption{} % no subcaption here
+            \label{fig:example-2b}
+        \end{subfigure}
+        \caption{Example of two images placed side by side in one figure} \label{fig:example-2}
+    \end{figure}
+
+    Reference to formula~(\ref{eq:gaussian}).
+
+    \begin{equation}
+        \int_{-\infty}^{\infty} e^{-x^2} \, dx = \sqrt{\pi}
+        \label{eq:gaussian}
+    \end{equation}
+
+
+
+    \section{CONCLUSION}
+    Conclusion text with reference examples.
+
+    Reference to sec.~\ref{sec:sub}.
+
+    Reference to a Russian-language article that has an English translation: \cite{Matveenko}.
+    Reference to a Russian-language book without an English translation: \cite{Gubanov}.
+    Reference to an English-language book that has a Russian translation: \cite{Hairer}.
+    Reference to a chapter in a Russian-language book without an English translation: \cite{layexpl7}.
+    Reference to an English-language book: \cite{IERS2010}.
+    Reference to an English-language technical report: \cite{DE430}.
+    Reference to a Russian-language conference proceedings article: \cite{BYSIS2022}.
+    Reference to a website that has an English version: \cite{ETU}.
+    Reference to a GOST standard: \cite{gost-radio}.
+    Reference to a patent: \cite{sviridov}.
+
+
+    \begin{otherlanguage*}{english}
+        \bibliographystyle{IEEE}
+        \bibliography{references-en,references-clones}
+    \end{otherlanguage*}
+
+    \additionalinfo{Received October 7, 2025, The final version: January 28, 2026}
+
+    \printauthorsinfo
+
+    % ========== TRANSLATED PART (in Russian) ==========
+    \begin{translatedpart}
+        \maketranslatedtitle
+
+        \begin{abstract}
+            Русская аннотация.
+            \keywordsru{Русские ключевые слова.}
+
+            \autocitationexample
+        \end{abstract}
+
+        % In the English version no second (Russian) bibliography is printed.
+
+        \additionalinfo{Поступила в редакцию 7 октября 2025, окончательный вариант 28 января 2026 г.}
+
+    \end{translatedpart}
+    
+\end{document}

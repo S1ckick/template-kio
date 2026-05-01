@@ -14,7 +14,7 @@
 % ===================== НАСТРОЙКИ ЖУРНАЛА ====================
 
 % Указываем номер страницы, с которой начинается статья
-\setcounter{page}{1}
+\setcounter{page}{2}
 
 % Рубрика в журнале (не всегда известна при подаче статьи)
 
@@ -52,9 +52,9 @@
 
 
 \udknumber{999.999}
-\doinumber{10.32603/2071-2340-XXX}
+\doinumber{10.32603/2071-2340-2026-4-XXX-XXX}
 
-% =============== РУССКИЕ ДАННЫЕ ===============
+% =============== ДАННЫЕ НА РУССКОМ ЯЗЫКЕ ===============
 
 % Заголовок статьи (русский)
 \title[Сокр. назв.]{Название статьи на русском}
@@ -81,37 +81,6 @@
 \authorinfo{4}{информация о четвертом авторе}
 \authororcid{4}{orcid.org/0000-9999-9999-9999}
 \authoremail{4}{gromoff@quantori.com}
-%
-%\author{5}[Дмитриев Д.~Д.\affil{4}]{Дмитриев Дмитрий Дмитриевич}
-%\authorpos{5}{}
-%\authorinfo{5}{информация о пятом авторе}
-%\authoremail{5}{}
-
-%\author{6}[Ершова Е.~Е.\affil{2,4}]{Ершова Елена Евгеньевна}
-%\authorpos{6}{}
-%\authorinfo{6}{информация о шестом авторе}
-%\authoremailEnvelope{6}{}
-%\authoremail{6}{}
-%
-%\author{7}[Фёдоров Ф.~Ф.\affil{5}]{Фёдоров Фёдор Фёдорович}
-%\authorpos{7}{}
-%\authorinfo{7}{информация о седьмом авторе}
-%\authoremail{7}{}
-%
-%\author{8}[Зайцева З.~З.\affil{1,5}]{Зайцева Зоя Захаровна}
-%\authorpos{8}{}
-%\authorinfo{8}{информация о восьмом авторе}
-%\authoremail{8}{}
-%
-%\author{9}[Иванов И.~И.\affil{3}]{Иванов Иван Иванович}
-%\authorpos{9}{}
-%\authorinfo{9}{информация о девятом авторе}
-%\authoremail{9}{}
-%
-%\author{10}[Кузнецов К.~К.\affil{4,5}]{Кузнецов Кирилл Константинович}
-%\authorpos{10}{}
-%\authorinfo{10}{информация о десятом авторе}
-%\authoremail{10}{}
 
 % Аффилиации
 \affiliation{1}{Санкт-Петербургский государственный электротехнический университет «ЛЭТИ»,
@@ -122,7 +91,7 @@
   Университетская набережная, д. 7–9, 199034, Санкт-Петербург, Россия}
 \affiliation{4}{Quantori LLC, 1 Broadway, Cambridge, MA 02142, United States}
 
-% ========== АНГЛИЙСКИЕ ДАННЫЕ ==========
+% ========== ДАННЫЕ НА АНГЛИЙСКОМ ЯЗЫКЕ ==========
 
 % Заголовок статьи (английский)
 \titleen[Short Title]{Article title in English}
@@ -143,30 +112,7 @@
 \authoren{4}[Gromova G.~G.\affil{1,3}]{Gromova Galina Gennadievna}
 \authorposen{4}{}
 \authorinfoen{4}{4th author info}
-%
-%\authoren{5}[Dmitriev D.~D.\affil{4}]{Dmitriev Dmitry Dmitrievich}
-%\authorposen{5}{}
-%\authorinfoen{5}{5th author info}
-%
-%\authoren{6}[Ershova E.~E.\affil{2,4}]{Ershova Elena Evgenievna}
-%\authorposen{6}{}
-%\authorinfoen{6}{6th author info}
-%
-%\authoren{7}[Fedorov F.~F.\affil{5}]{Fedorov Fedor Fedorovich}
-%\authorposen{7}{}
-%\authorinfoen{7}{7th author info}
-%
-%\authoren{8}[Zaitseva Z.~Z.\affil{1,5}]{Zaitseva Zoya Zakharovna}
-%\authorposen{8}{}
-%\authorinfoen{8}{8th author info}
-%
-%\authoren{9}[Ivanov I.~I.\affil{3}]{Ivanov Ivan Ivanovich}
-%\authorposen{9}{}
-%\authorinfoen{9}{9th author info}
-%
-%\authoren{10}[Kuznetsov K.~K.\affil{4,5}]{Kuznetsov Kirill Konstantinovich}
-%\authorposen{10}{}
-%\authorinfoen{10}{10th author info}
+
 
 % Аффилиации (английские)
 \affiliationen{1}{Saint Petersburg State Electrotechnical University, Professora Poposa st.,, 5, 197022, St. Petersburg, Russia}
@@ -178,17 +124,16 @@
 
 	% ========== РУССКАЯ ЧАСТЬ ==========
 
-	\russianversion % устанавливаем русскую версию
-	
+	\russianversion
+
 	\maketitle
-	
-	\pagestyle{mainstyle} 
-	
+
+	\pagestyle{mainstyle}
+
 	\begin{abstract}
 		Русская аннотация.
 		\keywordsru{Русские ключевые слова.}
 
-		% Можно добавить пример цитирования:
 		\citationexample Андреев А.~А., Борисов Б.~Б. Шаблон статьи для журнала КИО. Нигде не опубликовано
 	\end{abstract}
 
@@ -310,32 +255,28 @@
     \bibliographystyle{ugost2008}
     \bibliography{references-clones}
 
-    % Дополнительная информация о статье
     \additionalinfo{Поступила в редакцию 7 октября 2025, окончательный вариант 28 января 2026 г.}
-    
+
     \printauthorsinfo
 
-    % ========== АНГЛИЙСКАЯ ЧАСТЬ ==========
+    % ========== ПЕРЕВОДНАЯ ЧАСТЬ (на английском) ==========
     \begin{translatedpart}
-       % \englishversion % переключаем на английскую версию
-        
-        %даем команду на печать английского заголовка
         \maketranslatedtitle
 
         \begin{abstract}
             English abstract goes here.
             \keywordsen{keywords1, keywords2, keywords3}
-            \autocitationexample
 
+            \autocitationexample
         \end{abstract}
-        
+
         \begin{otherlanguage*}{english}
-            \bibliographystyleeng{IEEE} 
+            \bibliographystyleeng{IEEE}
             \bibliographyeng{references-en,references-clones}
         \end{otherlanguage*}
 
         \additionalinfo{Received October 7, 2025, The final version: January 28, 2026}
-        
-    \end{translatedpart}   
+
+    \end{translatedpart}
     
 \end{document}

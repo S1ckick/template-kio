@@ -55,8 +55,29 @@
 \newif\if@englishversion
 \@englishversionfalse
 
-\newcommand{\englishversion}{\@englishversiontrue}
-\newcommand{\russianversion}{\@englishversionfalse}
+% Открытый флаг (без @) — доступен из main.tex как \ifenglishpaper. Зеркалит \if@englishversion.
+\newif\ifenglishpaper
+\englishpaperfalse
+
+\newcommand{\englishversion}{%
+	\@englishversiontrue\englishpapertrue
+	\renewcommand{\refname}{References}%
+	\renewcommand{\bibname}{References}%
+}
+\newcommand{\russianversion}{%
+	\@englishversionfalse\englishpaperfalse
+	\renewcommand{\refname}{Список литературы}%
+	\renewcommand{\bibname}{Список литературы}%
+}
+
+% Переключение языка отрисовки на противоположный (используется в translatedpart).
+\def\@flip@englishversion{%
+	\if@englishversion
+		\@englishversionfalse\englishpaperfalse
+	\else
+		\@englishversiontrue\englishpapertrue
+	\fi
+}
 
 % font options
 
@@ -106,18 +127,17 @@
 \DeclareOption{cm}{\def\cmpj@sf{}}
 
 %Two languages
+% \@lang{<ru>}{<en>} и \@langrev — отдают вариант для текущего языка отрисовки.
+% \if@englishversion инвертируется в \translatedpart, поэтому одна проверка покрывает все случаи.
 
-\newcommand\@lang[2]{\@ifundefined{@english}{#1}{#2}}
-\newcommand\@langrev[2]{\@ifundefined{@reverse@lang}{\@lang{#1}{#2}}{\@lang{#2}{#1}}}
-\newcommand\@unreverselang[1]{%
-\let\@reverse@lang@temp\@reverse@lang%
-\let\@reverse@lang\undefined%
-#1%
-\let\@reverse@lang\@reverse@lang@temp%
-}
+\newcommand\@lang[2]{\if@englishversion#2\else#1\fi}
+\newcommand\@langrev[2]{\if@englishversion#2\else#1\fi}
+\newcommand\@unreverselang[1]{#1}
 
 \DeclareOption{english}{
 	\def\@english{}
+	\@englishversiontrue
+	\englishpapertrue
 }
 \DeclareOption{authorsinfo}{
     \def\need@authors@info{}
@@ -176,10 +196,11 @@
 \def\asbuk#1{\expandafter\@asbuk\csname c@#1\endcsname}
 \def\@asbuk#1{\ifcase#1\or а\or б\or в\or г\or д\or е\or ё\or ж\or з\or и\or й\or к\or л\or м\or н\or о\or п\or р\or с\or т\or у\or ф\or х\or ц\or ч\or ш\or щ\or ъ\or ы\or ь\or э\or ю\or я\fi}
 
-\@lang{
-  \renewcommand\thesubfigure{\asbuk{subfigure}}
-}{
-  \renewcommand\thesubfigure{\alph{subfigure}}
+% Подписи рисунков, таблиц и нумерация подрисунков — выбираются по языку отрисовки.
+\renewcommand\thesubfigure{\@lang{\asbuk{subfigure}}{\alph{subfigure}}}
+\AtBeginDocument{%
+	\renewcommand{\figurename}{\@lang{Рис.}{Fig.}}%
+	\renewcommand{\tablename}{\@lang{Табл.}{Table}}%
 }
 
 \newcommand\kioabstractname{\@langrev{Аннотация}{Abstract}}
@@ -368,7 +389,10 @@
 \newcommand\firstpage{\label{first@page}}
 \newcommand\lastpage{\label{last@page}}
 
-% Сноска без маркера на первой странице: английские авторы + английское название.
+% Сноска без маркера на первой странице:
+%   строка 1 — английские авторы (короткие имена, естественно оканчиваются точкой);
+%   строка 2 — полное английское название статьи;
+%   строка 3 — журнал, год, номер, страницы.
 % Печатается всегда, независимо от языка статьи.
 \def\@firstpage@english@citation{%
 	\begingroup
@@ -376,9 +400,9 @@
 		\def\@makefnmark{}%
 		\long\def\@makefntext##1{\noindent##1}%
 		\@footnotetext{%
-		%	\textit{For citation:}\space
-			\temp@authors@en.\space
-			\fancy@title@en.%
+			\temp@authors@en\\
+			\@title@en.\\
+			\journal@type@en, \issue@year. № \issue@number. P. \pages@span.%
 		}%
 	\endgroup
 }
@@ -479,11 +503,10 @@
 \newif\if@in@translatedpart
 \@in@translatedpartfalse
 
-% Текущий тип статьи: английский, если \englishversion или внутри \translatedpart, иначе русский.
+% Текущий тип статьи: язык определяется флагом \if@englishversion.
+% Внутри \translatedpart флаг инвертируется, поэтому проверка одна.
 \def\article@type@current{%
-	\if@englishversion\article@type@en%
-	\else\if@in@translatedpart\article@type@en%
-	\else\article@type@ru\fi\fi%
+	\if@englishversion\article@type@en\else\article@type@ru\fi%
 }
 
 \def\article@type@ru{{\selectlanguage{russian}Оригинальное исследование}}
@@ -641,14 +664,19 @@
         {\pageref*{first@page}--\pageref*{last@page}}%
 }
 
-\newcommand\print@doi{\href{http://dx.doi.org/\doi@number}{doi:\doi@number}}
-\newcommand\print@doi@full{\url{http://dx.doi.org/\doi@number}}
+\newcommand\print@doi{\href{https://doi.org/\doi@number}{doi:\doi@number}}
+\newcommand\print@doi@full{\url{https://doi.org/\doi@number}}
 
+% Ширина блока с метаданными (тип статьи, выпуск, УДК, URL, DOI).
+% Меньшая ширина → блок сдвигается вправо за счёт \hfill между картинкой и блоком.
+% Должно хватать на самую длинную строку — обычно DOI (например,
+% «doi:10.32603/2071-2340-2026-4-113-129»).
+\def\title@full@article@info@width{5.52cm}
 \def\title@full@article@info{%
-	\begin{minipage}{7cm}
-%		\fbox{% ← Рамка 
-			\parbox{\linewidth}{% ← Вложенный parbox для точности
-				\small\hv@sf 
+	\begin{minipage}{\title@full@article@info@width}
+%		\fbox{% ← Рамка
+			\parbox{\linewidth}{% ← Вложенный parbox для точности; текст внутри выровнен влево
+				\small\hv@sf
 				% ТИП СТАТЬИ ЖИРНЫМ ШРИФТОМ — язык согласно \article@type@current
 				\textbf{\article@type@current}\\ [0.6ex]
 				№~\issue@number:\space
@@ -690,10 +718,14 @@
 		\centering
 		\let \footnote \thanks
 		\vskip 2cm
-		\@ifundefined{@title}{}{\print@title}%
+		\if@englishversion
+			\@ifundefined{@title@en}{}{\let\@title\@title@en\print@title}%
+		\else
+			\@ifundefined{@title}{}{\print@title}%
+		\fi
 		\@ifundefined{@author}{}{\print@author}%
 		\@ifundefined{@address}{}{\print@address}%
-		\affiliation@footnotes
+		\if@englishversion\affiliation@footnotes@en\else\affiliation@footnotes\fi
 	}%
 	\par
 	\vskip 1.5em%
@@ -855,6 +887,9 @@
 
 
 % Ключевые слова — печатают свой блок прямо на месте вызова.
+% Текст аннотации, дополнительной информации и пример цитирования пользователь
+% записывает напрямую внутри \begin{abstract} / \additionalinfo{...} /
+% \citationexample <текст>.
 \newcommand{\keywordsru}[1]{%
 	\par\vskip 0.5ex\noindent\textbf{Ключевые слова: }\textit{#1}%
 }
@@ -965,8 +1000,8 @@
 \newcommand\maketranslatedtitle{
 	\begingroup
 	\global\@botnum\z@   % Не разрешаем рисунки внизу страницы.
-	% Используем английские данные
-	\let\@title\@title@en
+	% Внутри \translatedpart \if@englishversion уже отражает язык перевода.
+	\if@englishversion\let\@title\@title@en\fi
 	\@makerutitle
 	\@thanks
 	\endgroup
@@ -1005,16 +1040,18 @@
 	\centering
 	\let \footnote \thanks
 	
-	\@ifundefined{@title@en}{}{\def\@title{\@title@en}}%
+	\if@englishversion
+		\@ifundefined{@title@en}{}{\def\@title{\@title@en}}%
+	\fi
 	\@ifundefined{@title}{}{\print@rutitle}%
 	\global\let\affil\@affil%
-	
-	% Выводим английскую информацию об авторах
-	\print@author@en
-	
+
+	% Информация об авторах: \print@author уже выбирает язык по \if@englishversion.
+	\print@author
+
 	\@ifundefined{@address}{}{\print@address}%
-	% Английские аффилиации для английской части
-	\affiliation@footnotes@en
+	% Аффилиации соответствуют языку перевода.
+	\if@englishversion\affiliation@footnotes@en\else\affiliation@footnotes\fi
 	\global\let\affil\relax@with@arg%
 	\par
 	\vskip 1.5em%
@@ -1023,10 +1060,10 @@
 \newenvironment{translatedpart}{%
 	\def\@has@translated@part{}
 	\@in@translatedparttrue
+	\@flip@englishversion % язык переключается на противоположный
 	\lefthyphenmin=2 \righthyphenmin=2 % disallow x- or -x breaks; -xx OK
 	\lccode`\'=`\'
 	\def\@reverse@lang{}
-	\def\affiliation@footnotes{}
 	
 %%     ПРОВЕРКА МЕСТА    
 
@@ -1052,17 +1089,18 @@
 	\fi
 	\@firstpagefalse
 }{
-	% В КОНЦЕ английской части выводим информацию об авторах на английском
+	% В КОНЦЕ переведённой части выводим расширенную информацию об авторах
+	% на языке перевода (\if@englishversion уже инвертирован для translatedpart).
 	\@ifundefined{need@authors@info}{}{
 		\vspace*{1cm}
 		\par
 		\addvspace{6pt}
 		\widowpenalty=0
 		\clubpenalty=0
-		
-		\englishversion
+
 		\printauthorsinfo
 	}
+	\@flip@englishversion % восстанавливаем исходный язык
 }
 
 \newcommand\additionalinfo[1]{
@@ -1358,6 +1396,11 @@
 
 \newcites{eng}{References}
 
+
+\AtBeginDocument{%
+	\DeclareRobustCommand{\mylinkurl}[1]{\href{https://doi.org/#1}{#1}}%
+}
+
 \usepackage{letltxmacro}
 
 \LetLtxMacro{\originalcite}{\cite}
@@ -1366,14 +1409,32 @@
 
 \makeatletter
 \renewcommand{\cite}[2][]{%
-  \originalcite[#1]{#2}%
   \begingroup
-  \def\@temp##1{%
-    \nociteeng{EN-##1}%
-  }%
-  \@for\@tmp:=#2\do{%
-    \expandafter\@temp\expandafter{\@tmp}%
-  }%
+    \def\@cite@post{#1}%
+    \if@englishversion
+      % Сборка списка EN-<key> через token list.
+      \def\@cite@en@list{}%
+      \let\@cite@sep\@empty
+      \@for\@tmp:=#2\do{%
+        \edef\@cite@en@list{\@cite@en@list\@cite@sep EN-\@tmp}%
+        \def\@cite@sep{,}%
+      }%
+      \ifx\@cite@post\@empty
+        \expandafter\originalcite\expandafter{\@cite@en@list}%
+      \else
+        \expandafter\originalcite\expandafter[\@cite@post]\expandafter{\@cite@en@list}%
+      \fi
+    \else
+      \ifx\@cite@post\@empty
+        \originalcite{#2}%
+      \else
+        \originalcite[\@cite@post]{#2}%
+      \fi
+      \@for\@tmp:=#2\do{%
+        \edef\@tmp@en{EN-\@tmp}%
+        \expandafter\nociteeng\expandafter{\@tmp@en}%
+      }%
+    \fi
   \endgroup
 }
 \makeatother
