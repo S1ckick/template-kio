@@ -71,11 +71,14 @@
 }
 
 % Переключение языка отрисовки на противоположный (используется в translatedpart).
+% Меняется ТОЛЬКО \if@englishversion (текущий контекст рендера).
+% \ifenglishpaper остаётся равным выбранному пользователем языку статьи —
+% это нужно колонтитулам, которые должны быть постоянны на всех страницах.
 \def\@flip@englishversion{%
 	\if@englishversion
-		\@englishversionfalse\englishpaperfalse
+		\@englishversionfalse
 	\else
-		\@englishversiontrue\englishpapertrue
+		\@englishversiontrue
 	\fi
 }
 
@@ -342,10 +345,8 @@
 		\setstretch{0.9}
 		\if@englishversion
 		\csname author##1@short@en\endcsname%
-		\ifcsname author##1@pos@en\endcsname, \csname author##1@pos@en\endcsname\fi%
 		\else
 		\csname author##1@short\endcsname%
-		%\ifcsname author##1@pos\endcsname, \csname author##1@pos\endcsname\fi%
 		\fi
 		\ifcsname author##1@email\endcsname%
 		\hspace{0.5em}%
@@ -389,20 +390,26 @@
 \newcommand\firstpage{\label{first@page}}
 \newcommand\lastpage{\label{last@page}}
 
-% Сноска без маркера на первой странице:
-%   строка 1 — английские авторы (короткие имена, естественно оканчиваются точкой);
-%   строка 2 — полное английское название статьи;
-%   строка 3 — журнал, год, номер, страницы.
-% Печатается всегда, независимо от языка статьи.
-\def\@firstpage@english@citation{%
+% Сноска без маркера на первой странице — выходные данные на «противоположном»
+% языке (английская статья → русская сноска, русская статья → английская сноска).
+% Три строки: авторы, полное название, журнал/год/номер/страницы.
+\def\@firstpage@translation@citation{%
 	\begingroup
 		\def\@thefnmark{}%
 		\def\@makefnmark{}%
 		\long\def\@makefntext##1{\noindent##1}%
 		\@footnotetext{%
-			\temp@authors@en\\
-			\@title@en.\\
-			\journal@type@en, \issue@year. № \issue@number. P. \pages@span.%
+			\if@englishversion
+				% Английская статья → русская сноска.
+				\temp@authors\\
+				\@title.\\
+				\journal@type@ru, \issue@year. № \issue@number. С. \pages@span.%
+			\else
+				% Русская статья → английская сноска.
+				\temp@authors@en\\
+				\@title@en.\\
+				\journal@type@en, \issue@year. No \issue@number. P. \pages@span.%
+			\fi
 		}%
 	\endgroup
 }
@@ -436,7 +443,7 @@
 			\hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
 	\global\@topnum\z@   % Prevents figures from going at top of page
     \@maketitle
-	\@firstpage@english@citation % сноска с английскими авторами и названием
+	\@firstpage@translation@citation % выходные данные на противоположном языке
 	\thispagestyle{firstpagestyle} % Специальный стиль для первой страницы
 	\global\@firstpagefalse % Сбрасываем флаг
 	\pagestyle{mainstyle} % Устанавливаем основной стиль для следующих страниц
@@ -480,17 +487,17 @@
 	\def\issue@number{#2}%
 	\def\@section@image@path@prefix{"images/"}
 	\ifthenelse{\equal{edu}{#3}}{%
-		\def\journal@type{\@langrev{Компьютерные инструменты в образовании}{Computer tools in education}}%
+		\def\journal@type{\@langrev{Компьютерные инструменты в образовании}{Computer Tools in Education}}%
 		\def\journal@type@ru{{\selectlanguage{russian}Компьютерные инструменты в образовании}}%
-		\def\journal@type@en{Computer tools in education}%
+		\def\journal@type@en{Computer Tools in Education}%
 	}{%
       \ifthenelse{\equal{cam}{#3}}{%
-        \def\journal@type{\@langrev{Компьютерная математика}{Computer assisted mathematics}}%
+        \def\journal@type{\@langrev{Компьютерная математика}{Computer Assisted Mathematics}}%
         \def\journal@type@ru{{\selectlanguage{russian}Компьютерная математика}}%
-        \def\journal@type@en{Computer assisted mathematics}%
+        \def\journal@type@en{Computer Assisted Mathematics}%
         \def\@section@image@path@prefix{cam-}%
       }{%
-        \def\journal@type{\@langrev{Компьютерные инструменты в школе}{Computer tools at schools}}%
+        \def\journal@type{\@langrev{Компьютерные инструменты в школе}{Computer Tools at Schools}}%
       }%
     }%
     \ifthenelse{\equal{cam}{#3}}{%
@@ -681,9 +688,7 @@
 				\textbf{\article@type@current}\\ [0.6ex]
 				№~\issue@number:\space
 				\pages@span%
-				\@langrev{%no UDC in english
-					\@ifundefined{udk@number}{}{\\[0.6ex]\@langrev{УДК}{UDC}:\space\udk@number}%
-				}{}
+				\@ifundefined{udk@number}{}{\\[0.6ex]\@langrev{УДК}{UDC}:\space\udk@number}%
 				\\[0.6ex]\href{http://cte.eltech.ru}{http://cte.eltech.ru}%
 				\@ifundefined{doi@number}{}{\\[0.6ex]\print@doi}%
 			}
@@ -764,26 +769,40 @@
 %\newcommand\citationexample{\abstract@section{\citationname}{}}
 %\newcommand\acknowledgements{\abstract@section{\acknowledgementsname}{\slshape}}
 
-\newcommand\citationexample{\par\vskip 1ex\noindent\textbf{\citationname: }}
 \newcommand\acknowledgements[1]{\par\vskip 1ex\noindent\textbf{\acknowledgementsname: }\textit{#1}}
 
-\newcommand\autocitationexample{\citationexample\@langrev{
-  \authors@short@split@by@comma\space\fancy@title\space//
-  \journal@type. \issue@year. № \issue@number. С. \pages@span.
-  \@ifundefined{doi@number}{}{\print@doi}
-}{
-  \authors@short@en@split@by@comma. \fancy@title@en. \journal@type, \issue@year.
-  № \issue@number. P. \pages@span. \@ifundefined{doi@number}{}{\print@doi}.
-}}
+% \autocitation — единая команда для печати «Цитирование/Citation»: ярлык +
+% автоматически собранный пример цитирования.
+%   • Русская версия — стиль ГОСТ Р 7.0.100-2018: «Авторы. Название // Журнал.
+%     Год. № Номер. С. Страницы. doi:…».
+%   • Английская версия — IEEE-подобный стиль: «Authors, “Title,” Journal,
+%     no. N, pp. P, Year, doi: …».
+% Используются полные названия (\@title / \@title@en).
+\newcommand\autocitation{%
+  \par\vskip 1ex\noindent\textbf{\citationname: }%
+  \begingroup
+    \let\affil\@gobble % в цитировании не нужны индексы аффилиаций
+    \@langrev{%
+      % Русский / ГОСТ
+      \authors@short@split@by@comma\space\@title\space//
+      \space\journal@type. \issue@year. № \issue@number. С. \pages@span.%
+      \@ifundefined{doi@number}{}{\space\print@doi.}%
+    }{%
+      % English / IEEE
+      \authors@short@en@split@by@comma, ``\@title@en,''\space
+      \journal@type@en, no.~\issue@number, pp.~\pages@span, \issue@year%
+      \@ifundefined{doi@number}{}{, doi:~\print@doi}.%
+    }%
+  \endgroup
+}
 
 \newcommand\pacs{\par\vskip 1ex
         \noindent\raggedright\upshape{\hv@sf\bfseries PACS:}\slshape\space}
 
 % =========================================================================
 % Generic author API: \author{N}[short]{full}, \authoren{N}[short]{full},
-% \authorpos{N}{...}, \authorposen{N}{...}, \authorinfo{N}{...},
-% \authorinfoen{N}{...}, \authoremail{N}{...}, \authoremailEnvelope{N}{...},
-% \authororcid{N}{...}.
+% \authorinfo{N}{...}, \authorinfoen{N}{...},
+% \authoremail{N}{...}, \authoremailEnvelope{N}{...}, \authororcid{N}{...}.
 % N is an Arabic numeral; it is used directly as the key inside \csname...\endcsname.
 % =========================================================================
 
@@ -802,15 +821,6 @@
 \long\def\make@authoren#1[#2]#3{%
 	\expandafter\gdef\csname author#1@short@en\endcsname{#2}%
 	\expandafter\gdef\csname author#1@full@en\endcsname{#3}%
-}
-
-% \authorpos{N}{...} / \authorposen{N}{...}
-\newcommand{\authorpos}[2]{%
-	\expandafter\def\csname author#1@pos\endcsname{#2}%
-	\expandafter\def\csname author#1@pos@en\endcsname{#2}%
-}
-\newcommand{\authorposen}[2]{%
-	\expandafter\def\csname author#1@pos@en\endcsname{#2}%
 }
 
 % \authorinfo{N}{...} / \authorinfoen{N}{...}
@@ -860,7 +870,6 @@
 		\def\authorinfo##1{
 			\setstretch{0.9}
 			\csname author##1@short@en\endcsname%
-		%	\ifcsname author##1@pos@en\endcsname, \csname author##1@pos@en\endcsname\fi%
 			\ifcsname author##1@email\endcsname%
 			\hspace{0.5em}%
 			\ifcsname author##1@email@recepient\endcsname\@Letter\fi%
@@ -887,14 +896,38 @@
 
 
 % Ключевые слова — печатают свой блок прямо на месте вызова.
-% Текст аннотации, дополнительной информации и пример цитирования пользователь
-% записывает напрямую внутри \begin{abstract} / \additionalinfo{...} /
-% \citationexample <текст>.
+% Текст аннотации и дополнительной информации пользователь записывает напрямую
+% внутри \begin{abstract} и \additionalinfo{...}.
+% Пример цитирования формируется автоматически командой \autocitation.
 \newcommand{\keywordsru}[1]{%
 	\par\vskip 0.5ex\noindent\textbf{Ключевые слова: }\textit{#1}%
 }
 \newcommand{\keywordsen}[1]{%
 	\par\vskip 0.5ex\noindent\textbf{Keywords: }\textit{#1}%
+}
+
+% Благодарности / Acknowledgments
+\newcommand{\acknowledgmentsru}[1]{%
+	\par\vskip 1ex\noindent\textbf{Благодарности: }\textit{#1}%
+}
+\newcommand{\acknowledgmentsen}[1]{%
+	\par\vskip 1ex\noindent\textbf{Acknowledgments: }\textit{#1}%
+}
+
+% Финансирование / Funding
+\newcommand{\fundingru}[1]{%
+	\par\vskip 1ex\noindent\textbf{Финансирование: }\textit{#1}%
+}
+\newcommand{\fundingen}[1]{%
+	\par\vskip 1ex\noindent\textbf{Funding: }\textit{#1}%
+}
+
+% Конфликт интересов / Conflict of Interest
+\newcommand{\conflictofinterestru}[1]{%
+	\par\vskip 1ex\noindent\textbf{Конфликт интересов: }\textit{#1}%
+}
+\newcommand{\conflictofinteresten}[1]{%
+	\par\vskip 1ex\noindent\textbf{Conflict of Interest: }\textit{#1}%
 }
 
 
@@ -1009,9 +1042,9 @@
 	\global\let\makerutitle\relax
 	\global\let\@makerutitle\relax
 	\global\let\@thanks\@empty
+	% \@title и \@title@en НЕ очищаем — они нужны позже для \autocitation.
 	\global\let\@author\@empty
 	\global\let\@date\@empty
-	\global\let\@title\@empty
 	\global\let\title\relax
 	\global\let\author\relax
 	\global\let\date\relax
@@ -1206,23 +1239,24 @@
 	\renewcommand{\headrulewidth}{0.4pt}
 	\renewcommand{\footrulewidth}{0.4pt}
 	
-	% Верхние колонтитулы (язык согласно \if@englishversion)
+	% Верхние колонтитулы. Используем \ifenglishpaper (постоянный по всему документу),
+	% чтобы внутри \translatedpart колонтитулы НЕ переключались на другой язык.
 	\fancyhead[RO]{%
 		\normalsize\sf@phv\textcolor{rulercolor}{%
-			\if@englishversion\@englisharticleheader\else\@russianarticleheader\fi
+			\ifenglishpaper\@englisharticleheader\else\@russianarticleheader\fi
 		}%
 	}
 
 	\fancyhead[LE]{%
 		\normalsize\sf@phv\textcolor{rulercolor}{%
-			\if@englishversion\@englishauthorsheader\else\@russianauthorsheader\fi
+			\ifenglishpaper\@englishauthorsheader\else\@russianauthorsheader\fi
 		}%
 	}
 
 	% НИЖНИЕ КОЛОНТИТУЛЫ С НОМЕРАМИ СТРАНИЦ ВНУТРИ
 	\fancyfoot[RO]{%
 		\normalsize\sf@phv\textcolor{rulercolor}{%
-			\if@englishversion
+			\ifenglishpaper
 				©\ \MakeTextUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
 			\else
 				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ {\selectlanguage{russian}№\ \issue@number.\ С.\ \pages@span}
@@ -1236,7 +1270,7 @@
 		\normalsize\sf@phv\textcolor{black}{\kio@page}
 		\hfill
 		\normalsize\sf@phv\textcolor{rulercolor}{%
-			\if@englishversion\@englishsectionheader\else\@russiansectionheader\fi
+			\ifenglishpaper\@englishsectionheader\else\@russiansectionheader\fi
 		}%
 	}
 }
@@ -1252,7 +1286,7 @@
 	\fancyheadoffset{0pt}
 	\fancyfootoffset{0pt}
 	
-	%     ПРАВАЯ СТРАНИЦА (нечетная)    
+	%     ПРАВАЯ СТРАНИЦА (нечетная)
 	\fancyfoot[RO]{%
 		\footnotesize\sf@phv%
 		\hspace*{0pt}% Компенсируем левый отступ
@@ -1263,7 +1297,7 @@
 			\exhyphenpenalty=10000
 			\emergencystretch=0em
 			\textcolor{rulercolor}{%
-				\if@englishversion
+				\ifenglishpaper
 					\noindent\MakeTextUppercase{\journal@type@en}%
 				\else
 					\noindent\MakeTextUppercase{\journal@type@ru}%
@@ -1271,10 +1305,10 @@
 			}
 		\end{minipage}%
 		\hfill%
-		% Иконка по центру
+		% Иконка CC BY по центру (файл лежит в каталоге images/)
 		\raisebox{-3.0ex}{%
-			\IfFileExists{cc-by.png}{%
-				\includegraphics[height=4.5ex]{cc-by.png}%
+			\IfFileExists{images/cc-by.png}{%
+				\includegraphics[height=4.5ex]{images/cc-by.png}%
 			}{}%
 		}%
 %		\hfill%
@@ -1283,18 +1317,18 @@
 		\hspace{1em}
 		\normalsize\textcolor{black}{\kio@page}%
 	}
-	
-	%     ЛЕВАЯ СТРАНИЦА (четная)    
+
+	%     ЛЕВАЯ СТРАНИЦА (четная)
 	\fancyfoot[LE]{%
 		\footnotesize\sf@phv%
 		\hspace*{0pt}% Компенсируем левый отступ
 		% Номер страницы к левому краю
 		\normalsize\textcolor{black}{\kio@page}%
 		\hspace*{20pt plus 1fill}%
-		% Иконка точно по центру
+		% Иконка CC BY точно по центру (файл лежит в каталоге images/)
 		\raisebox{-3.0ex}{%
-			\IfFileExists{cc-by.png}{%
-				\includegraphics[height=4.5ex]{cc-by.png}%
+			\IfFileExists{images/cc-by.png}{%
+				\includegraphics[height=4.5ex]{images/cc-by.png}%
 			}{}%
 		}%
 		\hfill%
@@ -1305,7 +1339,7 @@
 			\exhyphenpenalty=10000
 			\emergencystretch=2em
 			\textcolor{rulercolor}{%
-				\if@englishversion
+				\ifenglishpaper
 					\noindent\MakeTextUppercase{\journal@type@en}%
 				\else
 					\noindent\MakeTextUppercase{\journal@type@ru}%

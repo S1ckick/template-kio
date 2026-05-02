@@ -62,23 +62,19 @@
 
 % Authors (Russian version)
 \author{1}[Андреев А.~А.\affil{1,3}]{Андреев Андрей Андреевич}
-\authorpos{1}{}
 \authorinfo{1}{информация об авторе длинная}
 \authororcid{1}{orcid.org/0000-0000-9999-9999}
 \authoremailEnvelope{1}{aaandreev@etu.ru} % corresponding-author address
 
 \author{2}[Борисов Б.~Б.\affil{2}]{Борисов Борис Борисович}
-\authorpos{2}{}
 \authorinfo{2}{информация о втором авторе длинная}
 \authoremail{2}{borisov@iaaras.ru}
 
 \author{3}[Воронов В.~В.\affil{3}]{Воронов Владимир Владимирович}
-\authorpos{3}{}
 \authorinfo{3}{информация о третьем авторе}
 \authoremail{3}{v.v.voronov@spbu.ru}
 
 \author{4}[Громова Г.~Г.\affil{4}]{Громова Галина Геннадьевна}
-\authorpos{4}{}
 \authorinfo{4}{информация о четвертом авторе}
 \authororcid{4}{orcid.org/0000-9999-9999-9999}
 \authoremail{4}{gromoff@quantori.com}
@@ -99,19 +95,15 @@
 
 % Authors (English version)
 \authoren{1}[Andreev A.~A.\affil{1,2}]{Andreev Andrey Andreevich}
-\authorposen{1}{}
 \authorinfoen{1}{1st author info}
 
 \authoren{2}[Borisov B.~B.\affil{2}]{Borisov Boris Borisovich}
-\authorposen{2}{}
 \authorinfoen{2}{2nd author info}
 
 \authoren{3}[Voronov V.~V.\affil{3}]{Voronov Vladimir Vladimirovich}
-\authorposen{3}{}
 \authorinfoen{3}{3rd author info}
 
 \authoren{4}[Gromova G.~G.\affil{1,3}]{Gromova Galina Gennadievna}
-\authorposen{4}{}
 \authorinfoen{4}{4th author info}
 
 
@@ -135,7 +127,7 @@
 		English abstract goes here.
 		\keywordsen{keywords1, keywords2, keywords3}
 
-		\citationexample Andreev A.~A., Borisov B.~B. Article template for the KIO journal. Unpublished
+		\autocitation
 	\end{abstract}
 
     \section{INTRODUCTION}
@@ -252,11 +244,16 @@
     Reference to a GOST standard: \cite{gost-radio}.
     Reference to a patent: \cite{sviridov}.
 
+    \acknowledgmentsen{The authors thank their colleagues for fruitful discussions.}
+    \fundingen{The work was supported by grant No.~XX-XX-XXXXX.}
+    \conflictofinteresten{The authors declare no conflict of interest.}
 
     \begin{otherlanguage*}{english}
         \bibliographystyle{IEEE}
         \bibliography{references-en,references-clones}
     \end{otherlanguage*}
+
+    
 
     \additionalinfo{Received October 7, 2025, The final version: January 28, 2026}
 
@@ -270,10 +267,14 @@
             Русская аннотация.
             \keywordsru{Русские ключевые слова.}
 
-            \autocitationexample
+            \autocitation
         \end{abstract}
 
         % In the English version no second (Russian) bibliography is printed.
+
+        \acknowledgmentsru{Авторы благодарят коллег за полезные обсуждения.}
+        \fundingru{Работа выполнена при финансовой поддержке гранта №~XX-XX-XXXXX.}
+        \conflictofinterestru{Авторы заявляют об отсутствии конфликта интересов.}
 
         \additionalinfo{Поступила в редакцию 7 октября 2025, окончательный вариант 28 января 2026 г.}
 
