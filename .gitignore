@@ -7,3 +7,4 @@
 *-clones.bib
 images/*
 !images/cc-by.png
+.DS_Store
