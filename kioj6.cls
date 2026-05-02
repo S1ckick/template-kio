@@ -790,7 +790,7 @@
     }{%
       % English / IEEE
       \authors@short@en@split@by@comma, ``\@title@en,''\space
-      \journal@type@en, no.~\issue@number, pp.~\pages@span, \issue@year%
+      \journal@type@en, no.~\issue@number, p.~\pages@span, \issue@year%
       \@ifundefined{doi@number}{}{, doi:~\print@doi}.%
     }%
   \endgroup
