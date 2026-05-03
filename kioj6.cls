@@ -766,17 +766,53 @@
 	\rightskip=\@titleindent%
 	\upshape{\hv@sf\bfseries \keywordsname: }\slshape}
 
-%\newcommand\citationexample{\abstract@section{\citationname}{}}
-%\newcommand\acknowledgements{\abstract@section{\acknowledgementsname}{\slshape}}
 
 \newcommand\acknowledgements[1]{\par\vskip 1ex\noindent\textbf{\acknowledgementsname: }\textit{#1}}
 
-% \autocitation — единая команда для печати «Цитирование/Citation»: ярлык +
-% автоматически собранный пример цитирования.
+% --- Хелперы для IEEE-стилизации списка авторов ----------------------------
+
+% Перестановка «Lastname I.~I.» → «I.~I. Lastname» (по первому пробелу).
+% Перед вызовом полезно сделать \let\affil\@gobble, чтобы убрать аффилиации.
+\def\@kio@swap@author#1 #2\@@nil{#2 #1}
+
+% Печать всех авторов в IEEE-стиле:
+%   1 author : «I. I. X»
+%   2 authors: «I. I. X and J. J. Y»
+%   3+       : «I. I. X, J. J. Y, and K. K. Z» (Oxford comma)
+\newcommand{\@kio@ieee@authors}{%
+	\count@\z@
+	\@authors@iter{@short@en}{\advance\count@\@ne}%
+	\edef\@kio@total{\the\count@}%
+	\count@\z@
+	\@authors@iter{@short@en}{%
+		\advance\count@\@ne
+		\ifnum\count@>\@ne
+			\ifnum\count@=\@kio@total\relax
+				\ifnum\@kio@total=\tw@\space and\space\else, and\space\fi
+			\else
+				, %
+			\fi
+		\fi
+		% \edef forces full expansion of \author<i>@short@en (включая \affil,
+		% который локально \let на \@gobble), чтобы шаблон #1 #2\@@nil увидел
+		% уже строку «Surname I.~I.», а не сам токен.
+		\edef\@kio@cur{\csname author\author@i @short@en\endcsname}%
+		\expandafter\@kio@swap@author\@kio@cur\@@nil
+	}%
+}
+
+% «p.» для одной страницы, «pp.» для диапазона — определяется через метки first/last@page.
+\newcommand{\@kio@pages@prefix}{%
+	\ifthenelse{\equal{\pageref*{first@page}}{\pageref*{last@page}}}{p.}{pp.}%
+}
+
+% --- Автогенерируемое цитирование ------------------------------------------
+% \autocitation — печатает ярлык «Цитирование/Citation» и автоматически
+% собранный пример цитирования.
 %   • Русская версия — стиль ГОСТ Р 7.0.100-2018: «Авторы. Название // Журнал.
 %     Год. № Номер. С. Страницы. doi:…».
-%   • Английская версия — IEEE-подобный стиль: «Authors, “Title,” Journal,
-%     no. N, pp. P, Year, doi: …».
+%   • Английская версия — IEEE-стиль: «I. I. Author1, …, and I. I. AuthorN,
+%     “Title,” Journal, no. N, pp. P–Q, Year, doi:…».
 % Используются полные названия (\@title / \@title@en).
 \newcommand\autocitation{%
   \par\vskip 1ex\noindent\textbf{\citationname: }%
@@ -785,15 +821,23 @@
     \@langrev{%
       % Русский / ГОСТ
       \authors@short@split@by@comma\space\@title\space//
-      \space\journal@type. \issue@year. № \issue@number. С. \pages@span.%
+      \space\journal@type. \issue@year. № \issue@number. С.~\pages@span.%
       \@ifundefined{doi@number}{}{\space\print@doi.}%
     }{%
       % English / IEEE
-      \authors@short@en@split@by@comma, ``\@title@en,''\space
-      \journal@type@en, no.~\issue@number, p.~\pages@span, \issue@year%
-      \@ifundefined{doi@number}{}{, doi:~\print@doi}.%
+      \@kio@ieee@authors, ``\@title@en,''\space
+      \journal@type@en, no.~\issue@number, \@kio@pages@prefix~\pages@span, \issue@year%
+      \@ifundefined{doi@number}{}{, \print@doi}.%
     }%
   \endgroup
+}
+
+% --- Ручное цитирование ---
+% \manualcitation{<текст>} — печатает ярлык «Цитирование/Citation» и далее
+% переданный пользователем текст. Пример:
+%   \manualcitation{Andreev A.~A., Borisov B.~B. Article title. Journal, 2026.}
+\newcommand{\manualcitation}[1]{%
+  \par\vskip 1ex\noindent\textbf{\citationname: }#1%
 }
 
 \newcommand\pacs{\par\vskip 1ex
