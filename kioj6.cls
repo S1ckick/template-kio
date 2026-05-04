@@ -1221,10 +1221,19 @@
 \frenchspacing
 \let\@afterindentfalse\@afterindenttrue
 
+% Сноска на первой странице (выходные данные на «противоположном» языке):
+%   • линия — во всю ширину текста;
+%   • симметричные расстояния сверху и снизу;
+%   • увеличенный отступ от основного текста для зрительного отделения блока.
+% Геометрия:
+%   above rule = \skip\footins (12pt) + \vskip 8pt  ≈ 20pt
+%   below rule = \vskip 12pt + \footnotesep (8pt)  ≈ 20pt
 \renewcommand\footnoterule{%
-  \kern-3\p@
-  \hrule height 0.4pt\@width.2\columnwidth
-  \kern2.6\p@}
+  \vskip 8\p@
+  \color{rulercolor}\hrule height 0.4pt \@width\textwidth
+  \vskip 12\p@}
+\setlength{\skip\footins}{12pt plus 2pt minus 2pt}
+\setlength{\footnotesep}{8pt}
 
 %%  Headings  %%
 
