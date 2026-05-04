@@ -1221,7 +1221,7 @@
 \frenchspacing
 \let\@afterindentfalse\@afterindenttrue
 
-% Сноска на первой странице (выходные данные на «противоположном» языке):
+% Сноска на первой странице (выходные данные на противоположном языке):
 %   • линия — во всю ширину текста;
 %   • симметричные расстояния сверху и снизу;
 %   • увеличенный отступ от основного текста для зрительного отделения блока.
@@ -1233,7 +1233,7 @@
   \color{rulercolor}\hrule height 0.4pt \@width\textwidth
   \vskip 12\p@}
 \setlength{\skip\footins}{12pt plus 2pt minus 2pt}
-\setlength{\footnotesep}{8pt}
+\setlength{\footnotesep}{5pt}
 
 %%  Headings  %%
 
