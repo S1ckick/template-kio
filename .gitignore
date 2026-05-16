@@ -9,3 +9,4 @@ images/*
 !images/cc-by.png
 .DS_Store
 clean.sh
+*-prefixed.bib
