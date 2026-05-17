@@ -872,6 +872,30 @@ FUNCTION {bbl.media}
    if$}
 if$}
 
+FUNCTION {bbl.video.bracket}
+{ curlanguage "russian" =
+   { "[видео]" }
+   { "[video]" }
+if$}
+
+FUNCTION {bbl.software.developer}
+{ curlanguage "russian" =
+   { "разработчик" }
+   { "developer" }
+if$}
+
+FUNCTION {bbl.software.kind}
+{ curlanguage "russian" =
+   { "Электронная программа" }
+   { "Electronic program" }
+if$}
+
+FUNCTION {bbl.software.subkind}
+{ curlanguage "russian" =
+   { "электронная" }
+   { "electronic" }
+if$}
+
 FUNCTION {bbl.req}
 {
   curlanguage "english" =
@@ -2429,12 +2453,116 @@ FUNCTION {techreport}
 %%   * dissertation                    → @phdthesis.                  %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+FUNCTION {video}
+{ output.bibitem
+  % output.bibitem leaves an empty buffer on the stack; discard it so we
+  % can build the entry as a single string from scratch.
+  pop$
+  title duplicate$ empty$
+    { pop$ "empty title in " cite$ * warning$ "" }
+    'skip$
+  if$
+  "~: " *
+  bbl.video.bracket *
+  author empty$
+    'skip$
+    { "~/ " *
+      format.author *
+    }
+  if$
+  url empty$
+    'skip$
+    { " \BibDash{} " *
+      bbl.url *
+      ": \url{" *
+      url *
+      "}" *
+      urldate empty$
+        'skip$
+        { " (" *
+          bbl.urldate *
+          ": " *
+          urldate *
+          ")" *
+        }
+      if$
+    }
+  if$
+  add.period$
+  write$
+  newline$
+}
+
+FUNCTION {software}
+{ output.bibitem
+  pop$
+  title duplicate$ empty$
+    { pop$ "empty title in " cite$ * warning$ "" }
+    'skip$
+  if$
+  author empty$ organization empty$ and howpublished empty$ and
+    'skip$
+    { "~/ " *
+      bbl.software.developer *
+      ": " *
+      author empty$
+        { organization empty$
+            { howpublished * }
+            { organization * }
+          if$
+        }
+        { format.author * }
+      if$
+    }
+  if$
+  address empty$ year empty$ and
+    'skip$
+    { add.period$
+      " \BibDash{} " *
+      address empty$
+        { year * }
+        { address *
+          year empty$
+            'skip$
+            { " : " * year * }
+          if$
+        }
+      if$
+    }
+  if$
+  add.period$
+  " \BibDash{} " *
+  bbl.software.kind *
+  " : " *
+  bbl.software.subkind *
+  url empty$
+    'skip$
+    { add.period$
+      " \BibDash{} " *
+      bbl.url *
+      ": \url{" *
+      url *
+      "}" *
+      urldate empty$
+        'skip$
+        { " (" *
+          bbl.urldate *
+          ": " *
+          urldate *
+          ")" *
+        }
+      if$
+    }
+  if$
+  add.period$
+  write$
+  newline$
+}
+
 FUNCTION {blog}             {online}
 FUNCTION {news}             {article}
 FUNCTION {newsarticle}      {article}
-FUNCTION {video}            {online}
 FUNCTION {lecture}          {online}
-FUNCTION {software}         {online}
 FUNCTION {dataset}          {online}
 FUNCTION {website}          {online}
 FUNCTION {socialmedia}      {online}
