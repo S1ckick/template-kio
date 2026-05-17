@@ -2411,6 +2411,24 @@ FUNCTION {techreport}
   fin.entry
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% New IEEE type aliases — best-fit mappings to GOST 7.0.5 handlers. %%
+%% These let the same BibTeX file feed both the IEEE.bst (English)    %%
+%% and ugost2008.bst (Russian) bibliographies. GOST has no separate   %%
+%% layouts for blogs, datasets, software, lectures, social-media etc, %%
+%% so each new IEEE entry type is routed to the closest existing      %%
+%% GOST handler:                                                      %%
+%%   * any online/electronic resource  → @online   (URL-based, with   %%
+%%       \BIBforeignlanguage / [Электронный ресурс] handling),        %%
+%%   * news article in a periodical    → @article,                    %%
+%%   * presentation / conf. paper      → @inproceedings,              %%
+%%   * preprint                        → @misc,                       %%
+%%   * standard / handbook             → @manual,                     %%
+%%   * government document             → @misc,                       %%
+%%   * patent (any form)               → @patent,                     %%
+%%   * dissertation                    → @phdthesis.                  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 FUNCTION {blog}             {online}
 FUNCTION {news}             {article}
 FUNCTION {newsarticle}      {article}
@@ -2430,6 +2448,10 @@ FUNCTION {preprint}         {misc}
 FUNCTION {arxiv}            {misc}
 FUNCTION {dissertation}     {phdthesis}
 
+%% @standard — dedicated GOST handler.
+%% Forms the leading identifier from the organization + number fields,
+%% so the standard number is not lost. Layout:
+%%   [Organization Number]. Title. — Address. — Year. — Note. — doi.
 FUNCTION {standard}
 { output.bibitem
   author empty$
@@ -2702,8 +2724,18 @@ FUNCTION {begin.bib}
   "\providecommand*{\BibUrl}[1]{\url{#1}}"           write$ newline$
   "\providecommand{\BibAnnote}[1]{}"                 write$ newline$
   "\providecommand*{\BibEmph}[1]{#1}"                write$ newline$
-  "\setlength{\itemsep}{-5pt}"            write$ newline$
-  "\setlength{\labelwidth}{20pt}"          write$ newline$
+  % User-configurable appearance hooks. Defaults match the historic
+  % ugost2008.bst look (\small font, single line spacing, -5pt itemsep).
+  % Override from the document preamble with \renewcommand, e.g.:
+  %   \renewcommand{\bibfontsize}{\footnotesize}
+  %   \renewcommand{\biblinespread}{1.1}
+  %   \renewcommand{\bibitemsep}{0pt}
+  "\providecommand{\bibfontsize}{\small}"            write$ newline$
+  "\providecommand{\biblinespread}{1.0}"             write$ newline$
+  "\providecommand{\bibitemsep}{-5pt}"               write$ newline$
+  "\bibfontsize\linespread{\biblinespread}\selectfont" write$ newline$
+  "\setlength{\itemsep}{\bibitemsep}"                write$ newline$
+  "\setlength{\labelwidth}{20pt}"                    write$ newline$
 
 
   "\ProvideTextCommandDefault{\cyrdash}{\iflanguage{russian}{\hbox to.8em{--\hss--}}{\textemdash}}" write$ newline$

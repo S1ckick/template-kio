@@ -90,23 +90,34 @@ FUNCTION {default.is.use.url} { #1 }
 
 % #0 turns off the forced use of "et al."
 % #1 enables
+% When there are more than 6 authors, force et al. usage.
 FUNCTION {default.is.forced.et.al} { #1 }
 
 
 % The maximum number of names that can be present beyond which an "et al."
 % usage is forced. Be sure that num.names.shown.with.forced.et.al (below)
 % is not greater than this value!
+% List up to 6 authors; if more, use the primary author + et al.
 FUNCTION {default.max.num.names.before.forced.et.al} { #6 }
 
 
 % The number of names that will be shown with a forced "et al.".
 % Must be less than or equal to max.num.names.before.forced.et.al
+% Show only the first author followed by "et al."
 FUNCTION {default.num.names.shown.with.forced.et.al} { #1 }
+
+
+% The maximum number of editor names that can appear before "et al." is forced.
+% IEEE style allows up to 3 editors; if more, the first editor + et al. is used.
 FUNCTION {default.max.num.editors.before.forced.et.al} { #3 }
 
 
 % #0 turns off the alternate interword spacing for entries with URLs.
 % #1 enables
+% Disabled by default: the legacy x4 inter-word stretch produced visibly
+% loose lines in entries that carry long URLs (blog/news/social-media
+% references in particular). Long URLs are still broken safely by the
+% \url{} command from the url/hyperref package.
 FUNCTION {default.is.use.alt.interword.spacing} { #0 }
 
 
@@ -136,6 +147,10 @@ FUNCTION {default.name.latex.cmd}{ "" }
 
 
 % The default URL prefix.
+% NOTE: The leading "[Online]." (or "[Online Video].", etc.) is emitted by
+% the format.online.marker function so that the medium can vary per entry
+% type (videos, datasets, etc.). The prefix here therefore contains only
+% the "Available:" portion that follows the medium marker.
 FUNCTION {default.name.url.prefix}{ "Available:" }
 
 
@@ -1074,7 +1089,21 @@ FUNCTION {begin.bib}
   write$ newline$
   "\providecommand{\bibinfo}[2]{#2}"
   write$ newline$
-  "\setlength{\itemsep}{-5pt}"
+  % User-configurable appearance hooks. Defaults match the historic
+  % IEEE.bst look (\small font, single line spacing, -5pt itemsep).
+  % Override from the document preamble, e.g.:
+  %   \renewcommand{\bibfontsize}{\footnotesize}
+  %   \renewcommand{\biblinespread}{1.1}
+  %   \renewcommand{\bibitemsep}{0pt}
+  "\providecommand{\bibfontsize}{\small}"
+  write$ newline$
+  "\providecommand{\biblinespread}{1.0}"
+  write$ newline$
+  "\providecommand{\bibitemsep}{-5pt}"
+  write$ newline$
+  "\bibfontsize\linespread{\biblinespread}\selectfont"
+  write$ newline$
+  "\setlength{\itemsep}{\bibitemsep}"
   write$ newline$
   "\providecommand{\BIBentrySTDinterwordspacing}{\spaceskip=0pt\relax}"
   write$ newline$
@@ -1196,6 +1225,9 @@ FUNCTION {format.address.org.or.pub.date}
           t *
         }
       if$
+      % For foreign-language books / proceedings, the
+      % marker "(in Language)" is inserted between the publisher and the
+      % year, e.g. "Tokyo: Nihon Keizai Hyoronsha (in Japanese), 2000.".
       inlanguage empty$
         { skip$ }
         { " (in " * inlanguage "inlanguage" bibinfo.check * ")" * }
@@ -1213,6 +1245,9 @@ FUNCTION {format.address.org.or.pub.date}
               if$
             }
             { month "month" bibinfo.check *
+              % when both month and day are present (typical for
+              % conference proceedings), the date reads "Month Day, Year",
+              % e.g. "Jun. 2--6, 2003". Without a day it stays "Month Year".
               day empty$
                 { skip$ }
                 { " " * day "day" bibinfo.check * }
@@ -1355,6 +1390,7 @@ FUNCTION {format.date}
       cap.status.std
       swap$ 'skip$
         {
+          % If day is supplied, format as "Month Day, Year"; otherwise "Month Year".
           day empty$
             { swap$
               " " * swap$
@@ -1378,6 +1414,10 @@ FUNCTION {format.date.electronic}
         { "there's a month but no year in " cite$ * warning$
         pop$ ")" * "(" swap$ *
         this.to.prev.status
+        % The "(Date)" cluster is followed by a sentence
+        % separator (period in period-style entries, comma in
+        % comma-style entries). Inherit punct.std rather than
+        % suppressing it with punct.no.
         punct.std 'this.status.punct :=
         space.normal 'this.status.space :=
         quote.no 'this.status.quote :=
@@ -1387,7 +1427,10 @@ FUNCTION {format.date.electronic}
     }
     { swap$
         { swap$ pop$ ")" * "(" swap$ * }
-        { 
+        { % Render electronic dates as "(Month Day, Year)" when
+          % a day is available (e.g., online video, online manual), or as
+          % "(Month Year)" otherwise (e.g., online conference paper).
+          % Stack on entry: [month_val, year_val] (year on top).
           day empty$
             { swap$ "(" swap$ * " " * swap$ * ")" * }
             { swap$ "(" swap$ * " " * day * ", " * swap$ * ")" * }
@@ -1395,6 +1438,9 @@ FUNCTION {format.date.electronic}
         }
       if$
     this.to.prev.status
+    % "(Date)" is followed by a sentence separator inherited
+    % from the entry's std punctuation (period for online references,
+    % comma elsewhere).
     punct.std 'this.status.punct :=
     space.normal 'this.status.space :=
     quote.no 'this.status.quote :=
@@ -1532,7 +1578,7 @@ FUNCTION {format.article.title.electronic}
 FUNCTION {format.book.title.edition}
 { title "title" bibinfo.check
   titleraw empty$
-    { 
+    { % No transliteration supplied: italicise the title itself.
       duplicate$ empty$ 'skip$ 'emphasize if$
     }
     { titleraw "titleraw" bibinfo.check
@@ -1566,7 +1612,7 @@ FUNCTION {format.book.title.edition}
 FUNCTION {format.book.title}
 { title "title" bibinfo.check
   titleraw empty$
-    {
+    { % No transliteration supplied: italicise the title itself.
       duplicate$ empty$ 'skip$ 'emphasize if$
     }
     { titleraw "titleraw" bibinfo.check
@@ -1598,6 +1644,9 @@ FUNCTION {format.journal}
   if$
 }
 
+
+%% Plain (un-italicised) variant of format.journal — used for blog
+%% references where the blog source title is set in roman type.
 FUNCTION {format.journal.plain}
 { journal duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -1707,6 +1756,13 @@ FUNCTION {format.number.if.use.for.article}
    if$
 }
 
+% The series title (and any series volume number) is treated
+% as an extension of the book/proceedings title and is enclosed in
+% parentheses immediately after it, e.g. "Title (Series Title, 67)".
+% We deliberately bind the parenthesised series to the previous item
+% (the title) with a space rather than a comma so the parenthesis sits
+% flush against the title in the rendered bibliography.
+% This is the BOOK style. See format.series.in for the conference style.
 FUNCTION {format.series}
 { series empty$
    { "" }
@@ -1721,6 +1777,11 @@ FUNCTION {format.series}
 }
 
 
+%% Series formatter for CONFERENCE PROCEEDINGS.
+%% Conference Proceedings With Series Title:
+%%   "in Abbreviated Name of Conf., in Series Title, vol. X, X ed., ..."
+%% The series here is rendered in roman type (no italics) and prefixed
+%% with "in ", not wrapped in parentheses as it is for books.
 FUNCTION {format.series.in}
 { series empty$
    { "" }
@@ -2026,6 +2087,10 @@ cap.status.std
 
 
 %% URL
+%% A reference may carry both a DOI and a URL; in that
+%% case the DOI is rendered first, terminated by a period, and the URL
+%% follows. Earlier versions of IEEEtran.bst suppressed the URL whenever
+%% a DOI was present — we drop that suppression so both fields render.
 FUNCTION {format.url}
 { is.use.url
     { url empty$
@@ -2048,6 +2113,27 @@ FUNCTION {format.url}
 }
 
 
+%% "(in Language)" marker — placed immediately after the article/paper
+%% title for non-English publications ("Periodical
+%% in Other Language" and "Manual" online).  Output form:
+%% "(in German)", "(in Russian)" etc.  Reads from the `inlanguage`
+%% field (kept distinct from `language`, which is consumed by
+%% \BIBforeignlanguage for hyphenation only).
+%%
+%% IEEE convention: the marker is ALWAYS followed by a comma, but the
+%% punctuation BEFORE it depends on the entry type:
+%%   - period before "(in Lang)"  --> Video, Lecture
+%%       e.g. "Title of Video. (in Language), (Release date)."
+%%   - comma before  "(in Lang)"  --> Article, Manual, Book
+%%       e.g. "Title, (in Language), x ed. (Year)."
+%%
+%% format.in.language therefore leaves prev.status.punct alone (so it
+%% inherits whatever the previous format function set, typically the
+%% entry-level std punctuation) and forces this.status.punct to comma
+%% so the following item is joined with a comma.
+%% Handlers that want a comma BEFORE "(in Lang)" in a period-style
+%% entry (e.g. @manual online) override this.status.punct := comma on
+%% the title BEFORE calling format.in.language.
 FUNCTION {format.in.language}
 { inlanguage duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2062,6 +2148,8 @@ FUNCTION {format.in.language}
 }
 
 
+%% translator (used for translated books, conference proceedings, etc.)
+%% Output form: "trans. J. K. Translator"
 FUNCTION {format.translator}
 { translator duplicate$ empty$ 'skip$
     { pop$
@@ -2074,6 +2162,10 @@ FUNCTION {format.translator}
 }
 
 
+%% accessed date (used for online references)
+%% Output form: "Accessed: Month Day, Year"
+%% IEEE: the accessed-date phrase is preceded by a period (not a comma),
+%% even inside comma-style entries.
 FUNCTION {format.urldate}
 { urldate duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2087,6 +2179,10 @@ FUNCTION {format.urldate}
   if$
 }
 
+
+%% Social-media variant of format.urldate — omits the colon after
+%% "Accessed" to match the social-media layout
+%% ("Accessed Apr. 19, 2021" instead of "Accessed: Apr. 19, 2021").
 FUNCTION {format.urldate.social}
 { urldate duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2100,6 +2196,13 @@ FUNCTION {format.urldate.social}
   if$
 }
 
+
+%% [Online]. / [Online Video]. marker
+%% IEEE style: the preceding field is terminated with a period before the
+%% medium marker, regardless of whether the entry uses comma- or
+%% period-style internal separators. We override prev.status.punct to
+%% period but leave prev.status.quote intact so that a quoted title that
+%% immediately precedes the marker still gets its closing "''" written.
 FUNCTION {format.online.marker}
 { url empty$
     { "" }
@@ -2118,6 +2221,8 @@ FUNCTION {format.online.marker}
   if$
 }
 
+
+%% Article ID (Art. no. XXX) for periodicals identified by article number
 FUNCTION {format.articleno}
 { articleno duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2129,6 +2234,8 @@ FUNCTION {format.articleno}
   if$
 }
 
+
+%% arXiv preprint: "arXiv:XXXX.XXXXX"
 FUNCTION {format.eprint}
 { eprint duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2147,6 +2254,8 @@ FUNCTION {format.eprint}
   if$
 }
 
+
+%% Software version (for @software entries)
 FUNCTION {format.version}
 { version duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2159,6 +2268,7 @@ FUNCTION {format.version}
 }
 
 
+%% Repository / archive name (for @software entries)
 FUNCTION {format.repository}
 { repository duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2170,6 +2280,7 @@ FUNCTION {format.repository}
 }
 
 
+%% Section (sect. x) used in books/chapters
 FUNCTION {format.section}
 { section duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2268,6 +2379,14 @@ FUNCTION {booklet}
   if.url.std.interword.spacing
 }
 
+%% @electronic — generic online reference (also the target of the
+%% @online / @website / @socialmedia / @webpage / @internet / @www
+%% aliases). "Websites" prescribes a roman
+%% (non-italicised) website / source title:
+%%   J. K. Author. "Page Title." Website Title. Accessed: Date.
+%%   [Online]. Available: URL
+%% We therefore render the `journal` field through format.journal.plain
+%% rather than the italicising format.journal used by periodicals.
 FUNCTION {electronic}
 { std.status.using.period
   start.entry
@@ -2328,10 +2447,17 @@ FUNCTION {incollection}
   format.authors "author" output.warn
   name.or.dash
   format.article.title "title" output.warn
+  % NOTE: for books/chapters the "(in Language)" marker is placed between
+  % the publisher and the year by format.address.publisher.date — NOT
+  % after the chapter title. We therefore do NOT call format.in.language
+  % here.
   format.in.booktitle "booktitle" output.warn
   format.series output
   format.editors output
   format.translator output
+  % the edition is placed AFTER editors and translator,
+  % immediately before the address/publisher block, e.g.
+  %   "in BookTitle, X. Editor, Ed., trans. T. Translator, 3rd ed. City: ..."
   format.edition output
   format.address.publisher.date.nowarn output
   format.volume output
@@ -2355,12 +2481,19 @@ FUNCTION {inproceedings}
   format.authors "author" output.warn
   name.or.dash
   format.article.title "title" output.warn
+  % "(in Language)" goes right after the closing quote of the
+  % paper title, before "in Abbreviated Name of Conf.".
   format.in.language output
   format.in.booktitle "booktitle" output.warn
+  % Series for conference proceedings: prefixed with "in ", roman type
+  % (NOT parenthesised — that is the book layout).
   format.series.in output
   format.editors output
   format.volume output
   format.number output
+  % Edition comes after vol./no., immediately before the date block
+  % ("Conference Proceedings With Series Title, Volume Title,
+  % and Edition": "... vol. X, X ed., Jul. 2006, pp. 4301-4304.").
   format.edition output
   publisher empty$
     { format.address.organization.date output }
@@ -2379,6 +2512,19 @@ FUNCTION {inproceedings}
   if.url.std.interword.spacing
 }
 
+%% @manual covers two layouts:
+%%
+%% Print Handbook / Manual:
+%%   Name of Manual/Handbook, (in Language), x ed., Abbrev. Name of Co.,
+%%   City of Co., State, Year, pp. xxx--xxx.
+%%
+%% Manual/Handbook (Online):
+%%   J. K. Author (or Abbrev. Name of Co., City, State, Country).
+%%   Name of Manual/Handbook, (in Language), x ed. (Year).
+%%   Accessed: Month Day, Year. [Online]. Available: URL
+%%
+%% The presence of a url or urldate field switches the entry to the
+%% online layout: period-style separators and a parenthesised "(Year)".
 FUNCTION {manual}
 { url empty$ urldate empty$ and
     { std.status.using.comma }
@@ -2389,6 +2535,11 @@ FUNCTION {manual}
   format.authors output
   name.or.dash
   format.book.title "title" output.warn
+  % Manual (Online) renders "Title, (in Language), x ed.
+  % (Year)." with commas around "(in Lang)" and "x ed." even though
+  % the surrounding entry is period-style. Override the title's
+  % trailing punctuation here so that "(in Lang)" / "x ed." are
+  % comma-joined to the title.
   url empty$ urldate empty$ and
     { skip$ }
     { punct.comma 'this.status.punct :=
@@ -2421,7 +2572,7 @@ FUNCTION {manual}
   if.url.std.interword.spacing
 }
 
-%% Master's thesis
+%% Master's thesis (Q. Theses and Dissertations).
 %% Basic Format:
 %%   J. K. Author, "Title of thesis," (in Language), M.S. thesis,
 %%   Abbrev. Dept., Abbrev. Univ., City, Abbrev. State, Year.
@@ -2448,7 +2599,7 @@ FUNCTION {mastersthesis}
 }
 
 %% @misc — generic fallback handler, also used as the target of the
-%% @preprint / @arxiv aliases. IEEE 2025 (Section S "Preprint arXiv")
+%% @preprint / @arxiv aliases. "Preprint arXiv"
 %% prescribes:
 %%   J. K. Author, "Title of paper," (in Language), Year, arXiv:number.
 %% The "(in Language)" marker is therefore inserted right after the
@@ -2478,6 +2629,10 @@ FUNCTION {misc}
   if.url.std.interword.spacing
 }
 
+%% Year-first electronic date — "(Year, Month Day)" or "(Year)".
+%% Used by the @government and @patentonline layouts where the IEEE
+%% prescribes year-first parenthesised dates (distinct from the
+%% month-first format produced by format.date.electronic).
 FUNCTION {format.date.year.first.electronic}
 { month "month" bibinfo.check duplicate$ empty$
   year  "year" bibinfo.check duplicate$ empty$
@@ -2513,6 +2668,10 @@ FUNCTION {format.date.year.first.electronic}
   if$
 }
 
+
+%% Patent inventor formatter — "by Author1 and Author2".
+%% Joined to the preceding (title) field with a comma:
+%%   "Screwless clip mounted computer drive, by D. Williams."
 FUNCTION {format.patent.invented.by}
 { author duplicate$ empty$ 'skip$
     { pop$
@@ -2528,7 +2687,7 @@ FUNCTION {format.patent.invented.by}
 }
 
 
-%% Patent
+%% Patent (L. Patent)
 %% Basic Format:
 %%   J. K. Author, "Title of patent," (in Language), Country Patent xxx,
 %%   Month Day, Year.
@@ -2573,7 +2732,7 @@ FUNCTION {periodical}
   if.url.std.interword.spacing
 }
 
-%% Ph.D. dissertation
+%% Ph.D. dissertation (Q. Theses and Dissertations).
 %% Basic Format:
 %%   J. K. Author, "Title of dissertation," (in Language), Ph.D.
 %%   dissertation, Abbrev. Dept., Abbrev. Univ., City, Abbrev. State,
@@ -2683,11 +2842,15 @@ FUNCTION {unpublished}
 }
 
 
-%% Social media 
+%% Social media (T. Websites — "For social media
 %% websites (Twitter etc.)"):
 %% Basic Format:
 %%   J. K. Author, "Post Title." Media Title. Accessed Date Accessed.
 %%   [Online.] Available: URL
+%% Three quirks vs. plain @website/@electronic:
+%%   * a COMMA (not a period) follows the author block,
+%%   * "Accessed" is NOT followed by a colon,
+%%   * the period is INSIDE the bracket: "[Online.]" not "[Online].".
 FUNCTION {socialmedia}
 { std.status.using.period
   start.entry
@@ -2709,10 +2872,12 @@ FUNCTION {socialmedia}
 }
 
 
-%% Blog 
+%% Blog (A. Blogs)
 %% Basic Format:
 %%   J. K. Author, "Title of the post," Title of the Blog, Month Day,
 %%   Year. [Online]. Available: URL
+%% Differs from @article only in that the blog source title (journal
+%% field) is rendered in roman type, NOT italics.
 FUNCTION {blog}
 { std.status.using.comma
   start.entry
@@ -2740,11 +2905,18 @@ FUNCTION {blog}
 }
 
 
-%% Software
+%% Software (O. Software)
 %% Basic Format:
 %%   J. K. Author. Title of Software. Date Repository or Archive.
 %%   (version or Year). Publisher Name. Accessed: Date.
 %%   [Type of Medium]. Global Persistent Identifier. Available: URL
+%% Example:
+%%   D. W. Arning et al. Mixed Mode--Mixed Level Circuit Simulator.
+%%   (2011). Ngspice. Accessed: Jan. 11, 2019. [Online].
+%%   doi:10.5281/zenodo.1234567. Available: http://ngspice.sourceforge.net
+%% The (Year) cluster precedes the publisher; the DOI / persistent
+%% identifier (read from the `doi` field) is rendered AFTER "[Online]."
+%% and BEFORE "Available: URL".
 FUNCTION {software}
 { std.status.using.period
   start.entry
@@ -2769,7 +2941,7 @@ FUNCTION {software}
 }
 
 
-%% Dataset
+%% Dataset (E. Datasets)
 %% Basic Format:
 %%   Author, Date, "Title of Dataset," Source. [Online]. Available: URL
 %%   (or doi: xxx if DOI is used)
@@ -2794,6 +2966,10 @@ FUNCTION {dataset}
   if.url.std.interword.spacing
 }
 
+
+%% Plain (un-quoted, italicised) title used for electronic references
+%% whose title is treated as a book/work title rather than as a short
+%% piece (websites, social-media posts).  Output form: "\emph{Title}".
 FUNCTION {format.book.title.electronic}
 { title "title" bibinfo.check
   titleraw empty$
@@ -2812,6 +2988,10 @@ FUNCTION {format.book.title.electronic}
   if$
 }
 
+
+%% Plain title formatter — no quotation marks, no italics. Used for the
+%% Conference Paper Online layout where the paper title is set in roman
+%% type and terminated by a period (e.g. Taylor's "Assessment: ...").
 FUNCTION {format.title.plain}
 { title "title" bibinfo.check duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2822,6 +3002,13 @@ FUNCTION {format.title.plain}
   if$
 }
 
+
+%% Conference-name formatter with the leading word "Presented" given a
+%% capital "P". Used by @confonline entries where the conference name
+%% follows a sentence-ending period: "Title. Presented at <Conf>.".
+%% The location of the conference (address field) is then joined to
+%% the conference name with a COMMA, matching 
+%% "Presented at <Conf>., <City>, <Country>." pattern.
 FUNCTION {format.presented.booktitle.cap}
 { booktitle "booktitle" bibinfo.check duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2835,6 +3022,10 @@ FUNCTION {format.presented.booktitle.cap}
   if$
 }
 
+
+%% Lecture title formatter — plain text (no italics, no quotes), with
+%% the lecture medium type appended in square brackets as part of the
+%% title cluster, e.g. "Documenting literature [PowerPoint slides]".
 FUNCTION {format.lecture.title}
 { title "title" bibinfo.check duplicate$ empty$ 'skip$
     { medium empty$
@@ -2850,10 +3041,17 @@ FUNCTION {format.lecture.title}
 }
 
 
-%% Online video
+%% Online video / YouTube (K. Online Video)
 %% Basic Format:
 %%   Video Owner/Creator, Location. Title of Video. (in Language),
 %%   (Release date). Accessed: Date. [Online Video]. Available: URL
+%% Notes:
+%%   - The video owner/creator is joined to the optional location with
+%%     a COMMA ("mtaOnline1, Fazi Mosque, U.K.") even though the rest
+%%     of the entry uses period separators prescribes this
+%%     mixed style.
+%%   - The "(in Language)" marker, when supplied, sits between the
+%%     italicised title and the parenthesised release date.
 FUNCTION {video}
 { std.status.using.period
   start.entry
@@ -2878,10 +3076,18 @@ FUNCTION {video}
 }
 
 
-%% Patent Online
+%% Patent Online (L. Patent — "Patent Online")
 %% Basic Format:
 %%   Name of the invention, by inventor's name. (Year, Month Day).
 %%   Patent Number. [Online]. Available: URL
+%% Example:
+%%   Screwless clip mounted computer drive, by D. Williams.
+%%   (2005, Apr. 26). U.S. Patent 6,885,550. [Online].
+%%   Available: http://patft.uspto.gov/netacgi/6,885,550
+%% This is a period-style layout: the invention name (plain roman type,
+%% no quotes / no italics) leads the entry, followed by the inventor
+%% prefixed with "by", a year-first parenthesised date, the patent
+%% nationality+number cluster, and finally the [Online]/URL block.
 FUNCTION {patentonline}
 { std.status.using.period
   start.entry
@@ -2902,10 +3108,14 @@ FUNCTION {patentonline}
 }
 
 
-%% Conference Paper Online
+%% Conference Paper Online (C. Conference Paper Online)
 %% Basic Format:
 %%   J. K. Author. (Date). Title. (in Language). Presented at Abbreviated
 %%   Conf. Title. [Online]. Available: URL
+%% Period-style separators; the paper title is set in plain roman type
+%% (NOT quoted, NOT italicised), and the conference name is preceded by
+%% the capitalised phrase "Presented at" rather than the lowercase
+%% "presented at the" used by the in-person @presentation type.
 FUNCTION {confonline}
 { std.status.using.period
   start.entry
@@ -2929,10 +3139,16 @@ FUNCTION {confonline}
 }
 
 
-%% Lecture notes / Lecture online
+%% Lecture notes / Lecture online (G. Lectures)
 %% Basic Format:
 %%   J. K. Author. (Year). Title of lecture [Type of Medium]. (in Language),
 %%   Available: URL
+%% Note: IEEE prints the medium marker INSIDE the title cluster (e.g.,
+%% "[PowerPoint slides]") and omits the leading "[Online]." entirely.
+%% We therefore deliberately skip format.online.marker here. The
+%% "(in Language)" marker, when supplied, is inserted between the
+%% title+medium cluster and "Available: URL", and is always set off by
+%% commas (handled inside format.in.language).
 FUNCTION {lecture}
 { std.status.using.period
   start.entry
@@ -2952,10 +3168,14 @@ FUNCTION {lecture}
 }
 
 
-%% U.S. Government documents
+%% U.S. Government documents (R. U.S. Government Documents)
 %% Basic Format:
 %%   Legislative body. Number of Congress, Session. (Year, Month Day).
 %%   Title. [Online]. Available: URL
+%% The title is italicised (treated as a publication title). The date
+%% block uses the YEAR-FIRST parenthesised form "(Year, Month Day)" as
+%% prescribed. Distinct from the month-first form used by
+%% other electronic types.
 FUNCTION {government}
 { std.status.using.period
   start.entry
@@ -2974,6 +3194,12 @@ FUNCTION {government}
   if.url.std.interword.spacing
 }
 
+
+%% Booktitle formatter for "presented at" conference references.
+%% Note: when a paper is *presented* (rather than appearing in proceedings),
+%% the conference name is set in roman (not italic). The lead-in word is
+%% taken from the user-supplied intype field if present, otherwise from
+%% bbl.presented ("presented at").
 FUNCTION {format.presented.booktitle}
 { booktitle "booktitle" bibinfo.check duplicate$ empty$ 'skip$
     { this.to.prev.status
@@ -2990,8 +3216,8 @@ FUNCTION {format.presented.booktitle}
 }
 
 
-%% Conference paper PRESENTED at a conference (IEEE 2025 style:
-%%   C. Conferences and Conference Proceedings — Conference Paper).
+%% Conference paper PRESENTED at a conference (
+%%  Conferences and Conference Proceedings — Conference Paper).
 %% Basic Format:
 %%   J. K. Author, "Title of paper," presented at the Abbreviated Name of
 %%   Conf., City of Conf., State, Country, Month d--d, Year, Paper number.
