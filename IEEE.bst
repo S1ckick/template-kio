@@ -90,26 +90,24 @@ FUNCTION {default.is.use.url} { #1 }
 
 % #0 turns off the forced use of "et al."
 % #1 enables
-FUNCTION {default.is.forced.et.al} { #0 }
+FUNCTION {default.is.forced.et.al} { #1 }
 
 
 % The maximum number of names that can be present beyond which an "et al."
 % usage is forced. Be sure that num.names.shown.with.forced.et.al (below)
 % is not greater than this value!
-% Note: There are many instances of references in IEEE journals which have
-% a very large number of authors as well as instances in which "et al." is
-% used profusely.
-FUNCTION {default.max.num.names.before.forced.et.al} { #10 }
+FUNCTION {default.max.num.names.before.forced.et.al} { #6 }
 
 
 % The number of names that will be shown with a forced "et al.".
 % Must be less than or equal to max.num.names.before.forced.et.al
 FUNCTION {default.num.names.shown.with.forced.et.al} { #1 }
+FUNCTION {default.max.num.editors.before.forced.et.al} { #3 }
 
 
 % #0 turns off the alternate interword spacing for entries with URLs.
 % #1 enables
-FUNCTION {default.is.use.alt.interword.spacing} { #1 }
+FUNCTION {default.is.use.alt.interword.spacing} { #0 }
 
 
 % If alternate interword spacing for entries with URLs is enabled, this is
@@ -117,10 +115,10 @@ FUNCTION {default.is.use.alt.interword.spacing} { #1 }
 % default "4" here means that the interword spacing in entries with URLs can
 % stretch to four times normal. Does not have to be an integer. Note that
 % the value specified here can be overridden by the user in their LaTeX
-% code via a command such as: 
+% code via a command such as:
 % "\providecommand\BIBentryALTinterwordstretchfactor{1.5}" in addition to
 % that via the IEEEtranBSTCTL entry type.
-FUNCTION {default.ALTinterwordstretchfactor} { "4" }
+FUNCTION {default.ALTinterwordstretchfactor} { "1.5" }
 
 
 % #0 turns off the "dashification" of repeated (i.e., identical to those
@@ -138,7 +136,7 @@ FUNCTION {default.name.latex.cmd}{ "" }
 
 
 % The default URL prefix.
-FUNCTION {default.name.url.prefix}{ "[Online]. Available:" }
+FUNCTION {default.name.url.prefix}{ "Available:" }
 
 
 % Other controls that cannot be accessed via IEEEtranBSTCTL entry type.
@@ -193,8 +191,8 @@ FUNCTION {completed.message}
 
 FUNCTION {bbl.and}{ "and" }
 FUNCTION {bbl.etal}{ "et~al." }
-FUNCTION {bbl.editors}{ "eds." }
-FUNCTION {bbl.editor}{ "ed." }
+FUNCTION {bbl.editors}{ "Eds." }
+FUNCTION {bbl.editor}{ "Ed." }
 FUNCTION {bbl.edition}{ "ed." }
 FUNCTION {bbl.volume}{ "vol." }
 FUNCTION {bbl.of}{ "of" }
@@ -209,10 +207,19 @@ FUNCTION {bbl.patent}{ "Patent" }
 FUNCTION {bbl.patentUS}{ "U.S." }
 FUNCTION {bbl.revision}{ "Rev." }
 FUNCTION {bbl.series}{ "ser." }
-FUNCTION {bbl.standard}{ "Std." }
+FUNCTION {bbl.standard}{ "Standard" }
 FUNCTION {bbl.techrep}{ "Tech. Rep." }
-FUNCTION {bbl.mthesis}{ "Master's thesis" }
+FUNCTION {bbl.mthesis}{ "M.S. thesis" }
 FUNCTION {bbl.phdthesis}{ "Ph.D. dissertation" }
+FUNCTION {bbl.translator}{ "trans." }
+FUNCTION {bbl.accessed}{ "Accessed:" }
+FUNCTION {bbl.online}{ "[Online]." }
+FUNCTION {bbl.onlinevideo}{ "[Online Video]." }
+FUNCTION {bbl.available}{ "Available:" }
+FUNCTION {bbl.article.no}{ "Art. no." }
+FUNCTION {bbl.presented}{ "presented at" }
+FUNCTION {bbl.arxiv}{ "arXiv:" }
+FUNCTION {bbl.section}{ "sect." }
 FUNCTION {bbl.st}{ "st" }
 FUNCTION {bbl.nd}{ "nd" }
 FUNCTION {bbl.rd}{ "rd" }
@@ -259,18 +266,23 @@ ENTRY
   { address
     assignee
     author
+    articleno
     booktitle
     chapter
     day
     dayfiled
     edition
     editor
+    eprint
+    eprinttype
     howpublished
+    inlanguage
     institution
     intype
     journal
     key
     language
+    medium
     month
     monthfiled
     nationality
@@ -280,14 +292,19 @@ ENTRY
     pages
     paper
     publisher
+    repository
     school
+    section
     series
     revision
     title
     titleraw
+    translator
     type
     url
+    urldate
     doi
+    version
     volume
     year
     yearfiled
@@ -332,6 +349,7 @@ INTEGERS { is.use.number.for.article
            is.use.url
            is.forced.et.al
            max.num.names.before.forced.et.al
+           max.num.editors.before.forced.et.al
            num.names.shown.with.forced.et.al
            is.use.alt.interword.spacing
            is.dash.repeated.names}
@@ -364,6 +382,7 @@ FUNCTION {initialize.controls}
   default.is.use.url 'is.use.url :=
   default.is.forced.et.al 'is.forced.et.al :=
   default.max.num.names.before.forced.et.al 'max.num.names.before.forced.et.al :=
+  default.max.num.editors.before.forced.et.al 'max.num.editors.before.forced.et.al :=
   default.num.names.shown.with.forced.et.al 'num.names.shown.with.forced.et.al :=
   default.is.use.alt.interword.spacing 'is.use.alt.interword.spacing :=
   default.is.dash.repeated.names 'is.dash.repeated.names :=
@@ -1177,6 +1196,10 @@ FUNCTION {format.address.org.or.pub.date}
           t *
         }
       if$
+      inlanguage empty$
+        { skip$ }
+        { " (in " * inlanguage "inlanguage" bibinfo.check * ")" * }
+      if$
       year empty$ month empty$ and
         { skip$ }
         { t empty$ address empty$ and
@@ -1190,9 +1213,17 @@ FUNCTION {format.address.org.or.pub.date}
               if$
             }
             { month "month" bibinfo.check *
+              day empty$
+                { skip$ }
+                { " " * day "day" bibinfo.check * }
+              if$
               year empty$
                  { skip$ }
-                 { " " * year "year" bibinfo.check * }
+                 { day empty$
+                     { " " * year "year" bibinfo.check * }
+                     { ", " * year "year" bibinfo.check * }
+                   if$
+                 }
               if$
             }
           if$
@@ -1221,7 +1252,10 @@ FUNCTION {format.names}
       't :=
       nameptr #1 >
         { nameptr num.names.shown.with.forced.et.al #1 + =
-          numnames max.num.names.before.forced.et.al >
+          bibinfo "editor" =
+            { numnames max.num.editors.before.forced.et.al > }
+            { numnames max.num.names.before.forced.et.al > }
+          if$
           is.forced.et.al and and
             { "others" 't :=
               #1 'namesleft :=
@@ -1277,7 +1311,11 @@ FUNCTION {format.address}
 FUNCTION {format.doi}
 { doi empty$
   { "" }
-  { "doi:\mylinkurl{" doi * "}" * }
+  { this.to.prev.status
+    this.status.std
+    "doi:\mylinkurl{" doi * "}" *
+    cap.status.std
+  }
   if$
 }
 
@@ -1317,8 +1355,14 @@ FUNCTION {format.date}
       cap.status.std
       swap$ 'skip$
         {
-          swap$
-          " " * swap$
+          day empty$
+            { swap$
+              " " * swap$
+            }
+            { swap$
+              " " * day * ", " * swap$
+            }
+          if$
         }
       if$
       *
@@ -1329,24 +1373,29 @@ FUNCTION {format.date}
 FUNCTION {format.date.electronic}
 { month "month" bibinfo.check duplicate$ empty$
   year  "year" bibinfo.check duplicate$ empty$
-    { swap$ 
+    { swap$
         { pop$ }
         { "there's a month but no year in " cite$ * warning$
         pop$ ")" * "(" swap$ *
         this.to.prev.status
-        punct.no 'this.status.punct :=
+        punct.std 'this.status.punct :=
         space.normal 'this.status.space :=
         quote.no 'this.status.quote :=
         cap.yes  'status.cap :=
         }
       if$
     }
-    { swap$ 
+    { swap$
         { swap$ pop$ ")" * "(" swap$ * }
-        { "(" swap$ * ", " * swap$ * ")" * }
+        { 
+          day empty$
+            { swap$ "(" swap$ * " " * swap$ * ")" * }
+            { swap$ "(" swap$ * " " * day * ", " * swap$ * ")" * }
+          if$
+        }
       if$
     this.to.prev.status
-    punct.no 'this.status.punct :=
+    punct.std 'this.status.punct :=
     space.normal 'this.status.space :=
     quote.no 'this.status.quote :=
     cap.yes  'status.cap :=
@@ -1467,8 +1516,14 @@ FUNCTION {format.article.title.electronic}
   duplicate$ empty$ 'skip$
     { this.to.prev.status
       this.status.std
-      cap.status.std
+      quote.close 'this.status.quote :=
+      is.last.char.not.punct
+        { punct.std 'this.status.punct := }
+        { punct.no 'this.status.punct := }
+      if$
       select.language
+      "``" swap$ *
+      cap.status.std
     }
   if$
 }
@@ -1477,9 +1532,11 @@ FUNCTION {format.article.title.electronic}
 FUNCTION {format.book.title.edition}
 { title "title" bibinfo.check
   titleraw empty$
-    { skip$ }
+    { 
+      duplicate$ empty$ 'skip$ 'emphasize if$
+    }
     { titleraw "titleraw" bibinfo.check
-      emphasize                    
+      emphasize
       swap$ " [" swap$ * "]" * *
     }
   if$
@@ -1509,7 +1566,9 @@ FUNCTION {format.book.title.edition}
 FUNCTION {format.book.title}
 { title "title" bibinfo.check
   titleraw empty$
-    { skip$ }
+    {
+      duplicate$ empty$ 'skip$ 'emphasize if$
+    }
     { titleraw "titleraw" bibinfo.check
       emphasize
       swap$ " [" swap$ * "]" * *
@@ -1535,6 +1594,16 @@ FUNCTION {format.journal}
       cap.status.std
       select.language
       emphasize
+    }
+  if$
+}
+
+FUNCTION {format.journal.plain}
+{ journal duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      cap.status.std
+      select.language
     }
   if$
 }
@@ -1638,15 +1707,26 @@ FUNCTION {format.number.if.use.for.article}
    if$
 }
 
-% The IEEE does not seem to tie the series so closely with the volume
-% and number as is done in other bibliography styles. Instead the
-% series is treated somewhat like an extension of the title.
 FUNCTION {format.series}
-{ series empty$ 
+{ series empty$
    { "" }
    { this.to.prev.status
      this.status.std
-     bbl.series " " *
+     punct.no 'prev.status.punct :=
+     space.normal 'prev.status.space :=
+     "(" series "series" bibinfo.check * ")" *
+     cap.status.std
+   }
+ if$
+}
+
+
+FUNCTION {format.series.in}
+{ series empty$
+   { "" }
+   { this.to.prev.status
+     this.status.std
+     bbl.in " " *
      series "series" bibinfo.check *
      cap.status.std
    }
@@ -1946,30 +2026,158 @@ cap.status.std
 
 
 %% URL
-
 FUNCTION {format.url}
-{   
-  doi empty$
-  {  is.use.url
-      { url empty$
-        { "" }
-        { this.to.prev.status
-          this.status.std
-          cap.yes 'status.cap :=
-          name.url.prefix " " *
-          "\url{" * url * "}" *
-          punct.no 'this.status.punct :=
-          punct.period 'prev.status.punct :=
-          space.normal 'this.status.space :=
-          space.normal 'prev.status.space :=
-          quote.no 'this.status.quote :=
+{ is.use.url
+    { url empty$
+      { "" }
+      { this.to.prev.status
+        this.status.std
+        cap.yes 'status.cap :=
+        name.url.prefix " " *
+        "\url{" * url * "}" *
+        punct.no 'this.status.punct :=
+        punct.period 'prev.status.punct :=
+        space.normal 'this.status.space :=
+        space.normal 'prev.status.space :=
+        quote.no 'this.status.quote :=
+      }
+    if$
+    }
+    { "" }
+  if$
+}
+
+
+FUNCTION {format.in.language}
+{ inlanguage duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      punct.comma 'this.status.punct :=
+      space.normal 'this.status.space :=
+      "inlanguage" bibinfo.check
+      "(in " swap$ * ")" *
+      cap.status.std
+    }
+  if$
+}
+
+
+FUNCTION {format.translator}
+{ translator duplicate$ empty$ 'skip$
+    { pop$
+      translator "translator" format.names
+      duplicate$ empty$ 'skip$
+        { bbl.translator " " * swap$ * }
+      if$
+    }
+  if$
+}
+
+
+FUNCTION {format.urldate}
+{ urldate duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      punct.period 'prev.status.punct :=
+      space.normal 'prev.status.space :=
+      "urldate" bibinfo.check
+      bbl.accessed " " * swap$ *
+      cap.yes 'status.cap :=
+    }
+  if$
+}
+
+FUNCTION {format.urldate.social}
+{ urldate duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      punct.period 'prev.status.punct :=
+      space.normal 'prev.status.space :=
+      "urldate" bibinfo.check
+      "Accessed " swap$ *
+      cap.yes 'status.cap :=
+    }
+  if$
+}
+
+FUNCTION {format.online.marker}
+{ url empty$
+    { "" }
+    { this.to.prev.status
+      this.status.std
+      punct.period 'prev.status.punct :=
+      space.normal 'prev.status.space :=
+      medium empty$
+        { bbl.online }
+        { "[" medium * "]." * }
+      if$
+      punct.no 'this.status.punct :=
+      space.normal 'this.status.space :=
+      cap.yes 'status.cap :=
+    }
+  if$
+}
+
+FUNCTION {format.articleno}
+{ articleno duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      "articleno" bibinfo.check
+      bbl.article.no " " * swap$ *
+      cap.status.std
+    }
+  if$
+}
+
+FUNCTION {format.eprint}
+{ eprint duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      "eprint" bibinfo.check
+      eprinttype empty$
+        { bbl.arxiv swap$ * emphasize }
+        { eprinttype "l" change.case$ "arxiv" =
+            { bbl.arxiv swap$ * emphasize }
+            { eprinttype ":" * swap$ * emphasize }
+          if$
         }
       if$
-      }
-      { "" }
-    if$
-  }
-  { "" }
+      cap.status.std
+    }
+  if$
+}
+
+FUNCTION {format.version}
+{ version duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      "version" bibinfo.check
+      "(" swap$ * ")" *
+      cap.status.std
+    }
+  if$
+}
+
+
+FUNCTION {format.repository}
+{ repository duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      "repository" bibinfo.check
+      cap.status.std
+    }
+  if$
+}
+
+
+FUNCTION {format.section}
+{ section duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      "section" bibinfo.check
+      bbl.section swap$ tie.or.space.prefix * *
+      cap.status.std
+    }
   if$
 }
 
@@ -1991,13 +2199,20 @@ FUNCTION {article}
   format.authors "author" output.warn
   name.or.dash
   format.article.title "title" output.warn
+  format.in.language output
   format.journal "journal" bibinfo.check "journal" output.warn
   format.volume output
   format.number.if.use.for.article output
-  format.pages output
+  articleno empty$
+    { format.pages output }
+    { skip$ }
+  if$
   format.date "year" output.warn
+  format.articleno output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
@@ -2019,11 +2234,17 @@ FUNCTION {book}
     { skip$ }
     { format.editors output }
   if$
+  format.translator output
   format.address.publisher.date output
   format.volume output
   format.number output
+  format.chapter output
+  format.section output
+  format.pages output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
@@ -2055,11 +2276,14 @@ FUNCTION {electronic}
   name.or.dash
   format.date.electronic output
   format.article.title.electronic output
+  format.journal.plain output
   format.howpublished "howpublished" bibinfo.check output
   format.organization "organization" bibinfo.check output
   format.address "address" bibinfo.check output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   empty.entry.warn
@@ -2077,13 +2301,21 @@ FUNCTION {inbook}
   name.or.dash
   format.book.title.edition output
   format.series output
+  author empty$
+    { skip$ }
+    { format.editors output }
+  if$
+  format.translator output
   format.address.publisher.date output
   format.volume output
   format.number output
   format.chapter output
+  format.section output
   format.pages output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
@@ -2096,16 +2328,21 @@ FUNCTION {incollection}
   format.authors "author" output.warn
   name.or.dash
   format.article.title "title" output.warn
-  format.in.booktitle.edition "booktitle" output.warn
+  format.in.booktitle "booktitle" output.warn
   format.series output
   format.editors output
+  format.translator output
+  format.edition output
   format.address.publisher.date.nowarn output
   format.volume output
   format.number output
   format.chapter output
+  format.section output
   format.pages output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
@@ -2118,11 +2355,13 @@ FUNCTION {inproceedings}
   format.authors "author" output.warn
   name.or.dash
   format.article.title "title" output.warn
+  format.in.language output
   format.in.booktitle "booktitle" output.warn
-  format.series output
+  format.series.in output
   format.editors output
   format.volume output
   format.number output
+  format.edition output
   publisher empty$
     { format.address.organization.date output }
     { format.organization "organization" bibinfo.check output
@@ -2133,29 +2372,60 @@ FUNCTION {inproceedings}
   format.pages output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
 }
 
 FUNCTION {manual}
-{ std.status.using.comma
+{ url empty$ urldate empty$ and
+    { std.status.using.comma }
+    { std.status.using.period }
+  if$
   start.entry
   if.url.alt.interword.spacing
   format.authors output
   name.or.dash
-  format.book.title.edition "title" output.warn
-  format.howpublished "howpublished" bibinfo.check output 
-  format.organization "organization" bibinfo.check output
-  format.address "address" bibinfo.check output
-  format.date output
+  format.book.title "title" output.warn
+  url empty$ urldate empty$ and
+    { skip$ }
+    { punct.comma 'this.status.punct :=
+      space.normal 'this.status.space :=
+    }
+  if$
+  format.in.language output
+  format.edition output
+  url empty$ urldate empty$ and
+    { % Print manual: organization, address, plain year, pages.
+      format.organization "organization" bibinfo.check output
+      format.address "address" bibinfo.check output
+      format.date output
+      format.pages output
+    }
+    { % Online manual: "(Year)." then "Accessed: ..." then [Online]/URL.
+      format.organization "organization" bibinfo.check output
+      format.address "address" bibinfo.check output
+      format.date.electronic output
+      format.pages output
+    }
+  if$
+  format.howpublished "howpublished" bibinfo.check output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
 }
 
+%% Master's thesis
+%% Basic Format:
+%%   J. K. Author, "Title of thesis," (in Language), M.S. thesis,
+%%   Abbrev. Dept., Abbrev. Univ., City, Abbrev. State, Year.
+%%   [Online]. Available: URL
 FUNCTION {mastersthesis}
 { std.status.using.comma
   start.entry
@@ -2163,17 +2433,27 @@ FUNCTION {mastersthesis}
   format.authors "author" output.warn
   name.or.dash
   format.article.title "title" output.warn
+  format.in.language output
   format.master.thesis.type output.nonnull
   format.school "school" bibinfo.warn output
   format.address "address" bibinfo.check output
   format.date "year" output.warn
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
 }
 
+%% @misc — generic fallback handler, also used as the target of the
+%% @preprint / @arxiv aliases. IEEE 2025 (Section S "Preprint arXiv")
+%% prescribes:
+%%   J. K. Author, "Title of paper," (in Language), Year, arXiv:number.
+%% The "(in Language)" marker is therefore inserted right after the
+%% quoted title; the eprint cluster prints "arXiv:NNNN" via
+%% format.eprint.
 FUNCTION {misc}
 { std.status.using.comma
   start.entry
@@ -2181,19 +2461,79 @@ FUNCTION {misc}
   format.authors output
   name.or.dash
   format.article.title "title" output.warn
-  format.howpublished "howpublished" bibinfo.check output 
+  format.in.language output
+  format.howpublished "howpublished" bibinfo.check output
   format.organization "organization" bibinfo.check output
   format.address "address" bibinfo.check output
   format.pages output
   format.date output
+  format.eprint output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   empty.entry.warn
   if.url.std.interword.spacing
 }
 
+FUNCTION {format.date.year.first.electronic}
+{ month "month" bibinfo.check duplicate$ empty$
+  year  "year" bibinfo.check duplicate$ empty$
+    { swap$
+        { pop$ }
+        { "there's a month but no year in " cite$ * warning$
+        pop$ ")" * "(" swap$ *
+        this.to.prev.status
+        punct.std 'this.status.punct :=
+        space.normal 'this.status.space :=
+        quote.no 'this.status.quote :=
+        cap.yes  'status.cap :=
+        }
+      if$
+    }
+    { swap$
+        { swap$ pop$ ")" * "(" swap$ * }
+        { % Both month and year present. Render as "(Year, Month Day)"
+          % when day is set, or "(Year, Month)" otherwise.
+          % Stack on entry: [month_val, year_val] (year on top).
+          day empty$
+            { "(" swap$ * ", " * swap$ * ")" * }
+            { "(" swap$ * ", " * swap$ * " " * day * ")" * }
+          if$
+        }
+      if$
+    this.to.prev.status
+    punct.std 'this.status.punct :=
+    space.normal 'this.status.space :=
+    quote.no 'this.status.quote :=
+    cap.yes  'status.cap :=
+    }
+  if$
+}
+
+FUNCTION {format.patent.invented.by}
+{ author duplicate$ empty$ 'skip$
+    { pop$
+      author "author" format.names
+      duplicate$ empty$ 'skip$
+        { punct.comma 'prev.status.punct :=
+          space.normal 'prev.status.space :=
+          "by " swap$ *
+        }
+      if$
+    }
+  if$
+}
+
+
+%% Patent
+%% Basic Format:
+%%   J. K. Author, "Title of patent," (in Language), Country Patent xxx,
+%%   Month Day, Year.
+%% The "(in Language)" marker (when supplied) is inserted between the
+%% quoted patent title and the "Country Patent xxx" cluster.
 FUNCTION {patent}
 { std.status.using.comma
   start.entry
@@ -2201,10 +2541,13 @@ FUNCTION {patent}
   format.authors output
   name.or.dash
   format.article.title output
+  format.in.language output
   format.patent.nationality.type.number output
   format.patent.date output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   empty.entry.warn
@@ -2230,6 +2573,11 @@ FUNCTION {periodical}
   if.url.std.interword.spacing
 }
 
+%% Ph.D. dissertation
+%% Basic Format:
+%%   J. K. Author, "Title of dissertation," (in Language), Ph.D.
+%%   dissertation, Abbrev. Dept., Abbrev. Univ., City, Abbrev. State,
+%%   Year. [Online]. Available: URL
 FUNCTION {phdthesis}
 { std.status.using.comma
   start.entry
@@ -2237,12 +2585,15 @@ FUNCTION {phdthesis}
   format.authors "author" output.warn
   name.or.dash
   format.article.title "title" output.warn
+  format.in.language output
   format.phd.thesis.type output.nonnull
   format.school "school" bibinfo.warn output
   format.address "address" bibinfo.check output
   format.date "year" output.warn
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
@@ -2278,12 +2629,15 @@ FUNCTION {standard}
   format.authors output
   name.or.dash
   format.book.title "title" output.warn
-  format.howpublished "howpublished" bibinfo.check output 
+  format.howpublished "howpublished" bibinfo.check output
   format.organization.institution.standard.type.number output
+  format.address "address" bibinfo.check output
   format.revision output
   format.date output
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
@@ -2296,13 +2650,15 @@ FUNCTION {techreport}
   format.authors "author" output.warn
   name.or.dash
   format.article.title "title" output.warn
-  format.howpublished "howpublished" bibinfo.check output 
+  format.howpublished "howpublished" bibinfo.check output
   format.institution "institution" bibinfo.warn output
   format.address "address" bibinfo.check output
   format.tech.report.number output.nonnull
   format.date "year" output.warn
   format.note output
   format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
@@ -2316,8 +2672,350 @@ FUNCTION {unpublished}
   name.or.dash
   format.article.title "title" output.warn
   format.date output
+  format.eprint output
   format.note "note" output.warn
   format.doi output
+  format.urldate output
+  format.online.marker output
+  format.url output
+  fin.entry
+  if.url.std.interword.spacing
+}
+
+
+%% Social media 
+%% websites (Twitter etc.)"):
+%% Basic Format:
+%%   J. K. Author, "Post Title." Media Title. Accessed Date Accessed.
+%%   [Online.] Available: URL
+FUNCTION {socialmedia}
+{ std.status.using.period
+  start.entry
+  if.url.alt.interword.spacing
+  format.authors output
+  punct.comma 'this.status.punct :=
+  space.normal 'this.status.space :=
+  name.or.dash
+  format.article.title.electronic output
+  format.journal.plain output
+  format.howpublished "howpublished" bibinfo.check output
+  format.note output
+  format.urldate.social output
+  format.online.marker output
+  format.url output
+  fin.entry
+  empty.entry.warn
+  if.url.std.interword.spacing
+}
+
+
+%% Blog 
+%% Basic Format:
+%%   J. K. Author, "Title of the post," Title of the Blog, Month Day,
+%%   Year. [Online]. Available: URL
+FUNCTION {blog}
+{ std.status.using.comma
+  start.entry
+  if.url.alt.interword.spacing
+  format.authors "author" output.warn
+  name.or.dash
+  format.article.title "title" output.warn
+  format.in.language output
+  format.journal.plain "journal" bibinfo.check "journal" output.warn
+  format.volume output
+  format.number.if.use.for.article output
+  articleno empty$
+    { format.pages output }
+    { skip$ }
+  if$
+  format.date "year" output.warn
+  format.articleno output
+  format.note output
+  format.doi output
+  format.urldate output
+  format.online.marker output
+  format.url output
+  fin.entry
+  if.url.std.interword.spacing
+}
+
+
+%% Software
+%% Basic Format:
+%%   J. K. Author. Title of Software. Date Repository or Archive.
+%%   (version or Year). Publisher Name. Accessed: Date.
+%%   [Type of Medium]. Global Persistent Identifier. Available: URL
+FUNCTION {software}
+{ std.status.using.period
+  start.entry
+  if.url.alt.interword.spacing
+  format.authors output
+  name.or.dash
+  format.book.title "title" output.warn
+  format.repository output
+  format.version output
+  format.date.electronic output
+  format.organization "organization" bibinfo.check output
+  format.howpublished "howpublished" bibinfo.check output
+  format.address "address" bibinfo.check output
+  format.note output
+  format.urldate output
+  format.online.marker output
+  format.doi output
+  format.url output
+  fin.entry
+  empty.entry.warn
+  if.url.std.interword.spacing
+}
+
+
+%% Dataset
+%% Basic Format:
+%%   Author, Date, "Title of Dataset," Source. [Online]. Available: URL
+%%   (or doi: xxx if DOI is used)
+FUNCTION {dataset}
+{ std.status.using.comma
+  start.entry
+  if.url.alt.interword.spacing
+  format.authors output
+  name.or.dash
+  format.date output
+  format.article.title "title" output.warn
+  format.howpublished "howpublished" bibinfo.check output
+  format.organization "organization" bibinfo.check output
+  format.address "address" bibinfo.check output
+  format.note output
+  format.doi output
+  format.urldate output
+  format.online.marker output
+  format.url output
+  fin.entry
+  empty.entry.warn
+  if.url.std.interword.spacing
+}
+
+FUNCTION {format.book.title.electronic}
+{ title "title" bibinfo.check
+  titleraw empty$
+    { duplicate$ empty$ 'skip$ 'emphasize if$ }
+    { titleraw "titleraw" bibinfo.check
+      emphasize
+      swap$ " [" swap$ * "]" * *
+    }
+  if$
+  duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      cap.status.std
+      select.language
+    }
+  if$
+}
+
+FUNCTION {format.title.plain}
+{ title "title" bibinfo.check duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      cap.status.std
+      select.language
+    }
+  if$
+}
+
+FUNCTION {format.presented.booktitle.cap}
+{ booktitle "booktitle" bibinfo.check duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      select.language
+      "Presented at " swap$ *
+      punct.comma 'this.status.punct :=
+      space.normal 'this.status.space :=
+      cap.status.std
+    }
+  if$
+}
+
+FUNCTION {format.lecture.title}
+{ title "title" bibinfo.check duplicate$ empty$ 'skip$
+    { medium empty$
+        { skip$ }
+        { " [" * medium * "]" * }
+      if$
+      this.to.prev.status
+      this.status.std
+      cap.status.std
+      select.language
+    }
+  if$
+}
+
+
+%% Online video
+%% Basic Format:
+%%   Video Owner/Creator, Location. Title of Video. (in Language),
+%%   (Release date). Accessed: Date. [Online Video]. Available: URL
+FUNCTION {video}
+{ std.status.using.period
+  start.entry
+  if.url.alt.interword.spacing
+  format.authors output
+  % Force a comma between Owner/Creator and Location (rather than the
+  % default period set by std.status.using.period).
+  punct.comma 'this.status.punct :=
+  space.normal 'this.status.space :=
+  name.or.dash
+  format.address "address" bibinfo.check output
+  format.book.title.electronic output
+  format.in.language output
+  format.date.electronic output
+  format.note output
+  format.urldate output
+  format.online.marker output
+  format.url output
+  fin.entry
+  empty.entry.warn
+  if.url.std.interword.spacing
+}
+
+
+%% Patent Online
+%% Basic Format:
+%%   Name of the invention, by inventor's name. (Year, Month Day).
+%%   Patent Number. [Online]. Available: URL
+FUNCTION {patentonline}
+{ std.status.using.period
+  start.entry
+  if.url.alt.interword.spacing
+  format.title.plain output
+  format.patent.invented.by output
+  name.or.dash
+  format.date.year.first.electronic output
+  format.patent.nationality.type.number output
+  format.note output
+  format.doi output
+  format.urldate output
+  format.online.marker output
+  format.url output
+  fin.entry
+  empty.entry.warn
+  if.url.std.interword.spacing
+}
+
+
+%% Conference Paper Online
+%% Basic Format:
+%%   J. K. Author. (Date). Title. (in Language). Presented at Abbreviated
+%%   Conf. Title. [Online]. Available: URL
+FUNCTION {confonline}
+{ std.status.using.period
+  start.entry
+  if.url.alt.interword.spacing
+  format.authors output
+  name.or.dash
+  format.date.electronic output
+  format.title.plain output
+  format.in.language output
+  format.presented.booktitle.cap output
+  format.address "address" bibinfo.check output
+  format.organization "organization" bibinfo.check output
+  format.note output
+  format.doi output
+  format.urldate output
+  format.online.marker output
+  format.url output
+  fin.entry
+  empty.entry.warn
+  if.url.std.interword.spacing
+}
+
+
+%% Lecture notes / Lecture online
+%% Basic Format:
+%%   J. K. Author. (Year). Title of lecture [Type of Medium]. (in Language),
+%%   Available: URL
+FUNCTION {lecture}
+{ std.status.using.period
+  start.entry
+  if.url.alt.interword.spacing
+  format.authors output
+  name.or.dash
+  format.date.electronic output
+  format.lecture.title output
+  format.in.language output
+  format.organization "organization" bibinfo.check output
+  format.note output
+  format.urldate output
+  format.url output
+  fin.entry
+  empty.entry.warn
+  if.url.std.interword.spacing
+}
+
+
+%% U.S. Government documents
+%% Basic Format:
+%%   Legislative body. Number of Congress, Session. (Year, Month Day).
+%%   Title. [Online]. Available: URL
+FUNCTION {government}
+{ std.status.using.period
+  start.entry
+  if.url.alt.interword.spacing
+  format.authors output
+  name.or.dash
+  format.howpublished "howpublished" bibinfo.check output
+  format.date.year.first.electronic output
+  format.book.title.electronic "title" output.warn
+  format.note output
+  format.urldate output
+  format.online.marker output
+  format.url output
+  fin.entry
+  empty.entry.warn
+  if.url.std.interword.spacing
+}
+
+FUNCTION {format.presented.booktitle}
+{ booktitle "booktitle" bibinfo.check duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      select.language
+      intype missing$
+        { bbl.presented " " * }
+        { intype " " * }
+      if$
+      swap$ *
+      cap.status.std
+    }
+  if$
+}
+
+
+%% Conference paper PRESENTED at a conference (IEEE 2025 style:
+%%   C. Conferences and Conference Proceedings — Conference Paper).
+%% Basic Format:
+%%   J. K. Author, "Title of paper," presented at the Abbreviated Name of
+%%   Conf., City of Conf., State, Country, Month d--d, Year, Paper number.
+FUNCTION {presentation}
+{ std.status.using.comma
+  start.entry
+  if.url.alt.interword.spacing
+  format.authors "author" output.warn
+  name.or.dash
+  format.article.title "title" output.warn
+  format.presented.booktitle output
+  format.series output
+  format.editors output
+  format.volume output
+  format.number output
+  format.address "address" bibinfo.check output
+  format.organization "organization" bibinfo.check output
+  format.date "year" output.warn
+  format.paper output
+  format.pages output
+  format.note output
+  format.doi output
+  format.urldate output
+  format.online.marker output
   format.url output
   fin.entry
   if.url.std.interword.spacing
@@ -2443,10 +3141,30 @@ FUNCTION {IEEEtranBSTCTL}
 %% ENTRY ALIASES %%
 %%%%%%%%%%%%%%%%%%%
 FUNCTION {conference}{inproceedings}
+% A conference paper available only online — period-style layout with
+% "Presented at <Conf>." (capital P). Distinct from @presentation, which
+% is the in-person comma-style "presented at the <Conf>, City, Date" form.
+FUNCTION {confpaperonline}{confonline}
+FUNCTION {conferenceonline}{confonline}
 FUNCTION {online}{electronic}
 FUNCTION {internet}{electronic}
 FUNCTION {webpage}{electronic}
+FUNCTION {website}{electronic}
+% NOTE: @socialmedia has its own dedicated handler (defined above) — do
+% NOT alias it to @electronic here.
 FUNCTION {www}{electronic}
+% News articles share the periodical-style layout of @article
+% (author, title, source title, date, [Online]. Available: URL).
+FUNCTION {news}{article}
+FUNCTION {newsarticle}{article}
+% A preprint (e.g., arXiv) is rendered through @misc using the
+% eprint / eprinttype fields handled by format.eprint.
+FUNCTION {preprint}{misc}
+FUNCTION {arxiv}{misc}
+% Theses with non-IEEE @thesis tag fall back to the doctoral handler;
+% users may also use @mastersthesis or @phdthesis directly.
+FUNCTION {thesis}{phdthesis}
+FUNCTION {dissertation}{phdthesis}
 FUNCTION {default.type}{misc}
 
 

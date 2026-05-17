@@ -2411,6 +2411,75 @@ FUNCTION {techreport}
   fin.entry
 }
 
+FUNCTION {blog}             {online}
+FUNCTION {news}             {article}
+FUNCTION {newsarticle}      {article}
+FUNCTION {video}            {online}
+FUNCTION {lecture}          {online}
+FUNCTION {software}         {online}
+FUNCTION {dataset}          {online}
+FUNCTION {website}          {online}
+FUNCTION {socialmedia}      {online}
+FUNCTION {government}       {misc}
+FUNCTION {presentation}     {inproceedings}
+FUNCTION {confonline}       {online}
+FUNCTION {conferenceonline} {online}
+FUNCTION {confpaperonline}  {online}
+FUNCTION {patentonline}     {patent}
+FUNCTION {preprint}         {misc}
+FUNCTION {arxiv}            {misc}
+FUNCTION {dissertation}     {phdthesis}
+
+FUNCTION {standard}
+{ output.bibitem
+  author empty$
+    { % No author: lead with "Organization Number" cluster.
+      organization empty$
+        { number empty$
+            { skip$ }
+            { number output.nonnull }
+          if$
+        }
+        { number empty$
+            { organization output.nonnull }
+            { organization " " * number * output.nonnull }
+          if$
+        }
+      if$
+    }
+    { format.author output.nonnull }
+  if$
+  new.sentence
+  title add.media "title" output.check
+  new.colon
+  titleaddon output
+  author empty$
+    { skip$ }
+    { new.block
+      organization empty$
+        { skip$ }
+        { organization output
+          number empty$ 'skip$
+            { " " * number * }
+          if$
+        }
+      if$
+    }
+  if$
+  new.block
+  address output
+  format.edition output
+  format.date "year/date" output.check
+  new.block
+  note output
+  new.sentence
+  format.doi output
+  new.sentence
+  output.eprint.url
+  format.annote output
+  fin.entry
+}
+
 FUNCTION {default.type} { misc }
 
 MACRO {jan} {"Jan."}
