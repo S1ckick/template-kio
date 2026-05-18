@@ -5,6 +5,7 @@
 
 % Здесь можно подключить свои пакеты.
 \usepackage{enumitem}
+\usepackage{tabularray}
 
 % ========== НАСТРОЙКИ СПИСКА ЛИТЕРАТУРЫ ==========
 %
@@ -172,28 +173,28 @@
     \end{enumerate}
 
     \subsection{Изображения}\label{sec:images}
-    Обычное (одиночное) изображение, снабжённое подписью, приведено на рис.~\ref{fig:example}.
+    Обычное (одиночное) растровое изображение, снабжённое подписью, приведено на рис.~\ref{fig:example}.
 
     \begin{figure}[htb]
         \centering
-        \includegraphics[width=0.4\textwidth]{xkcd1301.png}
+        \includegraphics[width=0.3\textwidth]{xkcd1301.png}
         \caption{Достоверность информации в зависимости от расширения файла} \label{fig:example}
     \end{figure}
 
     \subsubsection{Составные изображения}
 
-    Рис.~\ref{fig:example-2} содержит два изображения: \ref{fig:example-2a} и \ref{fig:example-2b}.
+    Рис.~\ref{fig:example-2} содержит два векторных изображения: \ref{fig:example-2a} и \ref{fig:example-2b}.
     
     \begin{figure}[H]
         \centering
-        \begin{subfigure}[t]{70mm} %указываем размер подрисунка, без буквы [t] картинки будут вертикально отцентрованы
-            \includegraphics[width=\textwidth]{xkcd1301.png} %width=\textwidth указывает, что ширина совпадает с шириной подрисунка
-            \subcaption{Необязательный подзаголовок}
-            \label{fig:example-2a}
+        \begin{subfigure}[t]{70mm}
+             \includegraphics{saturn-vlba-alpha.pdf}
+         \subcaption{Необязательный подзаголовок}
+         \label{fig:example-2a}
         \end{subfigure}
-        \quad %это широкий пробел между двумя рисунками
-        \begin{subfigure}[t]{50mm}
-            \includegraphics[width=\textwidth]{xkcd1301.png}
+        \ %это пробел между двумя рисунками
+        \begin{subfigure}[t]{70mm}
+         \includegraphics{saturn-vlba-delta.pdf}
             \subcaption{} % Здесь подзаголовок не указан
             \label{fig:example-2b}
         \end{subfigure}
@@ -201,47 +202,50 @@
     \end{figure}
     
     \subsection{Таблицы}
+
+    \subsubsection{\texttt{tabular}}
+\begin{table}[ht]
+  \centering
+\caption{Солнечные штормы классов G3-G5 в 2024 г. с датой прогноза и датой и временем прихода ударной волны}
+\label{tbl:events}
+\begin{tabular}{|c|c|c|} \hline
+  Ранжирование по Dst,   & Дата     & Время прихода            \\
+  G-индекс               & прогноза &  ударной волны \\ \hline
+  \#1 (G5) & 2024-05-10 & 2024-05-11T11  \\ \hline
+  \#2 (G5) & 2024-05-09 & 2024-05-10T17  \\ \hline 
+  \#3,4 (G4--3) & 2024-10-09 & 2024-10-11T15  \\ \hline 
+  \#6 (G3) & 2024-05-10 & 2024-05-12T10  \\ \hline 
+  \#5,9 (G4) & 2024-08-10    & 2024-08-11T07  \\ \hline
+  \#7 (G3) & 2024-10-06 & 2024-10-06T08  \\ \hline 
+  \#8 (G4) & 2024-03-23 & 2024-03-24T15 \\ \hline
+  \#10 (G3) & 2024-04-18 & 2024-04-19T06 \\ \hline
+  \#11 (G4) & 2024-09-14 & 2024-09-16T23\\ \hline
+  \#12 (G3) & 2024-08-01 & 2024-08-04T15 \\ \hline
+  \#13 (G3) & 2024-09-10 & 2024-09-12T04\\ \hline
+  \#15 (G4) & 2024-06-25 & 2024-06-28T11\\ \hline 
+\end{tabular}
+\end{table}
     
-    \subsubsection{Составные таблицы}
-    %Пример таблицы. [H] означает, что таблица должна быть ровно здесь и никуда не перемещаться.
+    \subsubsection{\texttt{tblr}}
     \begin{table}[H]
-        \centering
-        \caption{Пример составной таблицы}
-        \label{table-example}
-        \small
-        \begin{tabular}{|p{5cm}|c|}
-            \hline
-            \centering
-            Вопрос & ? \\
-            \hline
-            Ответ & 42 \\
-            \hline
-        \end{tabular}
-                \begin{tabular}{|p{5cm}|c|}
-        	\hline
-        	\centering
-        	Вопрос & ? \\
-        	\hline
-        	Ответ & 42 \\
-        	\hline
-        \end{tabular}
-                \begin{tabular}{|p{5cm}|c|}
-        	\hline
-        	\centering
-        	Вопрос & ? \\
-        	\hline
-        	Ответ & 42 \\
-        	\hline
-        \end{tabular}
-                \begin{tabular}{|p{5cm}|c|}
-        	\hline
-        	\centering
-        	Вопрос & ? \\
-        	\hline
-        	Ответ & 42 \\
-        	\hline
-        \end{tabular}
-    \end{table}
+  \centering
+  \caption{Пример сложной таблицы}
+  \label{tbl:complex}      
+\begin{tblr}{
+  hlines, vlines, % borders around each cell
+  rowsep=0pt, colsep = 0pt,
+  rows = {20pt}, columns = {100pt}, % fixed width columns and fixed height rows
+  cells = {c,m}, % centered cells (vertically and horizontally)
+  cell{1}{1} = {r=2}{}, % multirow
+  cell{1}{2} = {c=2}{}, % multicolumn
+}
+State of Health & Fasting Value &         & After Eating         \\
+                & Minimum       & Maximum & 2 hours after eating \\
+Healthy         & 70            & 100     & Less than 140        \\
+Pre-Diabetes    & 101           & 126     & 140 to 200           \\
+Diabetes        & More than 126 & N/A     & More than 200        \\
+\end{tblr}
+\end{table}
 
     \subsection{Формулы}
 
