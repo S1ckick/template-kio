@@ -4,6 +4,7 @@
 
 
 % You can load your own packages here.
+\usepackage{enumitem}
 
 
 % ========== BIBLIOGRAPHY APPEARANCE ==========
@@ -236,57 +237,98 @@
 
 
 
-    \section{CONCLUSION}
-    Conclusion text with reference examples.
+    \section{REFERENCE EXAMPLES}
+    This section illustrates every source type listed in the
+    accompanying ``Для цитирования.docx'' file. Each numbered item is a
+    category from that document; one or two examples per type are
+    provided. Use them as templates and remove from the final
+    submission.
 
     Reference to sec.~\ref{sec:sub}.
+    \begin{enumerate}
+        \item \textbf{Books and chapters}
+        \begin{itemize}[nosep]
+            \item English-language book with a Russian translation~--- \cite{Hairer}.
+            \item Russian-language book without an English translation~--- \cite{Gubanov}.
+            \item Chapter in a Russian-language book~--- \cite{layexpl7}.
+            \item Book chapter with edition, chapter, section and page range~--- \cite{OguraChapter}.
+            \item Multi-author book with several editors~--- \cite{MultiAuthorMultiEditor}.
+            \item Chapter with several authors, editor and edition~--- \cite{PontryaginMaxPrinciple}.
+            \item Chapter written by the volume editor~--- \cite{SanchezEditorAuthored}.
+            \item Chapter with a translator~--- \cite{SeriesTranslatorChapter}.
+        \end{itemize}
 
-    % --- Baseline reference types ---
-    Reference to a Russian-language article that has an English translation: \cite{Matveenko}.
-    Reference to a Russian-language book without an English translation: \cite{Gubanov}.
-    Reference to an English-language book that has a Russian translation: \cite{Hairer}.
-    Reference to a chapter in a Russian-language book without an English translation: \cite{layexpl7}.
-    Reference to an English-language book: \cite{IERS2010}.
-    Reference to an English-language technical report: \cite{DE430}.
-    Reference to a Russian-language conference proceedings article: \cite{BYSIS2022}.
-    Reference to a website that has an English version: \cite{ETU}.
-    Reference to a GOST standard: \cite{gost-radio}.
-    Reference to a patent: \cite{sviridov}.
+        \item \textbf{Articles}
+        \begin{itemize}[nosep]
+            \item Russian-language article with an English translation~--- \cite{Matveenko}.
+            \item Periodical in a non-English language (with the ``(in Language)'' marker)~--- \cite{WignerGerman}.
+            \item Periodical with article ID (Art.~no.)~--- \cite{Fardel}.
+        \end{itemize}
 
-    % --- Additional IEEE 2025 reference types ---
-    % Six book-layout variants (IEEE 2025 Section B):
-    Plain book (author, title, address, publisher, year)~--- \cite{KlausHorn}.
-    Book chapter with edition, chapter, section, and page range~--- \cite{OguraChapter}.
-    Multi-author book with several editors (Eds. + ``et al.'')~--- \cite{MultiAuthorMultiEditor}.
-    Chapter with author-side ``et al.'', editor, edition, and ``(in Language)''~--- \cite{PontryaginMaxPrinciple}.
-    Chapter written by the volume editor; foreign-language publisher, DOI, URL~--- \cite{SanchezEditorAuthored}.
-    Chapter with series in parentheses, two editors, a translator, and edition~--- \cite{SeriesTranslatorChapter}.
-    Book chapter with editor and series~--- \cite{Feistauer}.
-    Translated book~--- \cite{Dessalles}.
-    Periodical with article ID (Art.~no.)~--- \cite{Fardel}.
-    Periodical in a non-English language (with the ``(in Language)'' marker)~--- \cite{WignerGerman}.
-    Blog post~--- \cite{Owens}.
-    Conference paper presented at a conference~--- \cite{Caratelli}.
-    Conference proceedings paper~--- \cite{Amador}.
-    Online conference proceedings paper~--- \cite{SchubertDAC}.
-    Conference paper online~--- \cite{TaylorConfOnline}.
-    Online dataset~--- \cite{HHSDataset}.
-    Print handbook / manual~--- \cite{TransmissionSystems}.
-    Online manual~--- \cite{BreimannRF}.
-    Lecture notes~--- \cite{BarneyLecture}.
-    Online news article~--- \cite{MarkoffNews}.
-    Online video / YouTube~--- \cite{mtaOnlineVideo}.
-    Patent (print)~--- \cite{WilkinsonPatent}.
-    Patent (online)~--- \cite{WilliamsPatentOnline}.
-    Software~--- \cite{ArningSoftware}.
-    IEEE standard~--- \cite{Std308}.
-    IEEE standard with every field populated (location, date, DOI, URL)~--- \cite{StdIEEE754Full}.
-    Master's thesis~--- \cite{KawasakiThesis}.
-    Ph.D. dissertation~--- \cite{WilliamsPhD}.
-    Government document~--- \cite{USHouseGov}.
-    arXiv preprint~--- \cite{UrazhdinArxiv}.
-    Website~--- \cite{KumarWebsite}.
-    Social media~--- \cite{CostanzoTwitter}.
+        \item \textbf{Blog}~---\cite{Owens}
+
+        \item \textbf{Conference paper presented at a conference (no proceedings)}~---\cite{Caratelli}.
+
+        \item \textbf{Conference proceedings paper}~---\cite{BYSIS2022}
+
+        \item \textbf{Online dataset}
+        \begin{itemize}[nosep]
+            \item English-language dataset~--- \cite{HHSDataset}.
+            \item Russian-language dataset~--- \cite{vinitiDB}.
+        \end{itemize}
+
+        \item \textbf{Manual}
+        \begin{itemize}[nosep]
+            \item Print manual~--- \cite{TransmissionSystems}.
+            \item Online manual~--- \cite{BreimannRF}.
+        \end{itemize}
+
+        \item \textbf{Lecture notes}~--- \cite{BarneyLecture}.
+
+        \item \textbf{News article}~--- \cite{MarkoffNews}.
+
+        \item \textbf{Online video}
+        \begin{itemize}[nosep]
+            \item YouTube video~--- \cite{mtaOnlineVideo}.
+            \item VK Video~--- \cite{vkVideoExample}.
+        \end{itemize}
+
+        \item \textbf{Patent}
+        \begin{itemize}[nosep]
+            \item Patent~--- \cite{WilkinsonPatent}.
+            \item Russian patent~--- \cite{sviridov}.
+            \item Online patent~--- \cite{WilliamsPatentOnline}.
+        \end{itemize}
+
+        \item \textbf{Software}
+        \begin{itemize}[nosep]
+            \item Software~--- \cite{ArningSoftware}.
+            \item Russian software~--- \cite{schoolPassportSoftware}.
+        \end{itemize}
+
+        \item \textbf{Standards}
+        \begin{itemize}[nosep]
+            \item IEEE standard with every field populated (location, date, DOI, URL)~--- \cite{StdIEEE754Full}.
+            \item Russian GOST~--- \cite{gostMed57647}.
+        \end{itemize}
+
+        \item \textbf{Master's thesis}~--- \cite{KawasakiThesis}.
+
+        \item \textbf{Ph.D. dissertation}~--- \cite{WilliamsPhD}.
+
+        \item \textbf{Government document}~--- \cite{USHouseGov}.
+
+        \item \textbf{Technical report}~--- \cite{DE430}.
+
+        \item \textbf{Preprint arXiv}~--- \cite{UrazhdinArxiv}.
+
+        \item \textbf{Website}~--- \cite{ETU}.
+
+        \item \textbf{Social media}~--- \cite{CostanzoX}.
+    \end{enumerate}
+
+    \section{CONCLUSION}
+    Your conclusion.
 
     \acknowledgmentsen{The authors thank their colleagues for fruitful discussions.}
     \fundingen{The work was supported by grant No.~XX-XX-XXXXX.}

@@ -24,30 +24,6 @@
   note       = {in Russian}
 }
 
-% Book with chapter title, editors, series, volume and edition
-@inbook{Feistauer,
-  author    = {M. Feistauer},
-  title     = {Irrotational Incompressible Flow},
-  booktitle = {Mathematical Methods in Fluid Dynamics},
-  series    = {Monographs and Surveys in Pure and Applied Mathematics, 67},
-  edition   = {1},
-  publisher = {Longman},
-  address   = {Harlow, U.K.},
-  year      = {1993},
-  chapter   = {2},
-  pages     = {77--186}
-}
-
-% Translated book 
-@book{Dessalles,
-  author     = {J.-L. Dessalles},
-  title      = {Why We Talk: The Evolutionary Origins of Language},
-  translator = {James Grieve},
-  publisher  = {Oxford Univ. Press},
-  address    = {Oxford, U.K.},
-  year       = {2007}
-}
-
 @inbook{layexpl7,
   author    = {M. V. Lukashova and L. I. Rumyantseva and M. L. Sveshnikov},
   title     = {{Chapter 7. Theory of astronomical reductions}},
@@ -60,26 +36,7 @@
   note      = {in Russian}
 }
 
-@book{IERS2010,
-  author    = {G. Petit and B. Luzum},
-  title     = {{IERS} {Conventions} 2010 ({IERS} Technical Note 36)},
-  publisher = {{Verlag des Bundesamts f\"ur Kartographie und Geod\"asie}},
-  address   = {{Frankfurt am Main}},
-  pagetotal = {179},
-  year      = {2010},
-  url       = {https://iers-conventions.obspm.fr/content/tn36.pdf}
-}
-
-
 % ---- IEEE book-variant examples ------------
-
-@book{KlausHorn,
-  author    = {B. Klaus and P. Horn},
-  title     = {Robot Vision},
-  address   = {Cambridge, MA, USA},
-  publisher = {MIT Press},
-  year      = {1986}
-}
 
 @incollection{OguraChapter,
   author    = {T. Ogura and K. K. Author},
@@ -220,29 +177,6 @@
 
 % -------- Conference proceedings print or online ----------------
 
-@inproceedings{Amador,
-  author    = {A. Amador-Perez and R. A. Rodriguez-Solis},
-  title     = {Analysis of a {CPW}-fed annular slot ring antenna using {DOE}},
-  booktitle = {Proc. IEEE Antennas Propag. Soc. Int. Symp.},
-  series    = {Slot Ring Antennas II},
-  volume    = {3},
-  edition   = {2},
-  month     = jul,
-  year      = {2006},
-  pages     = {4301--4304}
-}
-
-% Conference Proceedings Online.
-@inproceedings{SchubertDAC,
-  author    = {T. Schubert},
-  title     = {Real challenges and solutions for validating system-on-chip high level formal verification of next-generation microprocessors},
-  booktitle = {Proc. 40th Design Automat. Conf. (DAC'03)},
-  month     = jun,
-  day       = {2--6},
-  year      = {2003},
-  url       = {https://www.dac.com/content/40th-dac}
-}
-
 @inproceedings{BYSIS2022,
   author    = {Abunin, A. A. and Abunina, M. A. and Belov, A. V. and Shlyk, N. S. and Pryamushkina, I. I. and
                Kryakunova, O. N. and Nikolayevskiy, N. F.},
@@ -258,19 +192,6 @@
   note      = {in Russian}
 }
 
-
-% -------- Conference paper online ------------------------
-@confpaperonline{TaylorConfOnline,
-  author    = {J. A. Taylor},
-  title     = {Assessment: A tool for development and engagement in the first year of university study},
-  booktitle = {Engaging Students: 9th Pacific Rim in Higher Education (FYHE) Conf.},
-  address   = {Griffith, Australia},
-  month     = nov,
-  year      = {2006},
-  url       = {http://www.fyhe.com.au/past_papers/2006/Papers/Taylor.pdf}
-}
-
-
 % -------- Online dataset ---------------------------------
 
 @dataset{HHSDataset,
@@ -280,6 +201,16 @@
   month        = aug,
   year         = {2013},
   doi          = {10.3886/ICPSR30122.v2}
+}
+
+@dataset{vinitiDB,
+  author       = {Viniti},
+  title        = {Database name},
+  titleraw     = {Nazvanie bazy dannykh},
+  year         = {2021},
+  language     = {russian},
+  url          = {http://bd.viniti.ru/idex.php?option=com_content&task=view&id=238&ltemid=101},
+  urldate      = {15.11.2021}
 }
 
 
@@ -342,6 +273,15 @@
   url        = {http://www.youtube.com/watch?v=IJjNsCVHc34}
 }
 
+@video{vkVideoExample,
+  author   = {M. O. Subbotin},
+  title    = {Solar wind forecast service},
+  titleraw = {Sluzhba prognoza solnechnogo vetra},
+  language = {russian},
+  url      = {https://vkvideo.ru/video-238191604_456239017},
+  urldate  = {17.05.2026}
+}
+
 
 % -------- Patent  -----------------------------------------
 
@@ -394,15 +334,17 @@
   url          = {http://ngspice.sourceforge.net}
 }
 
+@software{schoolPassportSoftware,
+  organization = {Academic MIAC},
+  title        = {Electronic health passport of a child (schoolchild)},
+  titleraw     = {Elektronnyy pasport zdorovya rebenka (shkolnika)},
+  address      = {Moscow},
+  year         = {2017},
+  language     = {russian}
+}
+
 
 % -------- Standards --------------------------------------
-
-@standard{Std308,
-  title        = {{IEEE} Criteria for Class {IE} Electric Systems},
-  organization = {IEEE},
-  number       = {308},
-  year         = {1969}
-}
 
 @standard{StdIEEE754Full,
   title        = {Standard for Floating-Point Arithmetic},
@@ -415,14 +357,18 @@
   url          = {https://standards.ieee.org/ieee/754/6210/}
 }
 
-@standard{gost-radio,
-  title        = {Radio communication. {Terms} and definitions},
-  organization = {GOST},
-  number       = {24375-1980},
-  year         = {1980},
-  note         = {in Russian}
+@standard{gostMed57647,
+  organization = {GOST P},
+  number       = {57647-2017},
+  title        = {Medicinal products for medical use. Pharmacogenomics. Biomarkers},
+  titleraw     = {Lekarstvennye sredstva dlya meditsinskogo primeneniya. Farmakogenomika. Biomarkery},
+  author       = {{I.M. Sechenov First Moscow State Medical University}},
+  address      = {Moscow},
+  publisher    = {Russian Institute of Standardization},
+  year         = {2017},
+  pages        = {7},
+  language     = {russian}
 }
-
 
 % -------- Theses and dissertations -----------------------
 
@@ -472,14 +418,14 @@
 
 
 % -------- Preprint arXiv ---------------------------------
-@preprint{UrazhdinArxiv,
-  author     = {S. Urazhdin and N. O. Birge and Pratt Jr., W. P. and J. Bass},
-  title      = {Current-driven magnetic excitations in permalloy-based multilayer nanopillars},
-  inlanguage = {English},
-  year       = {2003},
-  eprint     = {0303149},
-  eprinttype = {arXiv}
-}
+%@preprint{UrazhdinArxiv,
+%  author     = {S. Urazhdin and N. O. Birge and Pratt Jr., W. P. and J. Bass},
+%  title      = {Current-driven magnetic excitations in permalloy-based multilayer nanopillars},
+%  inlanguage = {English},
+%  year       = {2003},
+%  eprint     = {0303149},
+%  eprinttype = {arXiv}
+%}
 
 
 % -------- Websites and social media ----------------------
@@ -490,18 +436,10 @@
   urldate = {Apr. 6, 2026}
 }
 
-@online{KumarWebsite,
-  author  = {A. Kumar},
-  title   = {How neural networks are changing image recognition},
-  journal = {TechCrunch.com},
-  urldate = {Jan. 10, 2024},
-  url     = {https://techcrunch.com/2024/01/11/neural-networks-image-recognition}
-}
-
-@socialmedia{CostanzoTwitter,
+@socialmedia{CostanzoX,
   author  = {P. Costanzo},
   title   = {{Clemson orange uniforms are messing with the color on my TV. And apparently messing with the ND offense, too.}},
-  journal = {Twitter},
+  journal = {X},
   urldate = {Apr. 19, 2021},
-  url     = {https://twitter.com/PaulCostanzo/status/817826295707041793}
+  url     = {https://x.com/PaulCostanzo/status/817826295707041793}
 }

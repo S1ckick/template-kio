@@ -21,27 +21,6 @@
   language  = {russian}
 }
 
-@inbook{Feistauer,
-  author    = {M. Feistauer},
-  title     = {Irrotational Incompressible Flow},
-  booktitle = {Mathematical Methods in Fluid Dynamics},
-  series    = {Monographs and Surveys in Pure and Applied Mathematics, 67},
-  edition   = {1},
-  publisher = {Longman},
-  address   = {Harlow, U.K.},
-  year      = {1993},
-  chapter   = {2},
-  pages     = {77--186}
-}
-
-@book{Dessalles,
-  author    = {J.-L. Dessalles},
-  title     = {Why We Talk: The Evolutionary Origins of Language},
-  publisher = {Oxford Univ. Press},
-  address   = {Oxford, U.K.},
-  year      = {2007}
-}
-
 @inbook{layexpl7,
   author    = {М.В. Лукашова  and Л. И. Румянцева and М.Л. Свешников},
   title     = {{Глава 7. Теория астрономических редукций}},
@@ -53,26 +32,7 @@
   language  = {russian}
 }
 
-@book{IERS2010,
-  author    = {G. Petit and B. Luzum},
-  title     = {{IERS} {Conventions} 2010 ({IERS} Technical Note 36)},
-  publisher = {{Verlag des Bundesamts f\"ur Kartographie und Geod\"asie}},
-  address   = {{Frankfurt am Main}},
-  pagetotal = {179},
-  year      = {2010},
-  url       = {https://iers-conventions.obspm.fr/content/tn36.pdf}
-}
-
-
 % ---- IEEE book-variant examples ------------
-
-@book{KlausHorn,
-  author    = {B. Klaus and P. Horn},
-  title     = {Robot Vision},
-  address   = {Cambridge, MA, USA},
-  publisher = {MIT Press},
-  year      = {1986}
-}
 
 @incollection{OguraChapter,
   author    = {T. Ogura and K. K. Author},
@@ -159,6 +119,16 @@
   DOI      = {10.1017/S0074180900147990}
 }
 
+@article{WignerGerman,
+  author     = {E. P. Wigner},
+  title      = {On a modification of the {Rayleigh--Schrodinger} perturbation theory},
+  inlanguage = {German},
+  journal    = {Math. Naturwiss. Anz. Ungar. Akad. Wiss.},
+  volume     = {53},
+  pages      = {475},
+  year       = {1935}
+}
+
 @article{Fardel,
   author    = {R. Fardel and M. Nagel and F. Nuesch and T. Lippert and A. Wokaun},
   title     = {Fabrication of organic light emitting diode pixels by laser-assisted forward transfer},
@@ -168,17 +138,6 @@
   month     = aug,
   year      = {2007},
   articleno = {061103}
-}
-
-% Periodical in other language.
-@article{WignerGerman,
-  author     = {E. P. Wigner},
-  title      = {On a modification of the {Rayleigh--Schrodinger} perturbation theory},
-  inlanguage = {German},
-  journal    = {Math. Naturwiss. Anz. Ungar. Akad. Wiss.},
-  volume     = {53},
-  pages      = {475},
-  year       = {1935}
 }
 
 
@@ -197,7 +156,6 @@
 
 % -------- Conference paper presented at a conference -----------------
 
-% @presentation → inproceedings in GOST (paper presented at a conference).
 @presentation{Caratelli,
   author    = {D. Caratelli and M. C. Vigan{\'o} and G. Toso and P. Angeletti},
   title     = {Analytical placement technique for sparse arrays},
@@ -210,28 +168,6 @@
 
 
 % -------- Conference proceedings (print) -----------------------------
-
-@inproceedings{Amador,
-  author    = {A. Amador-Perez and R. A. Rodriguez-Solis},
-  title     = {Analysis of a {CPW}-fed annular slot ring antenna using {DOE}},
-  booktitle = {Proc. IEEE Antennas Propag. Soc. Int. Symp.},
-  series    = {Slot Ring Antennas II},
-  volume    = {3},
-  edition   = {2},
-  month     = jul,
-  year      = {2006},
-  pages     = {4301--4304}
-}
-
-@inproceedings{SchubertDAC,
-  author    = {T. Schubert},
-  title     = {Real challenges and solutions for validating system-on-chip high level formal verification of next-generation microprocessors},
-  booktitle = {Proc. 40th Design Automat. Conf. (DAC'03)},
-  month     = jun,
-  day       = {2--6},
-  year      = {2003},
-  url       = {https://www.dac.com/content/40th-dac}
-}
 
 @inproceedings{BYSIS2022,
   author    = {Абунин, А. А. and Абунина, М. А. and Белов, А. В. and Шлык, Н. С. and Прямушкина, И. И. and
@@ -248,23 +184,8 @@
 }
 
 
-% -------- Conference paper online ------------------------------------
-
-% @confonline → online in GOST (best fit for online conference paper).
-@confonline{TaylorConfOnline,
-  author    = {J. A. Taylor},
-  title     = {Assessment: A tool for development and engagement in the first year of university study},
-  booktitle = {Engaging Students: 9th Pacific Rim in Higher Education (FYHE) Conf.},
-  address   = {Griffith, Australia},
-  month     = nov,
-  year      = {2006},
-  url       = {http://www.fyhe.com.au/past_papers/2006/Papers/Taylor.pdf}
-}
-
-
 % -------- Online dataset ---------------------------------------------
 
-% @dataset → online in GOST.
 @dataset{HHSDataset,
   author       = {{U.S. Department of Health and Human Services}},
   title        = {Treatment Episode Dataset: Discharges ({TEDS-D}): Concatenated, 2006 to 2009},
@@ -272,6 +193,15 @@
   month        = aug,
   year         = {2013},
   doi          = {10.3886/ICPSR30122.v2}
+}
+
+@dataset{vinitiDB,
+  organization = {ВИНИТИ РАН},
+  title        = {Название базы данных},
+  year         = {2021},
+  language     = {russian},
+  url          = {http://bd.viniti.ru/idex.php?option=com_content&task=view&id=238&ltemid=101},
+  urldate      = {15.11.2021}
 }
 
 
@@ -299,7 +229,6 @@
 
 % -------- Lecture notes ----------------------------------------------
 
-% @lecture → online in GOST.
 @lecture{BarneyLecture,
   author     = {J. Barney},
   title      = {Documenting literature},
@@ -312,7 +241,6 @@
 
 % -------- News article -----------------------------------------------
 
-% @news → article in GOST (news article in a periodical).
 @news{MarkoffNews,
   author  = {J. Markoff},
   title   = {Software is smart enough for {SAT}, but still far from intelligent},
@@ -359,17 +287,6 @@
   year        = {1990}
 }
 
-@patentonline{WilliamsPatentOnline,
-  author      = {D. Williams},
-  title       = {Screwless clip mounted computer drive},
-  nationality = {United States},
-  number      = {6885550},
-  day         = {26},
-  month       = apr,
-  year        = {2005},
-  url         = {http://patft.uspto.gov/netacgi/6,885,550}
-}
-
 @patent{sviridov,
   author        = {Свиридов, К. Н.},
   title         = {Способ получения изображений космического объекта, наблюдаемого через турбулентную атмосферу},
@@ -379,6 +296,17 @@
   credits       = {заявл. № 2014134182/28 от 21.08.2014; опубл. 20.02.2016, бюл. № 5},
   holder        = {патентообладатель ОАО «Российские космические системы»},
   language      = {russian}
+}
+
+@patentonline{WilliamsPatentOnline,
+  author      = {D. Williams},
+  title       = {Screwless clip mounted computer drive},
+  nationality = {United States},
+  number      = {6885550},
+  day         = {26},
+  month       = apr,
+  year        = {2005},
+  url         = {http://patft.uspto.gov/netacgi/6,885,550}
 }
 
 
@@ -404,14 +332,6 @@
 
 % -------- Standards --------------------------------------------------
 
-% @standard → manual in GOST (standards rendered as normative documents).
-@standard{Std308,
-  title        = {{IEEE} Criteria for Class {IE} Electric Systems},
-  organization = {IEEE},
-  number       = {308},
-  year         = {1969}
-}
-
 @standard{StdIEEE754Full,
   title        = {Standard for Floating-Point Arithmetic},
   organization = {IEEE},
@@ -423,12 +343,16 @@
   url          = {https://standards.ieee.org/ieee/754/6210/}
 }
 
-% @standard → manual in GOST.
-@standard{gost-radio,
-  title        = {Радиосвязь. Термины и определения},
-  organization = {ГОСТ},
-  number       = {24375-1980},
-  year         = {1980},
+@standard{gostMed57647,
+  organization = {ГОСТ Р},
+  number       = {57647-2017},
+  title        = {Лекарственные средства для медицинского применения. Фармакогеномика. Биомаркеры},
+  type         = {национальный стандарт Российской Федерации},
+  author       = {{Первый Московский государственный медицинский университет имени И. М. Сеченова}},
+  address      = {Москва},
+  publisher    = {Стандартинформ},
+  year         = {2017},
+  pages        = {7~c.},
   language     = {russian}
 }
 
@@ -456,7 +380,6 @@
 
 % -------- U.S. Government documents ----------------------------------
 
-% @government → misc in GOST (general document).
 @government{USHouseGov,
   author       = {{U.S. House}},
   howpublished = {102nd Congress, 1st Session},
@@ -483,7 +406,6 @@
 
 % -------- Preprint arXiv ---------------------------------------------
 
-% @preprint → misc in GOST (handles arXiv via eprint/eprinttype fields).
 @preprint{UrazhdinArxiv,
   author     = {S. Urazhdin and N. O. Birge and Pratt Jr., W. P. and J. Bass},
   title      = {Current-driven magnetic excitations in permalloy-based multilayer nanopillars},
@@ -503,19 +425,10 @@
   language = {russian}
 }
 
-@online{KumarWebsite,
-  author  = {A. Kumar},
-  title   = {How neural networks are changing image recognition},
-  journal = {TechCrunch.com},
-  urldate = {Jan. 10, 2024},
-  url     = {https://techcrunch.com/2024/01/11/neural-networks-image-recognition}
-}
-
-% @socialmedia → online in GOST.
-@socialmedia{CostanzoTwitter,
+@socialmedia{CostanzoX,
   author  = {P. Costanzo},
   title   = {Clemson orange uniforms are messing with the color on my {TV}. And apparently messing with the {ND} offense, too.},
-  journal = {Twitter},
+  journal = {X},
   urldate = {Apr. 19, 2021},
-  url     = {https://twitter.com/PaulCostanzo/status/817826295707041793}
+  url     = {https://x.com/PaulCostanzo/status/817826295707041793}
 }

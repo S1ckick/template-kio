@@ -4,6 +4,7 @@
 
 
 % Здесь можно подключить свои пакеты.
+\usepackage{enumitem}
 
 
 % ========== НАСТРОЙКИ СПИСКА ЛИТЕРАТУРЫ ==========
@@ -235,65 +236,98 @@
 
     
 
-    \section{ЗАКЛЮЧЕНИЕ}
-    Текст заключения с примером ссылок.
+    \section{ПРИМЕРЫ ССЫЛОК}
+    Этот раздел демонстрирует все типы источников, перечисленные в
+    приложенном файле <<Для цитирования.docx>>. Подзаголовки повторяют
+    структуру этого документа. Для каждого типа приведён один-два
+    примера: их можно использовать как образец оформления и удалить из
+    итоговой статьи.
 
     Ссылка на разд.~\ref{sec:sub}.
+    \begin{enumerate}
+        \item \textbf{Книги и главы} 
+        \begin{itemize}[nosep]
+            \item Книга на английском с переводом на русский~--- \cite{Hairer}.
+            \item Книга на русском без английского перевода~--- \cite{Gubanov}.
+            \item Глава в книге на русском без перевода~--- \cite{layexpl7}.
+            \item Глава книги с указанием издания, главы, раздела и страниц~--- \cite{OguraChapter}.
+            \item Книга нескольких авторов с многими редакторами~--- \cite{MultiAuthorMultiEditor}.
+            \item Глава с многими авторами, редактором и изданием~--- \cite{PontryaginMaxPrinciple}.
+            \item Глава, написанная редактором тома~--- \cite{SanchezEditorAuthored}.
+            \item Глава с переводчиком~--- \cite{SeriesTranslatorChapter}.
+        \end{itemize}
 
-    % --- Примеры базовых типов литературы ---
-    Ссылка на статью на русском, у которой есть английский перевод: \cite{Matveenko}.
-    Ссылка на книгу на русском, у которой нет английского перевода: \cite{Gubanov}.
-    Ссылка на книгу на английском, у которой есть русский перевод: \cite{Hairer}.
-    Ссылка на главу в книге на русском, у которой нет английского перевода: \cite{layexpl7}.
-    Ссылка на книгу на английском: \cite{IERS2010}.
-    Ссылка на технический отчёт на английском: \cite{DE430}.
-    Ссылка на статью в трудах конференции на русском: \cite{BYSIS2022}.
-    Ссылка на сайт, имеющий английскую версию: \cite{ETU}.
-    Ссылка на ГОСТ: \cite{gost-radio}.
-    Ссылка на патент: \cite{sviridov}.
+        \item \textbf{Статьи}
+        \begin{itemize}[nosep]
+            \item Статья на русском с английским переводом~--- \cite{Matveenko}.
+            \item Статья в журнале на другом языке (с пометкой <<(in Language)>>)~--- \cite{WignerGerman}.
+            \item Статья в журнале с идентификатором (Art.~no.)~--- \cite{Fardel}.
+        \end{itemize}
 
-    % --- Дополнительные типы литературы по IEEE 2025 (раздел II гайда) ---
-    % Шесть вариантов оформления книг (раздел B руководства IEEE 2025):
-    Простейшая книга (автор, заголовок, город, издатель, год)~--- \cite{KlausHorn}.
-    Глава книги с указанием издания, главы, раздела и страниц~--- \cite{OguraChapter}.
-    Книга нескольких авторов с многими редакторами (Eds. + <<et al.>>)~--- \cite{MultiAuthorMultiEditor}.
-    Глава с <<автор et al.>>, редактором, изданием и пометкой <<(in Language)>>~--- \cite{PontryaginMaxPrinciple}.
-    Глава, написанная редактором тома; издатель <<(in Language)>>, с DOI и URL~--- \cite{SanchezEditorAuthored}.
-    Глава с серией в скобках, двумя редакторами, переводчиком и изданием~--- \cite{SeriesTranslatorChapter}.
-    Глава книги с редактором и серией~--- \cite{Feistauer}.
-    Переведённая книга~--- \cite{Dessalles}.
+        \item \textbf{Блог}~---\cite{Owens}
 
-    % Periodicals
-    Статья в журнале на другом языке (с пометкой <<(in Language)>>)~--- \cite{WignerGerman}.
+        \item \textbf{Доклад на конференции без публикации в сборнике}~---\cite{Caratelli}.
 
-    % Periodical with article ID
-    Статья в журнале с идентификатором (Art.~no.)~--- \cite{Fardel}.
-    
+        \item \textbf{Статья в трудах конференции}~---\cite{BYSIS2022}
 
-    Блог~--- \cite{Owens}.
-    Доклад на конференции (без публикации в сборнике)~--- \cite{Caratelli}.
-    Статья в трудах конференции~--- \cite{Amador}.
-    Статья в трудах конференции онлайн~--- \cite{SchubertDAC}.
-    Электронный доклад на конференции~--- \cite{TaylorConfOnline}.
-    Набор данных в сети~--- \cite{HHSDataset}.
-    Печатное руководство (Manual)~--- \cite{TransmissionSystems}.
-    Электронное руководство~--- \cite{BreimannRF}.
-    Лекционные материалы~--- \cite{BarneyLecture}.
-    Новостная статья~--- \cite{MarkoffNews}.
-    Видеоролик на YouTube~--- \cite{mtaOnlineVideo}.
-    Русский видеоролик (VK Video, ГОСТ-стиль)~--- \cite{vkVideoExample}.
-    Патент~--- \cite{WilkinsonPatent}.
-    Электронный патент~--- \cite{WilliamsPatentOnline}.
-    Программное обеспечение~--- \cite{ArningSoftware}.
-    Российское программное обеспечение (ГОСТ-стиль)~--- \cite{schoolPassportSoftware}.
-    Стандарт IEEE~--- \cite{Std308}.
-    Стандарт IEEE со всеми полями (адрес, дата, DOI, URL)~--- \cite{StdIEEE754Full}.
-    Магистерская диссертация~--- \cite{KawasakiThesis}.
-    Кандидатская/PhD-диссертация~--- \cite{WilliamsPhD}.
-    Документ правительства~--- \cite{USHouseGov}.
-    Препринт arXiv~--- \cite{UrazhdinArxiv}.
-    Веб-сайт~--- \cite{KumarWebsite}.
-    Социальная сеть~--- \cite{CostanzoTwitter}.
+        \item \textbf{Набор данных (датасет)}
+        \begin{itemize}[nosep]
+            \item Датасет на английском языке~--- \cite{HHSDataset}.
+            \item Датасет на русском языке~--- \cite{vinitiDB}. 
+        \end{itemize}
+
+        \item \textbf{Руководство}
+        \begin{itemize}[nosep]
+            \item Печатное руководство (Manual)~--- \cite{TransmissionSystems}.
+            \item Электронное руководство~--- \cite{BreimannRF}.
+        \end{itemize}
+
+        \item \textbf{Лекционные материалы}~--- \cite{BarneyLecture}.
+
+        \item \textbf{Новостная статья}~--- \cite{MarkoffNews}.
+
+        \item \textbf{Онлайн видео}
+        \begin{itemize}[nosep]
+            \item Видеоролик на YouTube~--- \cite{mtaOnlineVideo}.
+            \item Видеоролик на VK Video~--- \cite{vkVideoExample}.
+        \end{itemize}
+
+        \item \textbf{Патент}
+        \begin{itemize}[nosep]
+            \item Патент~--- \cite{WilkinsonPatent}.
+            \item Российский патент~--- \cite{sviridov}.
+            \item Электронный патент~--- \cite{WilliamsPatentOnline}.
+        \end{itemize}
+
+        \item \textbf{Программное обеспечение}
+        \begin{itemize}[nosep]
+            \item Программное обеспечение~--- \cite{ArningSoftware}.
+            \item Российское программное обеспечение~--- \cite{schoolPassportSoftware}.
+        \end{itemize}
+
+        \item \textbf{Стандарты}
+        \begin{itemize}[nosep]
+            \item Стандарт IEEE со всеми полями (адрес, дата, DOI, URL)~--- \cite{StdIEEE754Full}.
+            \item Российский ГОСТ ~--- \cite{gostMed57647}.
+        \end{itemize}
+
+        \item \textbf{Магистерская ВКР}~--- \cite{KawasakiThesis}.
+
+        \item \textbf{Кандидатская/PhD-диссертация}~--- \cite{WilliamsPhD}.
+
+        \item \textbf{Документ правительства}~--- \cite{USHouseGov}.
+
+        \item \textbf{Технический отчет}~--- \cite{DE430}.
+
+        \item \textbf{Препринт arXiv}~--- \cite{UrazhdinArxiv}.
+ 
+        \item \textbf{Веб-сайт}~--- \cite{ETU}.
+
+        \item \textbf{Социальные сети}~--- \cite{CostanzoX}.
+    \end{enumerate}
+
+    \section{ЗАКЛЮЧЕНИЕ}
+    Ваше заключение.
 
     \acknowledgmentsru{Авторы благодарят коллег за полезные обсуждения.}
     \fundingru{Работа выполнена при финансовой поддержке гранта №~XX-XX-XXXXX.}

@@ -1357,7 +1357,23 @@ FUNCTION {format.doi}
 
 %% author/editor names
 
-FUNCTION {format.authors}{ author "author" format.names }
+FUNCTION {format.authors}
+{ author "author" format.names
+  author empty$ editor empty$ or
+    'skip$
+    { author editor =
+        { ", " *
+          editor num.names$ #1 >
+            'bbl.editors
+            'bbl.editor
+          if$
+          *
+        }
+        'skip$
+      if$
+    }
+  if$
+}
 
 FUNCTION {format.editors}
 { editor "editor" format.names duplicate$ empty$ 'skip$
