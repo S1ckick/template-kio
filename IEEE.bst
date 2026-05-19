@@ -384,6 +384,11 @@ STRINGS { bibinfo
           name.latex.cmd
           name.url.prefix}
 
+% String / integer scratch space for parsing the urldate field into
+% (year, month-numeric, day) components. See parse.urldate below.
+STRINGS { ud.y ud.m ud.d ud.tmp ud.parsed }
+INTEGERS { ud.idx ud.len ud.space.pos }
+
 
 
 
@@ -1949,7 +1954,7 @@ FUNCTION {format.patent.date}
         { "monthfiled" bibinfo.check }
       if$
       dayfiled duplicate$ empty$
-        { "dayfiled" bibinfo.check pop$ "" * }
+        { "dayfiled" bibinfo.check pop$ " " * }
         { "dayfiled" bibinfo.check 
           monthfiled empty$ 
              { "dayfiled without a monthfiled in " cite$ * warning$
@@ -2177,6 +2182,161 @@ FUNCTION {format.translator}
   if$
 }
 
+% The `urldate` field in the .bib can be written in any of the three
+% popular formats; this section parses it and reformats to IEEE
+% "Mon. DD, YYYY" before it ever reaches the output. Inputs:
+%   * ISO  "YYYY-MM-DD"   e.g. 2026-04-06
+%   * GOST "DD.MM.YYYY"   e.g. 06.04.2026
+%   * IEEE "Mon. DD, YYYY" (also accepts "Month DD, YYYY") e.g. Apr. 6, 2026
+
+FUNCTION {ud.month.num.to.abbrev}
+{ duplicate$ "01" = { pop$ "Jan." } {
+  duplicate$ "02" = { pop$ "Feb." } {
+  duplicate$ "03" = { pop$ "Mar." } {
+  duplicate$ "04" = { pop$ "Apr." } {
+  duplicate$ "05" = { pop$ "May"  } {
+  duplicate$ "06" = { pop$ "Jun." } {
+  duplicate$ "07" = { pop$ "Jul." } {
+  duplicate$ "08" = { pop$ "Aug." } {
+  duplicate$ "09" = { pop$ "Sep." } {
+  duplicate$ "10" = { pop$ "Oct." } {
+  duplicate$ "11" = { pop$ "Nov." } {
+  duplicate$ "12" = { pop$ "Dec." } {
+    skip$
+  } if$ } if$ } if$ } if$ } if$ } if$ } if$ } if$ } if$ } if$ } if$ } if$
+}
+
+FUNCTION {ud.month.name.to.num}
+{ duplicate$ #1 #3 substring$ "l" change.case$ 'ud.tmp :=
+  ud.tmp "jan" =
+    { pop$ "01" }
+    { ud.tmp "feb" =
+        { pop$ "02" }
+        { ud.tmp "mar" =
+            { pop$ "03" }
+            { ud.tmp "apr" =
+                { pop$ "04" }
+                { ud.tmp "may" =
+                    { pop$ "05" }
+                    { ud.tmp "jun" =
+                        { pop$ "06" }
+                        { ud.tmp "jul" =
+                            { pop$ "07" }
+                            { ud.tmp "aug" =
+                                { pop$ "08" }
+                                { ud.tmp "sep" =
+                                    { pop$ "09" }
+                                    { ud.tmp "oct" =
+                                        { pop$ "10" }
+                                        { ud.tmp "nov" =
+                                            { pop$ "11" }
+                                            { ud.tmp "dec" =
+                                                { pop$ "12" }
+                                                { skip$ }
+                                              if$
+                                            }
+                                          if$
+                                        }
+                                      if$
+                                    }
+                                  if$
+                                }
+                              if$
+                            }
+                          if$
+                        }
+                      if$
+                    }
+                  if$
+                }
+              if$
+            }
+          if$
+        }
+      if$
+    }
+  if$
+}
+
+FUNCTION {parse.urldate}
+{ "no" 'ud.parsed :=
+  "" 'ud.y :=  "" 'ud.m :=  "" 'ud.d :=
+  urldate empty$ 'skip$
+    { urldate text.length$ 'ud.len :=
+      ud.len #10 =
+        { % ISO YYYY-MM-DD?
+          urldate #5 #1 substring$ "-" =
+          urldate #8 #1 substring$ "-" = and
+            { urldate #1 #4 substring$ 'ud.y :=
+              urldate #6 #2 substring$ 'ud.m :=
+              urldate #9 #2 substring$ 'ud.d :=
+              "yes" 'ud.parsed :=
+            }
+            { % GOST DD.MM.YYYY?
+              urldate #3 #1 substring$ "." =
+              urldate #6 #1 substring$ "." = and
+                { urldate #1 #2 substring$ 'ud.d :=
+                  urldate #4 #2 substring$ 'ud.m :=
+                  urldate #7 #4 substring$ 'ud.y :=
+                  "yes" 'ud.parsed :=
+                }
+                { skip$ }
+              if$
+            }
+          if$
+        }
+        { skip$ }
+      if$
+      ud.parsed "no" =
+        { ud.len #7 >
+            { urldate ud.len #3 - #4 substring$ 'ud.y :=
+              urldate ud.len #4 - #1 substring$ " " =
+              urldate ud.len #5 - #1 substring$ "," = and
+                { % Pre-year (positions 1..len-6) = "Mon[.] DD".
+                  % Find first space to separate month from day.
+                  #1 'ud.idx :=
+                  #0 'ud.space.pos :=
+                    { ud.idx ud.len #5 - <
+                      ud.space.pos #0 = and
+                    }
+                    { urldate ud.idx #1 substring$ " " =
+                        { ud.idx 'ud.space.pos := }
+                        { skip$ }
+                      if$
+                      ud.idx #1 + 'ud.idx :=
+                    }
+                  while$
+                  ud.space.pos #0 >
+                    { urldate #1 ud.space.pos #1 - substring$
+                      ud.month.name.to.num 'ud.m :=
+                      urldate ud.space.pos #1 +
+                      ud.len #6 - ud.space.pos -
+                      substring$ 'ud.d :=
+                      "yes" 'ud.parsed :=
+                    }
+                    { skip$ }
+                  if$
+                }
+                { skip$ }
+              if$
+            }
+            { skip$ }
+          if$
+        }
+        { skip$ }
+      if$
+    }
+  if$
+}
+
+FUNCTION {urldate.in.ieee.style}
+{ parse.urldate
+  ud.parsed "yes" =
+    { ud.m ud.month.num.to.abbrev " " * ud.d * ", " * ud.y * }
+    { urldate }
+  if$
+}
+
 
 %% accessed date (used for online references)
 %% Output form: "Accessed: Month Day, Year"
@@ -2184,10 +2344,12 @@ FUNCTION {format.translator}
 %% even inside comma-style entries.
 FUNCTION {format.urldate}
 { urldate duplicate$ empty$ 'skip$
-    { this.to.prev.status
+    { pop$
+      this.to.prev.status
       this.status.std
       punct.period 'prev.status.punct :=
       space.normal 'prev.status.space :=
+      urldate.in.ieee.style
       "urldate" bibinfo.check
       bbl.accessed " " * swap$ *
       cap.yes 'status.cap :=
@@ -2201,10 +2363,12 @@ FUNCTION {format.urldate}
 %% ("Accessed Apr. 19, 2021" instead of "Accessed: Apr. 19, 2021").
 FUNCTION {format.urldate.social}
 { urldate duplicate$ empty$ 'skip$
-    { this.to.prev.status
+    { pop$
+      this.to.prev.status
       this.status.std
       punct.period 'prev.status.punct :=
       space.normal 'prev.status.space :=
+      urldate.in.ieee.style
       "urldate" bibinfo.check
       "Accessed " swap$ *
       cap.yes 'status.cap :=
