@@ -10,3 +10,5 @@ images/*
 .DS_Store
 clean.sh
 *-prefixed.bib
+!saturn-vlba-alpha.pdf
+!saturn-vlba-delta.pdf
