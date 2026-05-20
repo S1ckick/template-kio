@@ -2188,6 +2188,16 @@ FUNCTION {format.translator}
 %   * ISO  "YYYY-MM-DD"   e.g. 2026-04-06
 %   * GOST "DD.MM.YYYY"   e.g. 06.04.2026
 %   * IEEE "Mon. DD, YYYY" (also accepts "Month DD, YYYY") e.g. Apr. 6, 2026
+FUNCTION {ud.unpad}
+{ duplicate$ text.length$ #2 =
+    { duplicate$ #1 #1 substring$ "0" =
+        { #2 #1 substring$ }
+        { skip$ }
+      if$
+    }
+    { skip$ }
+  if$
+}
 
 FUNCTION {ud.month.num.to.abbrev}
 { duplicate$ "01" = { pop$ "Jan." } {
@@ -2332,7 +2342,7 @@ FUNCTION {parse.urldate}
 FUNCTION {urldate.in.ieee.style}
 { parse.urldate
   ud.parsed "yes" =
-    { ud.m ud.month.num.to.abbrev " " * ud.d * ", " * ud.y * }
+    { ud.m ud.month.num.to.abbrev " " * ud.d ud.unpad * ", " * ud.y * }
     { urldate }
   if$
 }

@@ -109,6 +109,8 @@ STRINGS { curlanguage }
 STRINGS { s t }
 
 STRINGS { y m d }   % new in v.1.2j
+STRINGS { ud.y ud.m ud.d ud.tmp ud.parsed }
+INTEGERS { ud.idx ud.len ud.space.pos }
 
 FUNCTION {init.state.consts}
 { #0 'before.all :=
@@ -1638,6 +1640,151 @@ FUNCTION {editor.organization.rest}
   if$
 }
 
+% The `urldate` field in the .bib may be written in any of three
+% popular formats; we parse it and re-emit as GOST "DD.MM.YYYY".
+% Inputs supported:
+%   * ISO  "YYYY-MM-DD"   e.g. 2026-04-06
+%   * GOST "DD.MM.YYYY"   e.g. 06.04.2026
+%   * IEEE "Mon. DD, YYYY" / "Month DD, YYYY"  e.g. Apr. 6, 2026
+% Anything else passes through unchanged.
+
+FUNCTION {ud.pad2}
+{ duplicate$ text.length$ #1 =
+    { "0" swap$ * }
+    { skip$ }
+  if$
+}
+
+FUNCTION {ud.month.name.to.num}
+{ duplicate$ #1 #3 substring$ "l" change.case$ 'ud.tmp :=
+  ud.tmp "jan" =
+    { pop$ "01" }
+    { ud.tmp "feb" =
+        { pop$ "02" }
+        { ud.tmp "mar" =
+            { pop$ "03" }
+            { ud.tmp "apr" =
+                { pop$ "04" }
+                { ud.tmp "may" =
+                    { pop$ "05" }
+                    { ud.tmp "jun" =
+                        { pop$ "06" }
+                        { ud.tmp "jul" =
+                            { pop$ "07" }
+                            { ud.tmp "aug" =
+                                { pop$ "08" }
+                                { ud.tmp "sep" =
+                                    { pop$ "09" }
+                                    { ud.tmp "oct" =
+                                        { pop$ "10" }
+                                        { ud.tmp "nov" =
+                                            { pop$ "11" }
+                                            { ud.tmp "dec" =
+                                                { pop$ "12" }
+                                                { skip$ }
+                                              if$
+                                            }
+                                          if$
+                                        }
+                                      if$
+                                    }
+                                  if$
+                                }
+                              if$
+                            }
+                          if$
+                        }
+                      if$
+                    }
+                  if$
+                }
+              if$
+            }
+          if$
+        }
+      if$
+    }
+  if$
+}
+
+FUNCTION {parse.urldate}
+{ "no" 'ud.parsed :=
+  "" 'ud.y :=  "" 'ud.m :=  "" 'ud.d :=
+  urldate empty$ 'skip$
+    { urldate text.length$ 'ud.len :=
+      ud.len #10 =
+        { % ISO YYYY-MM-DD?
+          urldate #5 #1 substring$ "-" =
+          urldate #8 #1 substring$ "-" = and
+            { urldate #1 #4 substring$ 'ud.y :=
+              urldate #6 #2 substring$ 'ud.m :=
+              urldate #9 #2 substring$ 'ud.d :=
+              "yes" 'ud.parsed :=
+            }
+            { % GOST DD.MM.YYYY?
+              urldate #3 #1 substring$ "." =
+              urldate #6 #1 substring$ "." = and
+                { urldate #1 #2 substring$ 'ud.d :=
+                  urldate #4 #2 substring$ 'ud.m :=
+                  urldate #7 #4 substring$ 'ud.y :=
+                  "yes" 'ud.parsed :=
+                }
+                { skip$ }
+              if$
+            }
+          if$
+        }
+        { skip$ }
+      if$
+      ud.parsed "no" =
+        { ud.len #7 >
+            { urldate ud.len #3 - #4 substring$ 'ud.y :=
+              urldate ud.len #4 - #1 substring$ " " =
+              urldate ud.len #5 - #1 substring$ "," = and
+                { #1 'ud.idx :=
+                  #0 'ud.space.pos :=
+                    { ud.idx ud.len #5 - <
+                      ud.space.pos #0 = and
+                    }
+                    { urldate ud.idx #1 substring$ " " =
+                        { ud.idx 'ud.space.pos := }
+                        { skip$ }
+                      if$
+                      ud.idx #1 + 'ud.idx :=
+                    }
+                  while$
+                  ud.space.pos #0 >
+                    { urldate #1 ud.space.pos #1 - substring$
+                      ud.month.name.to.num 'ud.m :=
+                      urldate ud.space.pos #1 +
+                      ud.len #6 - ud.space.pos -
+                      substring$ 'ud.d :=
+                      "yes" 'ud.parsed :=
+                    }
+                    { skip$ }
+                  if$
+                }
+                { skip$ }
+              if$
+            }
+            { skip$ }
+          if$
+        }
+        { skip$ }
+      if$
+    }
+  if$
+}
+
+FUNCTION {urldate.in.gost.style}
+{ parse.urldate
+  ud.parsed "yes" =
+    { ud.d ud.pad2 "." * ud.m ud.pad2 * "." * ud.y * }
+    { urldate }
+  if$
+}
+
+
 FUNCTION {format.url}
 { url empty$
     { "" }
@@ -1645,7 +1792,7 @@ FUNCTION {format.url}
       bbl.url ":  \url{" * url * "}" *
       urldate empty$
         { "" }
-        { " (" bbl.urldate * ": " * urldate * ")" * }
+        { " (" bbl.urldate * ": " * urldate.in.gost.style * ")" * }
       if$ *
     }
   if$
@@ -2425,7 +2572,7 @@ FUNCTION {video}
         { " (" *
           bbl.urldate *
           ": " *
-          urldate *
+          urldate.in.gost.style *
           ")" *
         }
       if$
@@ -2491,7 +2638,7 @@ FUNCTION {software}
         { " (" *
           bbl.urldate *
           ": " *
-          urldate *
+          urldate.in.gost.style *
           ")" *
         }
       if$
@@ -2541,7 +2688,7 @@ FUNCTION {dataset}
         { " (" *
           bbl.urldate *
           ": " *
-          urldate *
+          urldate.in.gost.style *
           ")" *
         }
       if$
