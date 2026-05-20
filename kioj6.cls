@@ -336,6 +336,8 @@
 }
 
 \def\authors@short@en@split@by@comma{\@authors@split@by@comma{@short@en}}
+\def\authors@short@truncated{\@authors@truncated{3}{@short}{\ и~др.}}
+\def\authors@short@en@truncated{\@authors@truncated{3}{@short@en}{\ et al.}}
 
 \def\@Letter{{\footnotesize \Letter}}  
 
@@ -424,13 +426,8 @@
 	\setarticleheader{\@title}{\@title@en}
 	\fi
 
-	\begingroup
-	\let\affil\@gobble  % Игнорируем команду \affil
-	% Русские авторы (без аффилиаций)
-	\global\edef\temp@authors{\authors@short@split@by@comma}
-	% Английские авторы
-	\global\edef\temp@authors@en{\authors@short@en@split@by@comma}
-	\endgroup
+	\gdef\temp@authors{\begingroup\let\affil\@gobble\authors@short@truncated\endgroup}
+	\gdef\temp@authors@en{\begingroup\let\affil\@gobble\authors@short@en@truncated\endgroup}
 
 	% разные авторы для русского и английского
 	\setauthorsheader{\authors@names@only@ru}{\authors@names@only@en}
@@ -778,11 +775,21 @@
 % Печать всех авторов в IEEE-стиле:
 %   1 author : «I. I. X»
 %   2 authors: «I. I. X and J. J. Y»
-%   3+       : «I. I. X, J. J. Y, and K. K. Z» (Oxford comma)
+%   3        : «I. I. X, J. J. Y, and K. K. Z» (Oxford comma)
+%   4+       : «I. I. X, J. J. Y, K. K. Z, et al.» (truncate to first 3)
 \newcommand{\@kio@ieee@authors}{%
 	\count@\z@
 	\@authors@iter{@short@en}{\advance\count@\@ne}%
 	\edef\@kio@total{\the\count@}%
+	\ifnum\@kio@total>\thr@@\relax
+		\@kio@ieee@authors@truncated
+	\else
+		\@kio@ieee@authors@full
+	\fi
+}
+
+% Полный список авторов (n<=3): «X», «X and Y», «X, Y, and Z».
+\newcommand{\@kio@ieee@authors@full}{%
 	\count@\z@
 	\@authors@iter{@short@en}{%
 		\advance\count@\@ne
@@ -798,6 +805,20 @@
 		% уже строку «Surname I.~I.», а не сам токен.
 		\edef\@kio@cur{\csname author\author@i @short@en\endcsname}%
 		\expandafter\@kio@swap@author\@kio@cur\@@nil
+	}%
+}
+
+% Усечённый список (n>=4): первые три автора через запятую и затем «, et al.».
+\newcommand{\@kio@ieee@authors@truncated}{%
+	\count@\z@
+	\@authors@iter{@short@en}{%
+		\advance\count@\@ne
+		\ifnum\count@>\thr@@\relax\else
+			\ifnum\count@>\@ne, \fi
+			\edef\@kio@cur{\csname author\author@i @short@en\endcsname}%
+			\expandafter\@kio@swap@author\@kio@cur\@@nil
+			\ifnum\count@=\thr@@\relax, et~al.\fi
+		\fi
 	}%
 }
 
@@ -820,7 +841,7 @@
     \let\affil\@gobble % в цитировании не нужны индексы аффилиаций
     \@langrev{%
       % Русский / ГОСТ
-      \authors@short@split@by@comma\space\@title\space//
+      \authors@short@truncated\space\@title\space//
       \space\journal@type. \issue@year. № \issue@number. С.~\pages@span.%
       \@ifundefined{doi@number}{}{\space\print@doi.}%
     }{%
