@@ -2578,7 +2578,7 @@ FUNCTION {booklet}
 %% We therefore render the `journal` field through format.journal.plain
 %% rather than the italicising format.journal used by periodicals.
 FUNCTION {electronic}
-{ std.status.using.period
+{ std.status.using.comma
   start.entry
   if.url.alt.interword.spacing
   format.authors output

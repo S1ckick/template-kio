@@ -78,6 +78,7 @@ ENTRY
     %version        % not implemented yet...
     % Appear in biblatex-gost for @patent entry:
     authorcountry   % country of the patent authors
+    nationality     % patent-issuing country (used by IEEE.bst's @patent)
     credits         % statement of responsibility, other than provided in Biblatex
     ipc             % Code of the International Patent Classification
     %media          % General material designation NOTE: medium in the above
@@ -699,6 +700,26 @@ FUNCTION {bbl.urldate}
          if$}
       if$}
 if$}
+
+% Localised default word for the "Patent" label used by @patent.
+FUNCTION {bbl.patent}
+{ curlanguage "english" =
+   { "Patent" }
+   { curlanguage "russian" =
+      { "{Патент}" }
+      { curlanguage "german" =
+         { "Patent" }
+         { curlanguage "french" =
+            { "Brevet" }
+            { "language is not defined: " curlanguage " in bbl.patent" * * warning$ "Patent" }
+          if$
+         }
+       if$
+      }
+    if$
+   }
+if$}
+
 
 FUNCTION {bbl.techreport}
 { curlanguage "english" =
@@ -1640,14 +1661,16 @@ FUNCTION {editor.organization.rest}
   if$
 }
 
-% The `urldate` field in the .bib may be written in any of three
-% popular formats; we parse it and re-emit as GOST "DD.MM.YYYY".
-% Inputs supported:
-%   * ISO  "YYYY-MM-DD"   e.g. 2026-04-06
-%   * GOST "DD.MM.YYYY"   e.g. 06.04.2026
-%   * IEEE "Mon. DD, YYYY" / "Month DD, YYYY"  e.g. Apr. 6, 2026
-% Anything else passes through unchanged.
+%% ----- urldate normalisation -----------------------------------------
+%% The `urldate` field in the .bib may be written in any of three
+%% popular formats; we parse it and re-emit as GOST "DD.MM.YYYY".
+%% Inputs supported:
+%%   * ISO  "YYYY-MM-DD"   e.g. 2026-04-06
+%%   * GOST "DD.MM.YYYY"   e.g. 06.04.2026
+%%   * IEEE "Mon. DD, YYYY" / "Month DD, YYYY"  e.g. Apr. 6, 2026
+%% Anything else passes through unchanged.
 
+% Zero-pad a 1-digit number string to 2 digits ("6" -> "06").
 FUNCTION {ud.pad2}
 { duplicate$ text.length$ #1 =
     { "0" swap$ * }
@@ -1896,6 +1919,21 @@ FUNCTION {format.type.number}
       { "" }
       { type number tie.or.space.connect }
     if$
+    }
+  if$
+}
+FUNCTION {format.patent.id}
+{ number empty$
+    { "" }
+    { type empty$
+        { bbl.patent }
+        { type }
+      if$
+      nationality empty$
+        { skip$ }
+        { " " * nationality * }
+      if$
+      " " * number *
     }
   if$
 }
@@ -2188,9 +2226,11 @@ FUNCTION {patent}
   title add.media "title" output.check
   new.colon          % added in v.1.2k
   titleaddon output  % added in v.1.2k
-  add.period$
-  new.colon
-  format.type.number output
+  format.patent.id
+  duplicate$ empty$
+    { pop$ add.period$ new.colon format.type.number output }
+    { output.nonnull }
+  if$
   add.blank
   address.or.location output
   new.colon
@@ -2198,22 +2238,39 @@ FUNCTION {patent}
   new.slash
   format.author "author" output.check
   %add.blank
-  authorcountry paranthesify output
+  authorcountry missing$
+    'skip$
+    { authorcountry paranthesify output }
+  if$
   new.semicolon
-  holder output.nonnull
+  holder output            
   new.semicolon
-  credits output.nonnull
+  credits output           
   new.block
-  requestnumber add.number output
+  requestnumber missing$
+    'skip$
+    { requestnumber add.number output }
+  if$
   new.semicolon
   format.requestdate output
   new.semicolon
   format.publicationdate output
-  publication output
+  publication missing$
+    'skip$
+    { publication output }
+  if$
   new.semicolon
   format.prioritydate output
-  prioritynumber output
-  prioritycountry paranthesify output
+  prioritynumber missing$
+    'skip$
+    { prioritynumber output }
+  if$
+  prioritycountry missing$
+    'skip$
+    { prioritycountry paranthesify output }
+  if$
+  new.block
+  format.date output
   new.block
   note output
   new.sentence
