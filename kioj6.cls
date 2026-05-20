@@ -185,6 +185,7 @@
 \RequirePackage{ifthen}
 \RequirePackage{textcase}
 \RequirePackage{setspace}
+\RequirePackage{varwidth}
 \RequirePackage[pdfstartview=FitH,colorlinks=true,urlcolor=Blue,citecolor=Green,linkcolor=red]{hyperref}
 \RequirePackage{url}
 %\RequirePackage{doi}
@@ -357,8 +358,8 @@
 		\fi%
 		\hspace{0.5em}\href{mailto:\csname author##1@email\endcsname}{\csname author##1@email\endcsname}%
 		\fi
-		\ifcsname author##1@orcid\endcsname%      
-		, \href{https://\csname author##1@orcid\endcsname}{\csname author##1@orcid\endcsname}%  
+		\ifcsname author##1@orcid\endcsname%
+		, \href{https://\csname author##1@orcid\endcsname}{\csname author##1@orcid\endcsname}%
 		\fi
 	}
 	\@authors@iter{@short}{\authorinfo{\author@i}\par}%
@@ -654,7 +655,9 @@
     \vskip 1.5em%
     {\hv@sf
       \lineskip .5em%
-        \large\upshape\authors@all@info\par}
+      \large\upshape
+      \begin{varwidth}{\textwidth}\raggedright\authors@all@info\end{varwidth}%
+      \par}
   }
 \def\print@address{\vskip 0.5em
         \small\hv@sf\upshape\@address\par
