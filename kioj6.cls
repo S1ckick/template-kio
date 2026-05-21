@@ -352,11 +352,11 @@
 		\csname author##1@short\endcsname%
 		\fi
 		\ifcsname author##1@email\endcsname%
-		\hspace{0.5em}%
+		\hspace{0.25em}%
 		\ifcsname author##1@email@recepient\endcsname%
-		\hspace{0.5em}\@Letter\ % <-- Добавлен пробел после конвертика
+		\hspace{0.25em}\@Letter\ % <-- Добавлен пробел после конвертика
 		\fi%
-		\hspace{0.5em}\href{mailto:\csname author##1@email\endcsname}{\csname author##1@email\endcsname}%
+		\hspace{0.25em}\href{mailto:\csname author##1@email\endcsname}{\csname author##1@email\endcsname}%
 		\fi
 		\ifcsname author##1@orcid\endcsname%
 		, \href{https://\csname author##1@orcid\endcsname}{\csname author##1@orcid\endcsname}%
