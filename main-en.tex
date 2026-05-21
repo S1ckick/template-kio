@@ -5,6 +5,7 @@
 
 % You can load your own packages here.
 \usepackage{enumitem}
+\usepackage{tabularray}
 
 
 % ========== BIBLIOGRAPHY APPEARANCE ==========
@@ -66,26 +67,27 @@
 % =============== RUSSIAN-LANGUAGE DATA ===============
 
 % Article title (Russian)
-\title[Сокр. назв.]{Название статьи на русском}
+\title[К вопросу об оформлении научных статей]{К вопросу об оформлении научных статей с~использованием современных технических средств на~основе пакета прикладного ПО \LaTeX}
 
 % Authors (Russian version)
 \author{1}[Андреев А.~А.\affil{1,3}]{Андреев Андрей Андреевич}
-\authorinfo{1}{информация об авторе длинная}
+\author{1}[Андреев А.~А.\affil{1,3}]{Андреев Аркадий Александрович}
+\authorinfo{1}{д. ф.-м. н., профессор кафедры алгоритмической математики факультета компьютерных технологий и информатики СПбГЭТУ «ЛЭТИ»}
 \authororcid{1}{orcid.org/0000-0000-9999-9999}
-\authoremailEnvelope{1}{aaandreev@etu.ru} % corresponding-author address
+\authoremailEnvelope{1}{aaandreev@etu.ru} % адрес для корреспонденции
 
-\author{2}[Борисов Б.~Б.\affil{2}]{Борисов Борис Борисович}
-\authorinfo{2}{информация о втором авторе длинная}
-\authoremail{2}{borisov@iaaras.ru}
+\author{2}[Богоявленский-Мелитопольский М. М.\affil{2}]{Богоявленский-Мелитопольский Максим Маратович}
+\authorinfo{2}{к. ф.-м. н., н. с. Лаборатории радиоастрономических наблюдений ИПА РАН}
+\authoremail{2}{mbm@iaaras.ru}
 
 \author{3}[Воронов В.~В.\affil{3}]{Воронов Владимир Владимирович}
-\authorinfo{3}{информация о третьем авторе}
+\authorinfo{3}{аспирант, ассистент факультета математики и компьютерных наук СПбГУ}
 \authoremail{3}{v.v.voronov@spbu.ru}
 
-\author{4}[Громова Г.~Г.\affil{4}]{Громова Галина Геннадьевна}
-\authorinfo{4}{информация о четвертом авторе}
+\author{4}[Ге В.~Г.\affil{4}]{Ге Вильгельмина Геннадьевна}
+\authorinfo{4}{руководитель отдела контроля качества компании «Квантори»}
 \authororcid{4}{orcid.org/0000-9999-9999-9999}
-\authoremail{4}{gromoff@quantori.com}
+\authoremail{4}{vilgelmina.g.ge@quantori.com}
 
 % Affiliations
 \affiliation{1}{Санкт-Петербургский государственный электротехнический университет «ЛЭТИ»,
@@ -99,20 +101,20 @@
 % ========== ENGLISH-LANGUAGE DATA ==========
 
 % Article title (English)
-\titleen[Short Title]{Article title in English}
+\titleen[On Typography of Scientific Articles]{On Typography of Scientific Articles Using Modern Tools Based on Software from the \LaTeX\ Family}
 
 % Authors (English version)
-\authoren{1}[Andreev A.~A.\affil{1,2}]{Andreev Andrey Andreevich}
-\authorinfoen{1}{1st author info}
+\authoren{1}[Andreev A.~A.\affil{1,2}]{Andreev Arkady Aleksandrovich}
+\authorinfoen{1}{D. Sc., professor at the Department of Algorithmic Mathematics, Faculty of Computer Technology and Informatics, ETU ``LETI''}
 
-\authoren{2}[Borisov B.~B.\affil{2}]{Borisov Boris Borisovich}
-\authorinfoen{2}{2nd author info}
+\authoren{2}[Bogoyavlenskiy-Melitopolskiy M.~M.\affil{2}]{Bogoyavlenskiy-Melitopolskiy Maksim Maratovich}
+\authorinfoen{2}{Ph. D., researcher at the Laboratory of radioastronomical observations, IAA RAS}
 
 \authoren{3}[Voronov V.~V.\affil{3}]{Voronov Vladimir Vladimirovich}
-\authorinfoen{3}{3rd author info}
+\authorinfoen{3}{postgraduate student, assistance lecturer at the Faculty of Mathematics and Computer Science, SPbSU}
 
-\authoren{4}[Gromova G.~G.\affil{4}]{Gromova Galina Gennadievna}
-\authorinfoen{4}{4th author info}
+\authoren{4}[Ge V.~G.\affil{4}]{Ge Vilgelmina Gennadievna}
+\authorinfoen{4}{Head of Quality Assurance, Quantori LLC}
 
 
 % Affiliations (English)
@@ -139,67 +141,7 @@
         %Or manual citation: \manualcitation{text}
 	\end{abstract}
 
-    \section{INTRODUCTION}
-    All section headings are written in capital letters. Subsections and below are in normal case.
-
-
-    \section{FIRST SECTION}
-    Example of section text.
-
-    Now an example of a numbered list.
-    \begin{enumerate}
-        \item First item;
-        \item Second item.
-    \end{enumerate}
-    Reference to fig.~\ref{fig:example}.
-
-    \begin{figure}[htb]
-        \centering
-        \includegraphics[width=0.4\textwidth]{xkcd1301.png}
-        \caption{Reliability of information depending on the file extension} \label{fig:example}
-    \end{figure}
-
-    % Table example. [H] means the table must stay exactly here and not float.
-    \begin{table}[H]
-        \centering
-        \caption{Example table}
-        \label{table-example}
-        \small
-        \begin{tabular}{|p{5cm}|c|}
-            \hline
-            \centering
-            Question & ? \\
-            \hline
-            Answer & 42 \\
-            \hline
-        \end{tabular}
-                \begin{tabular}{|p{5cm}|c|}
-        	\hline
-        	\centering
-        	Question & ? \\
-        	\hline
-        	Answer & 42 \\
-        	\hline
-        \end{tabular}
-                \begin{tabular}{|p{5cm}|c|}
-        	\hline
-        	\centering
-        	Question & ? \\
-        	\hline
-        	Answer & 42 \\
-        	\hline
-        \end{tabular}
-                \begin{tabular}{|p{5cm}|c|}
-        	\hline
-        	\centering
-        	Question & ? \\
-        	\hline
-        	Answer & 42 \\
-        	\hline
-        \end{tabular}
-    \end{table}
-
-    \subsection{Subsection}\label{sec:sub} % section reference
+    \section{Introduction}
     The journal ``Computer Tools in Education'' has been published since January 1998.
 
     The scientific scope of the periodical is: algorithmic mathematics and mathematical modelling, computer science and information technology, automation of processes in education.
@@ -208,43 +150,121 @@
     Because the use of computer tools today directly influences mathematics itself, the journal pays more and more attention to computer mathematics and computer science.
     The journal also focuses on bringing current research to students, so it welcomes papers that explain new ideas in computer science and algorithmic mathematics, as well as papers that pose problems for young researchers.
 
-    \subsubsection{Subsubsection}
+    \section{Formatting examples}\label{sec:formatting}
+    Section headers are rendered in uppercase. There is no need to upper-case them in the source file.
+    That way, the section name will remain in normal case in PDF table of contents.
 
-    Fig.~\ref{fig:example-2} contains two images: \ref{fig:example-2a} and \ref{fig:example-2b}.
+    Now an example of a numbered list. Please pay attention to punctuation.
+    \begin{enumerate}
+        \item First item;
+        \item Second item;
+        \item Third item.
+    \end{enumerate}
 
-    \begin{figure}[H]
+    \subsection{Figures}
+
+    
+    Fig.~\ref{fig:example} is a normal raster image with a caption.
+
+    \begin{figure}[htb]
         \centering
-        \begin{subfigure}[t]{70mm} % subfigure width; without [t] the images would be vertically centred
-            \includegraphics[width=\textwidth]{xkcd1301.png} % width=\textwidth makes width match the subfigure
-            \subcaption{Optional subcaption}
-            \label{fig:example-2a}
-        \end{subfigure}
-        \quad % wide horizontal space between the two figures
-        \begin{subfigure}[t]{50mm}
-            \includegraphics[width=\textwidth]{xkcd1301.png}
-            \subcaption{} % no subcaption here
-            \label{fig:example-2b}
-        \end{subfigure}
-        \caption{Example of two images placed side by side in one figure} \label{fig:example-2}
+        \includegraphics[width=0.4\textwidth]{xkcd1301.png}
+        \caption{Reliability of information depending on the file extension} \label{fig:example}
     \end{figure}
 
-    Reference to formula~(\ref{eq:gaussian}).
+    \subsubsection{Composite figures}
 
+    Fig.~\ref{fig:example-2} contains two vector images: \ref{fig:example-2a} и \ref{fig:example-2b}.
+    
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}[t]{70mm}
+             \includegraphics{saturn-vlba-alpha.pdf}
+         \subcaption{Optional caption}
+         \label{fig:example-2a}
+        \end{subfigure}
+        \ %space between images
+        \begin{subfigure}[t]{70mm}
+         \includegraphics{saturn-vlba-delta.pdf}
+            \subcaption{} % Здесь подзаголовок не указан
+            \label{fig:example-2b}
+        \end{subfigure}
+        \caption{Two subfigures side by side} \label{fig:example-2}
+    \end{figure}
+
+    \subsection{Tables}
+
+    \subsubsection{\texttt{tabular}}
+\begin{table}[ht]
+  \centering
+\caption{G3-G5 solar storms in 2024 with their respective dates of forecase and dates and times of shock wave arrival}
+\label{tbl:events}
+\begin{tabular}{|c|c|c|} \hline
+  Dst ranging,   & Date     & Shock wave            \\
+  G-scale               & of forecast &  arrival time \\ \hline
+  \#1 (G5) & 2024-05-10 & 2024-05-11T11  \\ \hline
+  \#2 (G5) & 2024-05-09 & 2024-05-10T17  \\ \hline 
+  \#3,4 (G4--3) & 2024-10-09 & 2024-10-11T15  \\ \hline 
+  \#6 (G3) & 2024-05-10 & 2024-05-12T10  \\ \hline 
+  \#5,9 (G4) & 2024-08-10    & 2024-08-11T07  \\ \hline
+  \#7 (G3) & 2024-10-06 & 2024-10-06T08  \\ \hline 
+  \#8 (G4) & 2024-03-23 & 2024-03-24T15 \\ \hline
+  \#10 (G3) & 2024-04-18 & 2024-04-19T06 \\ \hline
+  \#11 (G4) & 2024-09-14 & 2024-09-16T23\\ \hline
+  \#12 (G3) & 2024-08-01 & 2024-08-04T15 \\ \hline
+  \#13 (G3) & 2024-09-10 & 2024-09-12T04\\ \hline
+  \#15 (G4) & 2024-06-25 & 2024-06-28T11\\ \hline 
+\end{tabular}
+\end{table}
+    
+    
+    \subsubsection{\texttt{tblr}}
+    \begin{table}[H]
+  \centering
+  \caption{Complex table}
+  \label{tbl:complex}      
+\begin{tblr}{
+  hlines, vlines, % borders around each cell
+  rowsep=0pt, colsep = 0pt,
+  rows = {20pt}, columns = {100pt}, % fixed width columns and fixed height rows
+  cells = {c,m}, % centered cells (vertically and horizontally)
+  cell{1}{1} = {r=2}{}, % multirow
+  cell{1}{2} = {c=2}{}, % multicolumn
+}
+State of Health & Fasting Value &         & After Eating         \\
+                & Minimum       & Maximum & 2 hours after eating \\
+Healthy         & 70            & 100     & Less than 140        \\
+Pre-Diabetes    & 101           & 126     & 140 to 200           \\
+Diabetes        & More than 126 & N/A     & More than 200        \\
+\end{tblr}
+\end{table}
+
+    \subsection{Equations}
+
+    Eq.~(\ref{eq:gaussian}) is numbered because it is references to.
+    
     \begin{equation}
-        \int_{-\infty}^{\infty} e^{-x^2} \, dx = \sqrt{\pi}
+        \int_{-\infty}^{\infty} e^{-x^2} \, \mathrm{d}x = \sqrt{\pi}
         \label{eq:gaussian}
     \end{equation}
+    
+    Displayed equations can be unnumbered as well, for instance:
 
+    $$\frac{d}{dt} \left( \frac{\partial L}{\partial \dot{\symbfit{q}}} \right) = \frac{\partial L}{\partial \symbfit{q}},$$
 
+    \noindent where $L$ is the Lagrangian, $\symbfit{q}$ are generalized coordinates, and $\dot{\symbfit{q}}$
+    are generalized velocities.
+    
+    \section{Reference examples}
+    Reference to Sec.~\ref{sec:formatting}.
 
-    \section{REFERENCE EXAMPLES}
-    This section illustrates every source type listed in the
-    accompanying ``Для цитирования.docx'' file. Each numbered item is a
-    category from that document; one or two examples per type are
-    provided. Use them as templates and remove from the final
-    submission.
+    Below you can find references for all kinds of bibliographical sources. You can
+    use their Bibtex entries as templates for your own bibliography.
 
-    Reference to sec.~\ref{sec:sub}.
+    About half of bibliography entries used in this text are stored in  \texttt{references-en.bib}.
+    The other half are stored in \texttt{references.bib}. There is no need to use two files,
+    it is normal to have only one for English manuscripts (Russian manuscripts are another story.)
+    
     \begin{enumerate}
         \item \textbf{Books and chapters}
         \begin{itemize}[nosep]
@@ -321,19 +341,15 @@
         \item \textbf{Social media}~---~\cite{ClarksonX}.
     \end{enumerate}
 
-    \section{CONCLUSION}
+    \section{Conclusion}
     Your conclusion.
 
     \acknowledgmentsen{The authors thank their colleagues for fruitful discussions.}
     \fundingen{The work was supported by grant No.~XX-XX-XXXXX.}
     \conflictofinteresten{The authors declare no conflict of interest.}
 
-    \begin{otherlanguage*}{english}
-        \bibliographystyle{IEEE}
-        \bibliography{references-en-prefixed,references-clones}
-    \end{otherlanguage*}
-
-    
+    \bibliographystyle{IEEE}
+    \bibliography{references-en,references}
 
     \additionalinfo{Received October 7, 2025, The final version: January 28, 2026}
 

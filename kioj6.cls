@@ -1522,25 +1522,13 @@
 \renewcommand{\cite}[2][]{%
   \begingroup
     \def\@cite@post{#1}%
-    \if@englishversion
-      % Сборка списка EN-<key> через token list.
-      \def\@cite@en@list{}%
-      \let\@cite@sep\@empty
-      \@for\@tmp:=#2\do{%
-        \edef\@cite@en@list{\@cite@en@list\@cite@sep EN-\@tmp}%
-        \def\@cite@sep{,}%
-      }%
-      \ifx\@cite@post\@empty
-        \expandafter\originalcite\expandafter{\@cite@en@list}%
-      \else
-        \expandafter\originalcite\expandafter[\@cite@post]\expandafter{\@cite@en@list}%
-      \fi
+    \ifx\@cite@post\@empty
+      \originalcite{#2}%
     \else
-      \ifx\@cite@post\@empty
-        \originalcite{#2}%
-      \else
-        \originalcite[\@cite@post]{#2}%
-      \fi
+      \originalcite[\@cite@post]{#2}%
+    \fi
+    \if@englishversion
+    \else
       \@for\@tmp:=#2\do{%
         \edef\@tmp@en{EN-\@tmp}%
         \expandafter\nociteeng\expandafter{\@tmp@en}%
