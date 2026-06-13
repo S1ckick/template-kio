@@ -313,18 +313,25 @@
 	\fi
 }
 
-% First N authors comma-separated; if more exist, append <more-text>.
-\def\@authors@truncated#1#2#3{%
+\def\@authors@truncated#1#2#3#4{%
+	\count@\z@
+	\@authors@iter{#3}{\advance\count@\@ne}%
+	\edef\@authors@truncated@total{\the\count@}%
+	\ifnum\@authors@truncated@total>#1
+		\@tempcnta#2\relax
+	\else
+		\@tempcnta\@authors@truncated@total\relax
+	\fi
 	\count@\z@\let\@author@sep\@empty
-	\@authors@iter{#2}{%
+	\@authors@iter{#3}{%
 		\advance\count@\@ne
-		\ifnum\count@>#1\else
+		\ifnum\count@>\@tempcnta\else
 			\@author@sep
-			\csname author\author@i#2\endcsname
+			\csname author\author@i#3\endcsname
 			\def\@author@sep{, }%
 		\fi
 	}%
-	\ifnum\count@>#1 #3\fi
+	\ifnum\@authors@truncated@total>#1 #4\fi
 }
 
 \def\authors@short@split@by@comma{\@authors@split@by@comma{@short}}
@@ -337,8 +344,8 @@
 }
 
 \def\authors@short@en@split@by@comma{\@authors@split@by@comma{@short@en}}
-\def\authors@short@truncated{\@authors@truncated{3}{@short}{\ и~др.}}
-\def\authors@short@en@truncated{\@authors@truncated{3}{@short@en}{\ et al.}}
+\def\authors@short@truncated{\@authors@truncated{4}{3}{@short}{\ и~др.}}
+\def\authors@short@en@truncated{\@authors@truncated{4}{3}{@short@en}{\ et al.}}
 
 \def\@Letter{{\footnotesize \Letter}}  
 
@@ -352,11 +359,11 @@
 		\csname author##1@short\endcsname%
 		\fi
 		\ifcsname author##1@email\endcsname%
-		\hspace{0.5em}%
+		\hspace{0.25em}%
 		\ifcsname author##1@email@recepient\endcsname%
-		\hspace{0.5em}\@Letter\ % <-- Добавлен пробел после конвертика
+		\hspace{0.25em}\@Letter\ % <-- Добавлен пробел после конвертика
 		\fi%
-		\hspace{0.5em}\href{mailto:\csname author##1@email\endcsname}{\csname author##1@email\endcsname}%
+		\hspace{0.25em}\href{mailto:\csname author##1@email\endcsname}{\csname author##1@email\endcsname}%
 		\fi
 		\ifcsname author##1@orcid\endcsname%
 		, \href{https://\csname author##1@orcid\endcsname}{\csname author##1@orcid\endcsname}%
@@ -371,7 +378,7 @@
 \def\authors@names@only@ru{%
 	\begingroup
 	\def\affil##1{}%
-	\@authors@truncated{3}{@short}{\ и~др.}%
+	\@authors@truncated{4}{3}{@short}{\ и~др.}%
 	\endgroup
 }
 
@@ -380,9 +387,9 @@
 	\begingroup
 	\def\affil##1{}%
 	\ifcsname author1@short@en\endcsname
-		\@authors@truncated{3}{@short@en}{\ et al.}%
+		\@authors@truncated{4}{3}{@short@en}{\ et al.}%
 	\else
-		\@authors@truncated{3}{@short}{\ et al.}%
+		\@authors@truncated{4}{3}{@short}{\ et al.}%
 	\fi
 	\endgroup
 }
@@ -406,12 +413,12 @@
 				% Английская статья → русская сноска.
 				\temp@authors\\
 				\@title.\\
-				\journal@type@ru, \issue@year. № \issue@number. С. \pages@span.%
+				\copyright\ \journal@type@ru, \issue@year. № \issue@number. С. \pages@span.%
 			\else
 				% Русская статья → английская сноска.
 				\temp@authors@en\\
 				\@title@en.\\
-				\journal@type@en, \issue@year. No \issue@number. P. \pages@span.%
+				\copyright\ \journal@type@en, \issue@year. No \issue@number. P. \pages@span.%
 			\fi
 		}%
 	\endgroup
@@ -784,14 +791,14 @@
 	\count@\z@
 	\@authors@iter{@short@en}{\advance\count@\@ne}%
 	\edef\@kio@total{\the\count@}%
-	\ifnum\@kio@total>\thr@@\relax
+	\ifnum\@kio@total>4
 		\@kio@ieee@authors@truncated
 	\else
 		\@kio@ieee@authors@full
 	\fi
 }
 
-% Полный список авторов (n<=3): «X», «X and Y», «X, Y, and Z».
+% Полный список авторов (n<=4)
 \newcommand{\@kio@ieee@authors@full}{%
 	\count@\z@
 	\@authors@iter{@short@en}{%
@@ -803,26 +810,23 @@
 				, %
 			\fi
 		\fi
-		% \edef forces full expansion of \author<i>@short@en (включая \affil,
-		% который локально \let на \@gobble), чтобы шаблон #1 #2\@@nil увидел
-		% уже строку «Surname I.~I.», а не сам токен.
 		\edef\@kio@cur{\csname author\author@i @short@en\endcsname}%
 		\expandafter\@kio@swap@author\@kio@cur\@@nil
 	}%
 }
 
-% Усечённый список (n>=4): первые три автора через запятую и затем «, et al.».
+% Усечённый список (n>4): первые три автора через запятую и затем «, et al.».
 \newcommand{\@kio@ieee@authors@truncated}{%
 	\count@\z@
 	\@authors@iter{@short@en}{%
 		\advance\count@\@ne
-		\ifnum\count@>\thr@@\relax\else
+		\ifnum\count@>3\else
 			\ifnum\count@>\@ne, \fi
 			\edef\@kio@cur{\csname author\author@i @short@en\endcsname}%
 			\expandafter\@kio@swap@author\@kio@cur\@@nil
-			\ifnum\count@=\thr@@\relax, et~al.\fi
 		\fi
 	}%
+	, et~al.%
 }
 
 % «p.» для одной страницы, «pp.» для диапазона — определяется через метки first/last@page.
@@ -982,6 +986,14 @@
 	\par\vskip 1ex\noindent\textbf{Acknowledgments: }\textit{#1}%
 }
 
+% Вклад авторов / Authors' Contributions
+\newcommand{\authorscontributionsru}[1]{%
+	\par\vskip 1ex\noindent\textbf{Вклад авторов: }\textit{#1}%
+}
+\newcommand{\authorscontributionsen}[1]{%
+	\par\vskip 1ex\noindent\textbf{Authors' Contributions: }\textit{#1}%
+}
+
 % Финансирование / Funding
 \newcommand{\fundingru}[1]{%
 	\par\vskip 1ex\noindent\textbf{Финансирование: }\textit{#1}%
@@ -997,7 +1009,6 @@
 \newcommand{\conflictofinteresten}[1]{%
 	\par\vskip 1ex\noindent\textbf{Conflict of Interest: }\textit{#1}%
 }
-
 
 \def\address#1{\gdef\@address{#1}}
 \def\addresses#1{\gdef\@address{%
@@ -1028,54 +1039,6 @@
 	\def\@russiansectionheader{{\selectlanguage{russian}#1}}%
 	\def\@englishsectionheader{#2}%
 }
-
-% Команда для автоматического форматирования авторов (макс. 3)
-\newcommand{\formatAuthors}[2]{%
-	\newcount\authcount
-	\authcount=0
-	\def\@tempru{#1}%
-	\def\@tempen{#2}%
-	
-	% Русские авторы
-	\def\@formattedru{}%
-	\@for\author:=\@tempru\do{%
-		\ifnum\authcount<4
-		\advance\authcount by 1
-		\ifnum\authcount=1
-		\def\@formattedru{\author}%
-		\else
-		\expandafter\def\expandafter\@formattedru\expandafter{\@formattedru, \author}%
-		\fi
-		\fi
-	}%
-	
-	\ifnum\authcount>3
-	\expandafter\def\expandafter\@formattedru\expandafter{\@formattedru\ и др.}%
-	\fi
-	
-	% Английские авторы
-	\authcount=0
-	\def\@formatteden{}%
-	\@for\author:=\@tempen\do{%
-		\ifnum\authcount<3
-		\advance\authcount by 1
-		\ifnum\authcount=1
-		\def\@formatteden{\author}%
-		\else
-		\expandafter\def\expandafter\@formatteden\expandafter{\@formatteden, \author}%
-		\fi
-		\fi
-	}%
-	
-	\ifnum\authcount>2
-	\expandafter\def\expandafter\@formatteden\expandafter{\@formatteden\ et al.}%
-	\fi
-	
-	\setauthorsheader{\@formattedru}{\@formatteden}%
-}
-\newcommand{\addr}[1]{\item\label{#1}}
-
-\newcommand{\refaddr}[1]{$^{\textsf{\footnotesize\@refad{#1}}}$}
 
 \DeclareRobustCommand\@refad{\@@refadx}
 \def\@@refadx#1{%
@@ -1118,7 +1081,7 @@
 	\global\let\date\relax
 	\global\let\and\relax
 }
-\def\print@rutitle{{\Large \hv@sf\bfseries\mathversion{bold} \MakeUppercase{\@title} \par}}
+\def\print@rutitle{{\Large \hv@sf\bfseries\mathversion{bold}{\@title} \par}}
 
 \def\@makerutitle{%
 	\par
@@ -1245,18 +1208,11 @@
 \frenchspacing
 \let\@afterindentfalse\@afterindenttrue
 
-% Сноска на первой странице (выходные данные на противоположном языке):
-%   • линия — во всю ширину текста;
-%   • симметричные расстояния сверху и снизу;
-%   • увеличенный отступ от основного текста для зрительного отделения блока.
-% Геометрия:
-%   above rule = \skip\footins (12pt) + \vskip 8pt  ≈ 20pt
-%   below rule = \vskip 12pt + \footnotesep (8pt)  ≈ 20pt
 \renewcommand\footnoterule{%
-  \vskip 8\p@
+  \vskip 8\p@ \@plus\z@ \@minus 5\p@
   \color{rulercolor}\hrule height 0.4pt \@width\textwidth
-  \vskip 12\p@}
-\setlength{\skip\footins}{12pt plus 2pt minus 2pt}
+  \vskip 12\p@ \@plus\z@ \@minus 3\p@}
+\setlength{\skip\footins}{12pt plus 2pt minus 6pt}
 \setlength{\footnotesep}{5pt}
 
 %%  Headings  %%
@@ -1315,7 +1271,7 @@
 	\fancyhf{}
 	\renewcommand{\headrulewidth}{0.4pt}
 	\renewcommand{\footrulewidth}{0.4pt}
-	
+
 	% Верхние колонтитулы. Используем \ifenglishpaper (постоянный по всему документу),
 	% чтобы внутри \translatedpart колонтитулы НЕ переключались на другой язык.
 	\fancyhead[RO]{%
@@ -1334,9 +1290,9 @@
 	\fancyfoot[RO]{%
 		\normalsize\sf@phv\textcolor{rulercolor}{%
 			\ifenglishpaper
-				©\ \MakeTextUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
+				\ \MakeTextUppercase{\journal@type@en}\ \issue@year.\ no.\ \issue@number.\ pp.\ \pages@span
 			\else
-				©\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ {\selectlanguage{russian}№\ \issue@number.\ С.\ \pages@span}
+				\ \MakeTextUppercase{\journal@type@ru}\ \issue@year.\ {\selectlanguage{russian}№\ \issue@number.\ С.\ \pages@span}
 			\fi
 		}%
 		\hfill
@@ -1354,8 +1310,8 @@
 
 % КОЛОНТИТУЛЫ ПЕРВОЙ СТРАНИЦЫ 
 \fancypagestyle{firstpagestyle}{%
-	\fancyhf{} 
-	
+	\fancyhf{}
+
 	\renewcommand{\headrulewidth}{0pt}
 	\renewcommand{\footrulewidth}{0.4pt}
 	
@@ -1375,9 +1331,10 @@
 			\emergencystretch=0em
 			\textcolor{rulercolor}{%
 				\ifenglishpaper
-					\noindent\MakeTextUppercase{\journal@type@en}%
+					\noindent\copyright\
+					\MakeTextUppercase{\journal@type@en}, \issue@year%
 				\else
-					\noindent\MakeTextUppercase{\journal@type@ru}%
+					\noindent\copyright\ \MakeTextUppercase{\journal@type@ru}, \issue@year%
 				\fi
 			}
 		\end{minipage}%
@@ -1417,9 +1374,9 @@
 			\emergencystretch=2em
 			\textcolor{rulercolor}{%
 				\ifenglishpaper
-					\noindent\MakeTextUppercase{\journal@type@en}%
+					\noindent\copyright\ \MakeTextUppercase{\journal@type@en}, \issue@year%
 				\else
-					\noindent\MakeTextUppercase{\journal@type@ru}%
+					\noindent\noindent\copyright\ \MakeTextUppercase{\journal@type@ru}, \issue@year%
 				\fi
 			}
 		\end{minipage}%
@@ -1522,25 +1479,13 @@
 \renewcommand{\cite}[2][]{%
   \begingroup
     \def\@cite@post{#1}%
-    \if@englishversion
-      % Сборка списка EN-<key> через token list.
-      \def\@cite@en@list{}%
-      \let\@cite@sep\@empty
-      \@for\@tmp:=#2\do{%
-        \edef\@cite@en@list{\@cite@en@list\@cite@sep EN-\@tmp}%
-        \def\@cite@sep{,}%
-      }%
-      \ifx\@cite@post\@empty
-        \expandafter\originalcite\expandafter{\@cite@en@list}%
-      \else
-        \expandafter\originalcite\expandafter[\@cite@post]\expandafter{\@cite@en@list}%
-      \fi
+    \ifx\@cite@post\@empty
+      \originalcite{#2}%
     \else
-      \ifx\@cite@post\@empty
-        \originalcite{#2}%
-      \else
-        \originalcite[\@cite@post]{#2}%
-      \fi
+      \originalcite[\@cite@post]{#2}%
+    \fi
+    \if@englishversion
+    \else
       \@for\@tmp:=#2\do{%
         \edef\@tmp@en{EN-\@tmp}%
         \expandafter\nociteeng\expandafter{\@tmp@en}%

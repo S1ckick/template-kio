@@ -1,0 +1,15 @@
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.pdf
+*-clones.bib
+images/*
+!images/cc-by.png
+.DS_Store
+clean.sh
+*-prefixed.bib
+!saturn-vlba-alpha.pdf
+!saturn-vlba-delta.pdf
+*.zip
