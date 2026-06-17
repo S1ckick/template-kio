@@ -1466,7 +1466,13 @@
 
 
 \AtBeginDocument{%
-	\DeclareRobustCommand{\mylinkurl}[1]{\href{https://doi.org/#1}{#1}}%
+	\DeclareRobustCommand{\mylinkurl}{%
+		\begingroup
+		\catcode`\_=12\relax \catcode`\~=12\relax \catcode`\#=12\relax
+		\catcode`\%=12\relax \catcode`\&=12\relax \catcode`\$=12\relax
+		\catcode`\^=12\relax
+		\mylinkurl@scan}%
+	\def\mylinkurl@scan#1{\href{https://doi.org/#1}{#1}\endgroup}%
 }
 
 \usepackage{letltxmacro}
