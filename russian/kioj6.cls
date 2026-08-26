@@ -411,14 +411,14 @@
 		\@footnotetext{%
 			\if@englishversion
 				% Английская статья → русская сноска.
-				\temp@authors\\
+				\copyright\ \temp@authors\\
 				\@title.\\
-				\copyright\ \journal@type@ru, \issue@year. № \issue@number. С. \pages@span.%
+				\journal@type@ru, \issue@year. № \issue@number. С. \pages@span.%
 			\else
 				% Русская статья → английская сноска.
-				\temp@authors@en\\
+				\copyright\ \temp@authors@en\\
 				\@title@en.\\
-				\copyright\ \journal@type@en, \issue@year. No \issue@number. P. \pages@span.%
+				\journal@type@en, \issue@year. No \issue@number. P. \pages@span.%
 			\fi
 		}%
 	\endgroup
@@ -1282,7 +1282,7 @@
 
 	\fancyhead[LE]{%
 		\normalsize\sf@phv\textcolor{rulercolor}{%
-			\ifenglishpaper\@englishauthorsheader\else\@russianauthorsheader\fi
+			\ifenglishpaper\copyright\ \@englishauthorsheader\else\copyright\ \@russianauthorsheader\fi
 		}%
 	}
 
@@ -1331,10 +1331,9 @@
 			\emergencystretch=0em
 			\textcolor{rulercolor}{%
 				\ifenglishpaper
-					\noindent\copyright\
-					\MakeTextUppercase{\journal@type@en}, \issue@year%
+					\noindent \MakeTextUppercase{\journal@type@en}, \issue@year%
 				\else
-					\noindent\copyright\ \MakeTextUppercase{\journal@type@ru}, \issue@year%
+					\noindent \MakeTextUppercase{\journal@type@ru}, \issue@year%
 				\fi
 			}
 		\end{minipage}%
@@ -1374,9 +1373,9 @@
 			\emergencystretch=2em
 			\textcolor{rulercolor}{%
 				\ifenglishpaper
-					\noindent\copyright\ \MakeTextUppercase{\journal@type@en}, \issue@year%
+					\noindent \MakeTextUppercase{\journal@type@en}, \issue@year%
 				\else
-					\noindent\noindent\copyright\ \MakeTextUppercase{\journal@type@ru}, \issue@year%
+					\noindent\noindent \MakeTextUppercase{\journal@type@ru}, \issue@year%
 				\fi
 			}
 		\end{minipage}%
