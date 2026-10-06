@@ -578,16 +578,16 @@ if$}
 
 FUNCTION {bbl.nr}
 { curlanguage "english" =
-   {"no."}
+   {"No."}
    { curlanguage "italian" =
-      { "no." }
+      { "No." }
       { curlanguage "russian" =
          { "№" }
          { curlanguage "german" =
             {"{nu.}"} %%% { "an." }
             { curlanguage "french" =
-                { "no." }
-                {"language is not defined: " curlanguage " in bbl.nr" * * warning$ "no."}
+                { "No." }
+                {"language is not defined: " curlanguage " in bbl.nr" * * warning$ "No."}
             if$}
          if$}
       if$}
