@@ -112,6 +112,7 @@ STRINGS { s t }
 STRINGS { y m d }   % new in v.1.2j
 STRINGS { ud.y ud.m ud.d ud.tmp ud.parsed }
 INTEGERS { ud.idx ud.len ud.space.pos }
+INTEGERS { last.is.bare.url }
 
 FUNCTION {init.state.consts}
 { #0 'before.all :=
@@ -180,6 +181,7 @@ FUNCTION {output.nonnull}
         }
       if$
       mid.sentence 'output.state :=
+      #0 'last.is.bare.url :=
     }
   if$
 }
@@ -201,8 +203,13 @@ FUNCTION {output.check}
   if$
 }
 
+% Запись, оканчивающаяся голым URL (без «дата обращения»), печатается без точки
+% в конце; во всех остальных случаях точка ставится как обычно.
 FUNCTION {fin.entry}
-{ add.period$
+{ last.is.bare.url
+    'skip$
+    'add.period$
+  if$
   write$
   newline$
 }
@@ -1432,6 +1439,7 @@ FUNCTION {output.bibitem}
   newline$
   ""
   before.all 'output.state :=
+  #0 'last.is.bare.url :=
 }
 
 FUNCTION {format.bvolume}
@@ -1820,12 +1828,22 @@ FUNCTION {format.url}
     }
   if$
 }
+FUNCTION {mark.bare.url}
+{ url empty$
+    'skip$
+    { urldate empty$
+        { #1 'last.is.bare.url := }
+        'skip$
+      if$
+    }
+  if$
+}
 
 FUNCTION {output.url}
 { doi empty$
   { url empty$
     'skip$
-    { format.url output }
+    { format.url output mark.bare.url }
     if$
   }
   'skip$
@@ -1893,7 +1911,7 @@ FUNCTION {format.eprint}
 FUNCTION {output.eprint.url}
 { doi empty$
   {eprint empty$
-    { format.url output }
+    { format.url output mark.bare.url }
     { format.eprint output }
   if$
   }
@@ -2635,9 +2653,8 @@ FUNCTION {video}
       if$
     }
   if$
-  add.period$
-  write$
-  newline$
+  mark.bare.url
+  fin.entry
 }
 
 FUNCTION {software}
@@ -2701,9 +2718,8 @@ FUNCTION {software}
       if$
     }
   if$
-  add.period$
-  write$
-  newline$
+  mark.bare.url
+  fin.entry
 }
 
 FUNCTION {dataset}
@@ -2751,9 +2767,8 @@ FUNCTION {dataset}
       if$
     }
   if$
-  add.period$
-  write$
-  newline$
+  mark.bare.url
+  fin.entry
 }
 
 FUNCTION {blog}             {online}
