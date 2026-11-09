@@ -1,4 +1,4 @@
-%%
+ %%
 %% This is file `ugost2008.bst',
 %% generated with the docstrip utility.
 %%
@@ -112,7 +112,6 @@ STRINGS { s t }
 STRINGS { y m d }   % new in v.1.2j
 STRINGS { ud.y ud.m ud.d ud.tmp ud.parsed }
 INTEGERS { ud.idx ud.len ud.space.pos }
-INTEGERS { last.is.bare.url }
 
 FUNCTION {init.state.consts}
 { #0 'before.all :=
@@ -181,7 +180,6 @@ FUNCTION {output.nonnull}
         }
       if$
       mid.sentence 'output.state :=
-      #0 'last.is.bare.url :=
     }
   if$
 }
@@ -203,13 +201,8 @@ FUNCTION {output.check}
   if$
 }
 
-% Запись, оканчивающаяся голым URL (без «дата обращения»), печатается без точки
-% в конце; во всех остальных случаях точка ставится как обычно.
 FUNCTION {fin.entry}
-{ last.is.bare.url
-    'skip$
-    'add.period$
-  if$
+{ add.period$
   write$
   newline$
 }
@@ -688,21 +681,21 @@ FUNCTION {bbl.url}
             { "URL" }
             { curlanguage "french" =
                 { "URL" }
-                { "language is not defined: " curlanguage " in bbl.url" * * warning$ "online; accessed" }
+                { "language is not defined: " curlanguage " in bbl.url" * * warning$ "URL" }
             if$}
          if$}
       if$}
 if$}
 FUNCTION {bbl.urldate}
 { curlanguage "english" =
-   {"online; accessed"}
+   {"дата~обращения"}
       { curlanguage "russian" =
          { "{дата~обращения}" }
          { curlanguage "german" =
             { "{online; abgerufen}" }
             { curlanguage "french" =
                 { "{en ligne; acc\'{e}d\'{e}}" }
-                { "language is not defined: " curlanguage " in bbl.urldate" * * warning$ "online; accessed" }
+                { "language is not defined: " curlanguage " in bbl.urldate" * * warning$ "дата~обращения" }
             if$}
          if$}
       if$}
@@ -1439,7 +1432,6 @@ FUNCTION {output.bibitem}
   newline$
   ""
   before.all 'output.state :=
-  #0 'last.is.bare.url :=
 }
 
 FUNCTION {format.bvolume}
@@ -1828,22 +1820,12 @@ FUNCTION {format.url}
     }
   if$
 }
-FUNCTION {mark.bare.url}
-{ url empty$
-    'skip$
-    { urldate empty$
-        { #1 'last.is.bare.url := }
-        'skip$
-      if$
-    }
-  if$
-}
 
 FUNCTION {output.url}
 { doi empty$
   { url empty$
     'skip$
-    { format.url output mark.bare.url }
+    { format.url output }
     if$
   }
   'skip$
@@ -1911,7 +1893,7 @@ FUNCTION {format.eprint}
 FUNCTION {output.eprint.url}
 { doi empty$
   {eprint empty$
-    { format.url output mark.bare.url }
+    { format.url output }
     { format.eprint output }
   if$
   }
@@ -2614,7 +2596,7 @@ FUNCTION {techreport}
 %% Layout (Russian):
 %%   Title : [видео] / Author -- URL: <url> (дата обращения: <date>)
 %% Layout (English):
-%%   Title : [video] / Author -- URL: <url> (online; accessed: <date>)
+%%   Title : [video] / Author -- URL: <url> (дата обращения: <date>)
 %% The entry is built as a single string for full control over the
 %% segment separators (which mix " : ", " / ", and "\BibDash{}" — a
 %% combination the standard state machine doesn't model).
@@ -2653,8 +2635,9 @@ FUNCTION {video}
       if$
     }
   if$
-  mark.bare.url
-  fin.entry
+  add.period$
+  write$
+  newline$
 }
 
 FUNCTION {software}
@@ -2718,8 +2701,9 @@ FUNCTION {software}
       if$
     }
   if$
-  mark.bare.url
-  fin.entry
+  add.period$
+  write$
+  newline$
 }
 
 FUNCTION {dataset}
@@ -2767,8 +2751,9 @@ FUNCTION {dataset}
       if$
     }
   if$
-  mark.bare.url
-  fin.entry
+  add.period$
+  write$
+  newline$
 }
 
 FUNCTION {blog}             {online}

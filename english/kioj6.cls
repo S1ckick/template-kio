@@ -657,7 +657,7 @@
 	\def\no@section@image{}%
 }%
 
-\def\print@title{{\LARGE \hv@sf\bfseries\mathversion{bold} \MakeUppercase{\@title} \par}}
+\def\print@title{{\LARGE \hv@sf\bfseries\mathversion{bold}{\@title} \par}}
 \def\print@author{%
     \vskip 1.5em%
     {\hv@sf
